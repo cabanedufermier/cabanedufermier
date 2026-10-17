@@ -14,7 +14,8 @@
       ]
     }
   ],
-  "rewrites": [
-    { "source": "/", "destination": "/Html/index.html" }
+  "redirects": [
+    { "source": "/Html/index.html", "destination": "/", "permanent": true },
+    { "source": "/Html", "destination": "/", "permanent": true }
   ]
 }

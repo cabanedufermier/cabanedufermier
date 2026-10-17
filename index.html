@@ -1,44 +1,923 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<!-- GTM Consent Mode (Default state) -->
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', {
-    'ad_storage': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
-    'analytics_storage': 'denied'
-  });
-</script>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-MMF76XHD');</script>
-<!-- End Google Tag Manager -->
+    <!-- GTM Consent Mode (Default state) -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied'
+        });
+    </script>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MMF76XHD');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=Html/index.html">
-    <title>Cabane du Fermier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CWY3F6DFJ6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- ========== GOOGLE SEARCH CONSOLE VÉRIFICATION ========== -->
+    <meta name="google-site-verification" content="vUV_iOVD_lSKEDMC98-kyI3YajCgpe4DEpiSqcrenXU" />
 
-  gtag('config', 'G-CWY3F6DFJ6');
-</script>
+    <!-- ========== SEO PRIMAIRE ========== -->
+    <title>Cabane du Fermier | Volailles, Viandes Fraîches & Légumes au Bénin</title>
+    <meta name="description" content="Cabane du Fermier : achetez en ligne des poulets fermiers, lapins, cailles, escargots et légumes précuits (tchayo, gboma) livrés frais au Bénin. Qualité locale garantie.">
+    <meta name="keywords" content="poulet fermier Bénin, volailles fraîches Cotonou, viande locale Bénin, légumes précuits, cabane du fermier, produits frais Bénin, escargot, lapin, cailles, tchayo, gboma">
+    <meta name="author" content="Cabane du Fermier">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.cabanedufermier.com/">
+
+    <!-- ========== GÉO-CIBLAGE (Bénin) ========== -->
+    <meta name="geo.region" content="BJ">
+    <meta name="geo.placename" content="Cotonou, Bénin">
+    <meta name="language" content="French">
+
+    <!-- ========== OPEN GRAPH (Facebook / WhatsApp) ========== -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cabanedufermier.com/">
+    <meta property="og:title" content="Cabane du Fermier | Volailles & Produits Frais au Bénin">
+    <meta property="og:description" content="Poulets fermiers, lapins, cailles, escargots et légumes précuits livrés frais directement de nos éleveurs partenaires au Bénin.">
+    <meta property="og:image" content="https://www.cabanedufermier.com/images/Logo.png">
+    <meta property="og:locale" content="fr_BJ">
+    <meta property="og:site_name" content="Cabane du Fermier">
+
+    <!-- ========== TWITTER CARD ========== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cabane du Fermier | Volailles & Produits Frais au Bénin">
+    <meta name="twitter:description" content="Poulets fermiers, lapins, cailles, escargots et légumes précuits livrés frais au Bénin.">
+    <meta name="twitter:image" content="https://www.cabanedufermier.com/images/Logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Leaflet.js (Carte interactive) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CWY3F6DFJ6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-CWY3F6DFJ6');
+    </script>
+
+    <!-- ========== DONNÉES STRUCTURÉES JSON-LD (Schema.org) ========== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Cabane du Fermier",
+      "description": "Vente en ligne de volailles fraîches, viandes et légumes précuits directement des éleveurs locaux au Bénin.",
+      "url": "https://www.cabanedufermier.com/",
+      "logo": "https://www.cabanedufermier.com/images/Logo.png",
+      "image": "https://www.cabanedufermier.com/images/Logo.png",
+      "telephone": "",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BJ",
+        "addressLocality": "Cotonou"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 6.3654,
+        "longitude": 2.4183
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "08:00",
+          "closes": "20:00"
+        }
+      ],
+      "priceRange": "XOF",
+      "servesCuisine": "Produits fermiers",
+      "sameAs": []
+    }
+    </script>
+
+    <!-- ========== PRODUITS JSON-LD (Extraits enrichis Google) ========== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Produits Cabane du Fermier",
+      "url": "https://www.cabanedufermier.com/",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Product",
+            "name": "Poulet Bicyclette",
+            "description": "Poulet fermier élevé en plein air, chair ferme et savoureuse. Le favori des familles béninoises.",
+            "image": "https://www.cabanedufermier.com/images/bicyclette.png",
+            "category": "Volailles",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "2500",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Product",
+            "name": "Cailles",
+            "description": "Petites volailles à la chair délicate et savoureuse, élevées localement avec soin.",
+            "image": "https://www.cabanedufermier.com/images/Cailles.png",
+            "category": "Volailles",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "1200",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Product",
+            "name": "Lapin Fermier",
+            "description": "Viande tendre et maigre, le lapin fermier est élevé dans des conditions saines pour une qualité optimale.",
+            "image": "https://www.cabanedufermier.com/images/Lapin.png",
+            "category": "Viandes",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "4000",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "Product",
+            "name": "Escargot",
+            "description": "Mets raffiné et nutritif, l'escargot offre une viande maigre riche en minéraux, très apprécié au Bénin.",
+            "image": "https://www.cabanedufermier.com/images/escargot.png",
+            "category": "Viandes",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "6000",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "item": {
+            "@type": "Product",
+            "name": "Tchayo",
+            "description": "Légume traditionnel béninois précuit avec soin, riche en nutriments et en saveurs authentiques.",
+            "image": "https://www.cabanedufermier.com/images/Tchayo.png",
+            "category": "Légumes",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "1000",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "item": {
+            "@type": "Product",
+            "name": "Gboma",
+            "description": "Feuilles de morelle noire, le gboma est un incontournable de la cuisine béninoise, préparé avec soin.",
+            "image": "https://www.cabanedufermier.com/images/Gboman.png",
+            "category": "Légumes",
+            "brand": { "@type": "Brand", "name": "Cabane du Fermier" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "XOF",
+              "price": "1000",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.cabanedufermier.com/#produits",
+              "seller": { "@type": "Organization", "name": "Cabane du Fermier" }
+            }
+          }
+        }
+      ]
+    }
+    </script>
 
 </head>
+
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMF76XHD"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <p>Redirection vers le site... <a href="Html/index.html">Cliquez ici</a></p>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMF76XHD" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-container">
+            <a href="#" class="logo">
+                <img src="images/Logo.png" alt="Cabane du Fermier - Logo">
+            </a>
+
+            <div class="desktop-menu">
+                <a href="#accueil" class="nav-link">Accueil</a>
+                <a href="#propos" class="nav-link">À Propos</a>
+                <a href="#produits" class="nav-link">Nos Produits</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#commander" class="btn btn-primary nav-btn">
+                    <i data-lucide="shopping-bag" class="icon-sm"></i> Commander
+                </a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Ouvrir le menu">
+                <i data-lucide="menu" id="menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#accueil" class="mobile-nav-link">Accueil</a>
+            <a href="#propos" class="mobile-nav-link">À Propos</a>
+            <a href="#produits" class="mobile-nav-link">Nos Produits</a>
+            <a href="#contact" class="mobile-nav-link">Contact</a>
+            <a href="#commander" class="btn btn-primary mobile-nav-btn">Commander</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="accueil" class="hero-section motif-bg reveal">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <span class="hero-badge">Premium Quality</span>
+                    <h1 class="hero-title">
+                        Produits frais, locaux et accessibles pour toute la <span
+                            class="text-accent-highlight">famille</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Découvrez nos volailles savoureuses, viandes fraîches et légumes précuits, directement de nos
+                        éleveurs partenaires.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#commander" class="btn btn-primary hero-btn">
+                            <i data-lucide="shopping-bag" class="icon-sm"></i> Commander maintenant
+                        </a>
+                        <a href="#produits" class="btn btn-outline hero-btn-outline">
+                            Découvrir nos produits <i data-lucide="arrow-right" class="icon-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-placeholder">
+                        <img src="images/Famille.jpg" alt="Famille heureuse avec des produits frais"
+                            class="hero-img">
+                        <div class="hero-stats-card">
+                            <div class="stat-icon">100%</div>
+                            <div class="stat-text">Local &<br>Frais</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="propos" class="about-section section motif-bg reveal">
+            <div class="container about-container">
+                <div class="about-content">
+                    <span class="section-badge">À Propos</span>
+                    <h2 class="section-title">
+                        Notre Passion pour le <span class="text-accent">Savoir-faire Local</span>
+                    </h2>
+                    <p class="about-text">
+                        Chez <strong class="text-primary">Cabane du Fermier</strong>, nous mettons un point d'honneur à
+                        vous offrir des produits frais, sains et de qualité.
+                    </p>
+                    <p class="about-text text-muted">
+                        Spécialisés dans la distribution de poulets et de viandes fraîches, ainsi que de légumes
+                        précuits, nous travaillons en étroite collaboration avec nos éleveurs locaux afin de garantir
+                        des produits soigneusement sélectionnés et préparés dans le respect des normes d'hygiène.
+                    </p>
+                    <div class="about-mission">
+                        <h3 class="mission-title">Notre Mission</h3>
+                        <p class="mission-text">
+                            Vous permettre de nourrir votre famille avec des produits fiables, savoureux et accessibles,
+                            tout en valorisant le savoir-faire local.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="about-features">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="leaf" class="feature-icon"></i>
+                        </div>
+                        <h4>Frais & Sain</h4>
+                        <p>Directement de la ferme à votre assiette.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="shield-check" class="feature-icon"></i>
+                        </div>
+                        <h4>Hygiène Garantie</h4>
+                        <p>Des normes strictes de sélection et de préparation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="award" class="feature-icon"></i>
+                        </div>
+                        <h4>Qualité Premium</h4>
+                        <p>Le meilleur de notre terroir à un prix abordable.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="produits" class="products-section section bg-surface motif-bg reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">Nos Produits</span>
+                    <h2>De la Ferme à Votre Table</h2>
+                    <p>Découvrez notre sélection de volailles, viandes fraîches et légumes locaux, précuits avec soin.
+                    </p>
+                </div>
+
+
+
+                <div class="products-grid" id="products-grid">
+
+                    <!-- Poulet Bicyclette -->
+                    <div class="product-card" data-category="volailles" data-product-id="poulet">
+                        <div class="product-img-wrapper">
+                            <img src="images/bicyclette.png" alt="Poulet Bicyclette" class="product-img" loading="lazy">
+                            <span class="product-category-tag">Volailles</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Poulet Bicyclette</h3>
+                            <p class="product-desc">Élevé en plein air, ce poulet fermier à la chair ferme et savoureuse est le favori des familles béninoises.</p>
+                            
+                            <div class="product-options-wrapper mt-3">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="under500" data-price="2500" data-name="< 500g">&lt; 500g</button>
+                                    <button type="button" class="option-pill" data-option="500to700" data-price="3000" data-name="500g - 700g">500g - 700g</button>
+                                    <button type="button" class="option-pill" data-option="700to1kg" data-price="4000" data-name="700g - 1kg">700g - 1kg</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">2500 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lapin -->
+                    <div class="product-card" data-category="viandes" data-product-id="lapin">
+                        <div class="product-img-wrapper">
+                            <img src="images/Lapin.png" alt="Lapin" class="product-img" loading="lazy">
+                            <span class="product-category-tag">Viandes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Lapin</h3>
+                            <p class="product-desc">Viande tendre et maigre, le lapin fermier est élevé dans des conditions saines pour une qualité optimale.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="1kg" data-price="4000" data-name="1kg">1kg</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">4000 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Escargot -->
+                    <div class="product-card" data-category="viandes" data-product-id="escargot">
+                        <div class="product-img-wrapper">
+                            <img src="images/escargot.png" alt="Escargot" class="product-img" loading="lazy">
+                            <span class="product-category-tag">Viandes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Escargot</h3>
+                            <p class="product-desc">Mets raffiné et nutritif, l'escargot offre une viande maigre riche en minéraux, très apprécié au Bénin.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="500g" data-price="6000" data-name="Sachet 500g">Sachet 500g</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">6000 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cailles -->
+                    <div class="product-card" data-category="volailles" data-product-id="cailles">
+                        <div class="product-img-wrapper">
+                            <img src="images/Cailles.png" alt="Cailles" class="product-img" loading="lazy">
+                            <span class="product-category-tag">Volailles</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Cailles</h3>
+                            <p class="product-desc">Petites volailles à la chair délicate et savoureuse, les cailles sont élevées localement avec soin.</p>
+                            
+                            <div class="product-options-wrapper mt-3">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="unite" data-price="1200" data-name="L'unité">L'unité</button>
+                                    <button type="button" class="option-pill" data-option="pack4" data-price="4500" data-name="Pack de 4">Pack de 4</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">1200 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tchayo -->
+                    <div class="product-card" data-category="legumes" data-product-id="tchayo">
+                        <div class="product-img-wrapper">
+                            <img src="images/Tchayo.png" alt="Tchayo" class="product-img" loading="lazy">
+                            <span class="product-category-tag tag-legume">Légumes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Tchayo</h3>
+                            <p class="product-desc">Légume traditionnel béninois précuit avec soin, le tchayo est riche en nutriments et en saveurs authentiques.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="500g" data-price="1000" data-name="Sachet 500g">Sachet 500g</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">1000 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gboma -->
+                    <div class="product-card" data-category="legumes" data-product-id="gboma">
+                        <div class="product-img-wrapper">
+                            <img src="images/Gboman.png" alt="Gboma" class="product-img" loading="lazy">
+                            <span class="product-category-tag tag-legume">Légumes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Gboma</h3>
+                            <p class="product-desc">Feuilles de morelle noire, le gboma est un incontournable de la cuisine béninoise, préparé avec soin.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="500g" data-price="1000" data-name="Sachet 500g">Sachet 500g</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">1000 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aman vivè (Vernonia) -->
+                    <div class="product-card" data-category="legumes" data-product-id="amanvive">
+                        <div class="product-img-wrapper">
+                            <img src="images/Amanvivè.png" alt="Aman vivè" class="product-img" loading="lazy">
+                            <span class="product-category-tag tag-legume">Légumes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Amanvivè <span class="product-local-name">(Vernonia)</span></h3>
+                            <p class="product-desc">La feuille amère, ou Vernonia, est un légume traditionnel africain aux vertus nutritionnelles exceptionnelles.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="500g" data-price="1000" data-name="Sachet 500g">Sachet 500g</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">1000 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gombo -->
+                    <div class="product-card" data-category="legumes" data-product-id="gombo">
+                        <div class="product-img-wrapper">
+                            <img src="images/Gombo.png" alt="Gombo" class="product-img" loading="lazy">
+                            <span class="product-category-tag tag-legume">Légumes</span>
+                            <span class="product-selected-badge">✓ Sélectionné</span>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">Gombo</h3>
+                            <p class="product-desc">Frais, tendre et plein de saveurs, notre gombo est idéal pour vos sauces traditionnelles béninoises.</p>
+                            
+                            <div class="product-options-wrapper mt-3" style="display: none;">
+                                <div class="options-toggle">
+                                    <button type="button" class="option-pill active" data-option="500g" data-price="1500" data-name="Sachet 500g">Sachet 500g</button>
+                                </div>
+                            </div>
+
+                            <div class="product-bottom mt-3">
+                                <span class="product-price-display">1500 F</span>
+                                <div class="product-cart-controls">
+                                    <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
+                                        <i data-lucide="shopping-cart" class="icon-sm"></i>
+                                    </button>
+                                    <div class="qty-control" style="display: none;">
+                                        <button type="button" class="btn-qty btn-minus"><i data-lucide="minus" class="icon-xs"></i></button>
+                                        <span class="qty-val">1</span>
+                                        <button type="button" class="btn-qty btn-plus"><i data-lucide="plus" class="icon-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- products grid ends here -->
+            </div>
+        </section>
+
+        <!-- Order Form Section -->
+        <section id="commander" class="order-section section motif-bg reveal">
+            <div class="container">
+                <div class="order-wrapper">
+                    <div class="order-content">
+                        <span class="section-badge badge-white">Passer Commande</span>
+                        <h2 class="text-white">Votre Panier</h2>
+                        <p class="text-white-muted">
+                            Vérifiez les articles sélectionnés et remplissez le formulaire pour finaliser votre commande directement via WhatsApp.
+                        </p>
+                        
+                        <div class="cart-summary-container mt-12">
+                            <div id="cart-empty-msg" class="cart-empty-msg">
+                                <i data-lucide="shopping-cart" class="icon-lg"></i>
+                                <p>Votre panier est vide. Sélectionnez des produits ci-dessus.</p>
+                            </div>
+                            <ul id="cart-items-list" class="cart-items-list" style="display: none;">
+                                <!-- Items injected by JS -->
+                            </ul>
+                            <div id="cart-total-container" class="cart-total-container" style="display: none;">
+                                <span>Total</span>
+                                <span id="cart-total-price">0 F</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-form-container">
+                        <form id="orderForm" class="order-form">
+                            <div class="form-group">
+                                <label for="name">Votre Nom & Prénoms</label>
+                                <input type="text" id="name" name="name" placeholder="Ex: Ariane Amoussou" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contactInfo">Votre Numéro WhatsApp</label>
+                                <input type="tel" id="contactInfo" name="contactInfo" placeholder="+229 XX XX XX XX" required>
+                            </div>
+
+                            <!-- Livraison Toggle -->
+                            <div class="form-group">
+                                <label>Mode de réception</label>
+                                <div class="livraison-toggle">
+                                    <button type="button" class="toggle-btn active" id="livraisonNon" data-value="Non">
+                                        <i data-lucide="store" class="icon-sm"></i> Retrait sur place
+                                    </button>
+                                    <button type="button" class="toggle-btn" id="livraisonOui" data-value="Oui">
+                                        <i data-lucide="truck" class="icon-sm"></i> Livraison à domicile
+                                    </button>
+                                </div>
+                                <input type="hidden" id="livraisonValue" value="Non">
+                            </div>
+
+                            <!-- Bloc adresse avec carte -->
+                            <div class="form-group" id="addressSection" style="display:none;">
+                                <label>Localisation de livraison</label>
+
+                                <!-- Carte interactive -->
+                                <div class="map-wrapper">
+                                    <div id="delivery-map"></div>
+                                    <div class="map-overlay-hint" id="mapHint">
+                                        <i data-lucide="map-pin" class="icon-sm"></i>
+                                        <span>Déplacez l'épingle pour ajuster</span>
+                                    </div>
+                                </div>
+
+                                <!-- Bouton géolocalisation automatique -->
+                                <button type="button" class="btn-geolocate" id="btnGeolocate">
+                                    <i data-lucide="crosshair" class="icon-sm"></i>
+                                    Sélectionner automatiquement ma localisation actuelle
+                                </button>
+                                <div class="geo-status" id="geoStatus"></div>
+
+                                <!-- Champ adresse manuelle (rempli auto ou modifiable) -->
+                                <label for="address" class="mt-3" style="font-size:0.85rem; opacity:0.85;">Adresse détectée ou saisie manuelle</label>
+                                <textarea id="address" name="address" placeholder="Quartier, rue, repère exact... (modifiable)" rows="2"></textarea>
+                                <input type="hidden" id="deliveryLat" name="deliveryLat">
+                                <input type="hidden" id="deliveryLng" name="deliveryLng">
+                            </div>
+                            <div class="payment-note mt-2 mb-3" style="color: rgba(255,255,255,0.85); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="info" class="icon-xs"></i> 
+                                <span><strong>Paiement à la livraison</strong> ou au retrait.</span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-full shadow-md" id="submitOrderBtn" disabled>
+                                <i data-lucide="message-circle" class="icon-sm"></i>
+                                Confirmer sur WhatsApp
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engagement Section -->
+        <section class="engagement-section section motif-bg reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge badge-white">Notre Engagement</span>
+                    <h2 class="text-white">Parce que Vous Méritez le Meilleur</h2>
+                </div>
+
+                <div class="engagement-grid">
+                    <div class="engagement-card">
+                        <div class="engagement-icon-wrapper">
+                            <i data-lucide="package-check" class="icon-lg"></i>
+                        </div>
+                        <h3>Produits Frais</h3>
+                        <p>Nous livrons avec rapidité pour conserver toute la fraîcheur des produits.</p>
+                    </div>
+
+                    <div class="engagement-card">
+                        <div class="engagement-icon-wrapper">
+                            <i data-lucide="shield-check" class="icon-lg"></i>
+                        </div>
+                        <h3>Hygiène Garantie</h3>
+                        <p>Une préparation méticuleuse et le respect strict des normes de sécurité.</p>
+                    </div>
+
+                    <div class="engagement-card">
+                        <div class="engagement-icon-wrapper">
+                            <i data-lucide="dollar-sign" class="icon-lg"></i>
+                        </div>
+                        <h3>Prix Accessibles</h3>
+                        <p>Profitez de la meilleure qualité tout en respectant votre budget.</p>
+                    </div>
+
+                    <div class="engagement-card">
+                        <div class="engagement-icon-wrapper">
+                            <i data-lucide="heart-handshake" class="icon-lg"></i>
+                        </div>
+                        <h3>Producteurs Locaux</h3>
+                        <p>Soutien direct à l'économie locale et à l'agriculture durable de notre région.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+
+        <section id="contact" class="contact-section section bg-surface reveal">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="section-badge">Contact & Partenariat</span>
+                    <h2>Nous Sommes À Votre Écoute</h2>
+                    <p>
+                        Vous avez une question ou vous souhaitez devenir partenaire ? N'hésitez pas à nous contacter.
+                    </p>
+                </div>
+
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon bg-primary-light text-white">
+                            <i data-lucide="phone"></i>
+                        </div>
+                        <h3>Téléphone</h3>
+                        <p class="text-muted">+229 01 91 66 66 17</p>
+                        <a href="tel:+2290191666617" class="contact-link">Appeler maintenant</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon bg-primary-light text-white">
+                            <i data-lucide="mail"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p class="text-muted">Cabanedufermier@gmail.com</p>
+                        <a href="mailto:Cabanedufermier@gmail.com" class="contact-link">Envoyer un email</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon bg-primary-light text-white">
+                            <i data-lucide="message-circle"></i>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p class="text-muted">Réponse en moins de 15 minutes</p>
+                        <a href="https://wa.me/2290191666617" target="_blank" rel="noopener noreferrer"
+                            class="contact-link text-whatsapp">
+                            Discuter sur WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-primary text-white">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="footer-title">Cabane du <span class="text-accent">Fermier</span></h3>
+                    <p class="footer-signature">
+                        Produits frais, locaux et de qualité.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="https://www.linkedin.com/company/la-cabane-du-fermier/" class="social-icon" aria-label="LinkedIn">IN</a>
+                        <a href="https://web.facebook.com/profile.php?id=61573416285155" class="social-icon" aria-label="Facebook">FB</a>
+                        <a href="https://www.instagram.com/cabanedufermier/" class="social-icon" aria-label="Instagram">Insta</a>
+                        <a href="https://www.tiktok.com/@cabane.du.fermier" class="social-icon" aria-label="TikTok">Tiktok</a>
+                        <a href="https://wa.me/2290191666617" target="_blank" rel="noopener noreferrer"
+                            class="social-icon" aria-label="WhatsApp">
+                            <i data-lucide="message-circle" class="icon-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links-group">
+                    <h4>Liens Rapides</h4>
+                    <ul>
+                        <li><a href="#accueil">Accueil</a></li>
+                        <li><a href="#propos">À Propos</a></li>
+                        <li><a href="#produits">Nos Produits</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links-group">
+                    <h4>Informations</h4>
+                    <ul>
+                        <li><a href="#commander">Commander</a></li>
+                        <li><a href="#contact">Contact & Partenariat</a></li>
+                        <li><a href="#contact">Politique de Livraison</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Nous Trouver</h4>
+                    <p>ATLANTIQUE, ABOMEY-CALAVI</p>
+                    <p>Cotonou, Bénin</p>
+                    <p>Cabanedufermier@gmail.com</p>
+                    <p>+229 01 91 66 66 17 / +229 01 61 97 04 37</p>
+                    <p>N° RCCM RB/ABC/22 A 42321</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> Cabane du Fermier. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Scripts -->
+    <script src="script.js"></script>
 </body>
+
 </html>
