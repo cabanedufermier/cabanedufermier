@@ -1,8 +1,8 @@
-﻿# Robots.txt - Cabane du Fermier
-# https://cabane-du-fermier.vercel.app/
+# Robots.txt - Cabane du Fermier
+# https://www.cabanedufermier.com/
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://cabane-du-fermier.vercel.app/sitemap.xml
+Sitemap: https://www.cabanedufermier.com/sitemap.xml
