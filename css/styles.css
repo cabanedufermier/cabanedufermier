@@ -160,7 +160,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../images/motif-feuillage-seamless.jpg');
+    background-image: url('../images/motif-feuillage-seamless.webp');
     background-size: 380px auto;
     background-repeat: repeat;
     opacity: 0.28;
@@ -180,7 +180,7 @@ h1, h2, h3, h4, h5, h6 {
     background-repeat: repeat-x;
     background-position: center;
     background-size: auto 32px;
-    background-image: url('../images/frise-divider-seamless.png');
+    background-image: url('../images/frise-divider-seamless.webp');
     position: relative;
     z-index: 5;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
@@ -1386,6 +1386,56 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-light);
 }
 
+.form-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    line-height: 1.35;
+}
+.form-hint svg {
+    color: var(--primary-light);
+    flex-shrink: 0;
+}
+
+/* Checkbox Opt-in */
+.form-checkbox-group {
+    margin-top: -0.25rem;
+    margin-bottom: 0.25rem;
+    padding: 0.75rem 0.9rem;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    transition: all var(--duration) var(--ease);
+}
+.form-checkbox-group:hover {
+    border-color: var(--primary-lighter);
+    background: #f7faf5;
+}
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    user-select: none;
+}
+.checkbox-label input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.checkbox-text {
+    flex: 1;
+}
+
 .order-form .btn {
     margin-top: 0.5rem;
     justify-content: center;
@@ -1532,7 +1582,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../images/motif-feuillage-seamless.jpg');
+    background-image: url('../images/motif-feuillage-seamless.webp');
     background-size: 380px auto;
     background-repeat: repeat;
     opacity: 0.14;

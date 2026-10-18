@@ -4,9 +4,20 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ----- 1. Initialize Lucide Icons -----
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
+    // ----- 1. Initialize Lucide Icons (supporte chargement différé) -----
+    function initLucide() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+            return true;
+        }
+        return false;
+    }
+    if (!initLucide()) {
+        // Lucide chargé en defer, réessayer jusqu'à ce qu'il soit disponible
+        let attempts = 0;
+        const lucideInterval = setInterval(() => {
+            if (initLucide() || ++attempts > 20) clearInterval(lucideInterval);
+        }, 100);
     }
 
     // ----- 2. Dynamic Year in Footer -----
@@ -402,15 +413,17 @@ document.addEventListener('DOMContentLoaded', () => {
         orderForm.addEventListener('submit', e => {
             e.preventDefault();
 
-            const name        = document.getElementById('name')?.value.trim()        || '';
-            const contactInfo = document.getElementById('contactInfo')?.value.trim() || '';
-            const livraison   = livraisonVal ? livraisonVal.value : 'Non';
-            const address     = addressInput?.value.trim() || '';
-            const lat         = deliveryLatEl?.value || '';
-            const lng         = deliveryLngEl?.value || '';
+            const name             = document.getElementById('name')?.value.trim()        || '';
+            const email            = document.getElementById('email')?.value.trim()       || '';
+            const contactInfo      = document.getElementById('contactInfo')?.value.trim() || '';
+            const marketingConsent = document.getElementById('marketingConsent')?.checked ? 'Oui' : 'Non';
+            const livraison        = livraisonVal ? livraisonVal.value : 'Non';
+            const address          = addressInput?.value.trim() || '';
+            const lat              = deliveryLatEl?.value || '';
+            const lng              = deliveryLngEl?.value || '';
 
-            if (!name || !contactInfo) {
-                alert('Veuillez remplir tous les champs obligatoires.');
+            if (!name || !email || !contactInfo) {
+                alert('Veuillez remplir tous les champs obligatoires (Nom, Email, WhatsApp).');
                 return;
             }
             if (livraison === 'Oui' && !address && !lat) {
@@ -438,8 +451,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             msg += `\n*Total : ${orderTotal} F*\n\n`;
             msg += `👤 *Nom :* ${name}\n`;
+            msg += `📧 *Email (Facture) :* ${email}\n`;
             msg += `📱 *WhatsApp / Contact :* ${contactInfo}\n`;
             msg += `🚚 *Livraison :* ${livraison === 'Oui' ? 'À domicile' : 'Retrait sur place'}\n`;
+            msg += `🎁 *Offres exclusives par email :* ${marketingConsent}\n`;
 
             if (livraison === 'Oui') {
                 if (address) msg += `📍 *Adresse :* ${address}\n`;
