@@ -131,39 +131,40 @@ h1, h2, h3, h4, h5, h6 {
 .shadow-md { box-shadow: var(--shadow-md); }
 
 /* ============================================
-   AFRICAN MOTIFS & DESIGN ACCENTS
+   AFRICAN MOTIFS & DESIGN ACCENTS (AUTHENTIQUES)
    ============================================ */
 
-/* Motif Background — Motif géométrique africain (Inspiré Kente & Étoile de diamant) */
+/* Motif Background — Fond élégant et aéré sans losanges répétitifs */
 .motif-bg {
     position: relative;
+    background-color: var(--white);
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(64, 145, 108, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(233, 163, 25, 0.04) 0%, transparent 45%);
 }
 .motif-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='30,4 56,30 30,56 4,30' stroke='%232d6a4f' stroke-width='1.4' stroke-opacity='0.45'/%3E%3Cpolygon points='30,11 49,30 30,49 11,30' stroke='%23e9a319' stroke-width='1' stroke-opacity='0.6' stroke-dasharray='3,2'/%3E%3Cpolygon points='30,18 42,30 30,42 18,30' stroke='%232d6a4f' stroke-width='1' stroke-opacity='0.4'/%3E%3Cpolygon points='30,22 32.5,27.5 38,30 32.5,32.5 30,38 27.5,32.5 22,30 27.5,27.5' fill='%23e9a319' fill-opacity='0.75' stroke='none'/%3E%3Cpolygon points='30,28 32,30 30,32 28,30' fill='%231b4332' stroke='none'/%3E%3Cpolygon points='0,0 12,0 0,12' stroke='%232d6a4f' stroke-width='1' stroke-opacity='0.35'/%3E%3Cpolygon points='60,0 48,0 60,12' stroke='%232d6a4f' stroke-width='1' stroke-opacity='0.35'/%3E%3Cpolygon points='0,60 12,60 0,48' stroke='%232d6a4f' stroke-width='1' stroke-opacity='0.35'/%3E%3Cpolygon points='60,60 48,60 60,48' stroke='%232d6a4f' stroke-width='1' stroke-opacity='0.35'/%3E%3Cpolygon points='30,0 33,3 27,3' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Cpolygon points='30,60 33,57 27,57' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Cpolygon points='0,30 3,33 3,27' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Cpolygon points='60,30 57,33 57,27' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Ccircle cx='15' cy='15' r='1.2' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Ccircle cx='45' cy='15' r='1.2' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Ccircle cx='15' cy='45' r='1.2' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3Ccircle cx='45' cy='45' r='1.2' fill='%23e9a319' fill-opacity='0.6' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 60px 60px;
-    opacity: 0.12;
-    pointer-events: none;
-    z-index: 0;
+    display: none; /* Supprime complètement les losanges répétitifs */
 }
 .motif-bg > * {
     position: relative;
     z-index: 1;
 }
 
-/* Version sombre pour sections colorées (Commander, Engagements) */
+/* Version sombre pour sections vertes (Commander, Engagements, Footer)
+   Filigrane végétal africain authentique (motif-feuillage-seamless.jpg) */
 .motif-bg-dark {
     position: relative;
+    background-color: var(--primary-dark);
 }
 .motif-bg-dark::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='30,4 56,30 30,56 4,30' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.25'/%3E%3Cpolygon points='30,11 49,30 30,49 11,30' stroke='%23f5c55a' stroke-width='1' stroke-opacity='0.45' stroke-dasharray='3,2'/%3E%3Cpolygon points='30,18 42,30 30,42 18,30' stroke='%2352b788' stroke-width='1' stroke-opacity='0.3'/%3E%3Cpolygon points='30,22 32.5,27.5 38,30 32.5,32.5 30,38 27.5,32.5 22,30 27.5,27.5' fill='%23f5c55a' fill-opacity='0.6' stroke='none'/%3E%3Cpolygon points='30,28 32,30 30,32 28,30' fill='%23ffffff' stroke='none'/%3E%3Cpolygon points='0,0 12,0 0,12' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.2'/%3E%3Cpolygon points='60,0 48,0 60,12' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.2'/%3E%3Cpolygon points='0,60 12,60 0,48' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.2'/%3E%3Cpolygon points='60,60 48,60 60,48' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.2'/%3E%3Ccircle cx='15' cy='15' r='1.2' fill='%23f5c55a' fill-opacity='0.5' stroke='none'/%3E%3Ccircle cx='45' cy='15' r='1.2' fill='%23f5c55a' fill-opacity='0.5' stroke='none'/%3E%3Ccircle cx='15' cy='45' r='1.2' fill='%23f5c55a' fill-opacity='0.5' stroke='none'/%3E%3Ccircle cx='45' cy='45' r='1.2' fill='%23f5c55a' fill-opacity='0.5' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 60px 60px;
-    opacity: 0.15;
+    background-image: url('../images/motif-feuillage-seamless.jpg');
+    background-size: 380px auto;
+    background-repeat: repeat;
+    opacity: 0.28;
+    mix-blend-mode: overlay;
     pointer-events: none;
     z-index: 0;
 }
@@ -172,21 +173,28 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1;
 }
 
-/* Frises Décoratives Africaines (African Ribbon Dividers — Inspiré Image 1) */
+/* Frises Décoratives Africaines Authentiques (Section Dividers créées à partir de la frise ethnique) */
 .african-ribbon {
     width: 100%;
-    height: 16px;
+    height: 32px;
     background-repeat: repeat-x;
     background-position: center;
-    background-size: 80px 16px;
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='16' viewBox='0 0 80 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='0' y1='1' x2='80' y2='1' stroke='%232d6a4f' stroke-width='1.5' stroke-opacity='0.5'/%3E%3Cline x1='0' y1='15' x2='80' y2='15' stroke='%232d6a4f' stroke-width='1.5' stroke-opacity='0.5'/%3E%3Cpolygon points='4,2.5 10,8 4,13.5' fill='%232d6a4f'/%3E%3Cpolygon points='16,2.5 10,8 16,13.5' fill='%232d6a4f'/%3E%3Ccircle cx='10' cy='3.5' r='1.2' fill='%23e9a319' stroke='none'/%3E%3Ccircle cx='10' cy='12.5' r='1.2' fill='%23e9a319' stroke='none'/%3E%3Cpolygon points='30,2.5 38,8 30,13.5 22,8' stroke='%232d6a4f' stroke-width='1.4' fill='%2352b788' fill-opacity='0.15'/%3E%3Ccircle cx='30' cy='8' r='3' fill='%23e9a319' stroke='none'/%3E%3Ccircle cx='30' cy='8' r='1.2' fill='%231b4332' stroke='none'/%3E%3Cpolygon points='43,8 48,2.5 53,8 48,13.5' fill='%232d6a4f'/%3E%3Cpolygon points='53,8 57,2.5 61,8 57,13.5' fill='%23e9a319'/%3E%3Crect x='64' y='3' width='2' height='10' rx='1' fill='%232d6a4f' stroke='none'/%3E%3Crect x='68' y='3' width='2' height='10' rx='1' fill='%232d6a4f' stroke='none'/%3E%3Crect x='72' y='3' width='2' height='10' rx='1' fill='%23e9a319' stroke='none'/%3E%3Ccircle cx='77' cy='5' r='1.4' fill='%232d6a4f' stroke='none'/%3E%3Ccircle cx='77' cy='11' r='1.4' fill='%23e9a319' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.85;
+    background-size: auto 32px;
+    background-image: url('../images/frise-divider-seamless.png');
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    border-top: 1px solid rgba(233, 163, 25, 0.25);
+    border-bottom: 1px solid rgba(45, 106, 79, 0.2);
 }
 
-/* Frise Africaine Dorée / Claire pour Footer et fonds sombres */
+/* Frise Africaine pour Footer et sections sombres */
 .african-ribbon-dark {
-    background-image: url("data:image/svg+xml,%3Csvg width='80' height='16' viewBox='0 0 80 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='0' y1='1' x2='80' y2='1' stroke='%23f5c55a' stroke-width='1.5' stroke-opacity='0.6'/%3E%3Cline x1='0' y1='15' x2='80' y2='15' stroke='%23f5c55a' stroke-width='1.5' stroke-opacity='0.6'/%3E%3Cpolygon points='4,2.5 10,8 4,13.5' fill='%23f5c55a'/%3E%3Cpolygon points='16,2.5 10,8 16,13.5' fill='%23f5c55a'/%3E%3Ccircle cx='10' cy='3.5' r='1.2' fill='%23ffffff' stroke='none'/%3E%3Ccircle cx='10' cy='12.5' r='1.2' fill='%23ffffff' stroke='none'/%3E%3Cpolygon points='30,2.5 38,8 30,13.5 22,8' stroke='%23f5c55a' stroke-width='1.4' fill='%2352b788' fill-opacity='0.25'/%3E%3Ccircle cx='30' cy='8' r='3' fill='%23ffffff' stroke='none'/%3E%3Ccircle cx='30' cy='8' r='1.2' fill='%231b4332' stroke='none'/%3E%3Cpolygon points='43,8 48,2.5 53,8 48,13.5' fill='%2352b788'/%3E%3Cpolygon points='53,8 57,2.5 61,8 57,13.5' fill='%23f5c55a'/%3E%3Crect x='64' y='3' width='2' height='10' rx='1' fill='%23ffffff' stroke='none'/%3E%3Crect x='68' y='3' width='2' height='10' rx='1' fill='%2352b788' stroke='none'/%3E%3Crect x='72' y='3' width='2' height='10' rx='1' fill='%23f5c55a' stroke='none'/%3E%3Ccircle cx='77' cy='5' r='1.4' fill='%23ffffff' stroke='none'/%3E%3Ccircle cx='77' cy='11' r='1.4' fill='%23f5c55a' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.35));
     opacity: 0.95;
+    border-top-color: rgba(245, 197, 90, 0.4);
+    border-bottom-color: rgba(27, 67, 50, 0.6);
 }
 
 /* Section Headers */
@@ -223,8 +231,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
 }
 .section-badge::before {
-    content: '◆';
-    font-size: 0.65rem;
+    content: '●';
+    font-size: 0.55rem;
     color: var(--accent);
 }
 .badge-white {
@@ -547,14 +555,67 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-secondary);
 }
 
+/* Notification Fraîcheur & Délai 24h */
+.freshness-notice-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.95rem 1.25rem;
+    margin-top: 1.25rem;
+    background: rgba(233, 163, 25, 0.12);
+    border: 1px solid rgba(233, 163, 25, 0.35);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-md);
+    color: var(--white);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+.freshness-notice-banner .notice-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-light);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.freshness-notice-banner strong {
+    color: var(--accent-light);
+}
+
+.products-advance-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    max-width: 680px;
+    margin: -1.5rem auto 2.5rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(45, 106, 79, 0.06);
+    border: 1px solid rgba(45, 106, 79, 0.16);
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    color: var(--primary-dark);
+    text-align: center;
+}
+.products-advance-notice .notice-info-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+.products-advance-notice strong {
+    color: var(--primary);
+}
+
 /* ============================================
-   ABOUT SECTION
+   ABOUT SECTION REVAMPED (Avec Grand Emblème)
    ============================================ */
 .about-container {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 4rem;
-    align-items: start;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 3.5rem;
+    align-items: center;
+    margin-bottom: 3.5rem;
 }
 
 .section-title {
@@ -574,7 +635,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 1.5rem;
     padding: 1.25rem 1.5rem;
     background: linear-gradient(135deg, rgba(45,106,79,0.06), rgba(45,106,79,0.02));
-    border-left: 3px solid var(--primary-lighter);
+    border-left: 4px solid var(--accent);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 .mission-title {
@@ -589,10 +650,78 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.65;
 }
 
-.about-features {
+/* Grand Emblème Showcase Carte */
+.about-emblem-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.about-emblem-card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    background: linear-gradient(145deg, #ffffff, #f7faf5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 2.25rem 1.75rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    align-items: center;
+    transition: all var(--duration) var(--ease);
+}
+.about-emblem-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(45, 106, 79, 0.35);
+}
+.emblem-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    width: 280px;
+    height: 280px;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle, rgba(233, 163, 25, 0.18) 0%, rgba(64, 145, 108, 0.12) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+.about-emblem-img {
+    position: relative;
+    z-index: 1;
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(10, 57, 5, 0.28));
+    transition: transform 0.5s ease;
+}
+.about-emblem-card:hover .about-emblem-img {
+    transform: scale(1.04) rotate(2deg);
+}
+.emblem-info {
+    position: relative;
+    z-index: 1;
+    margin-top: 1rem;
+}
+.emblem-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+.emblem-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Ligne équilibrée des 3 atouts */
+.about-features-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
 }
 
 .feature-card {
@@ -1394,8 +1523,26 @@ h1, h2, h3, h4, h5, h6 {
    FOOTER
    ============================================ */
 .footer {
+    position: relative;
     padding: 0;
     color: rgba(255,255,255,0.85);
+    background-color: var(--primary-dark);
+}
+.footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../images/motif-feuillage-seamless.jpg');
+    background-size: 380px auto;
+    background-repeat: repeat;
+    opacity: 0.14;
+    mix-blend-mode: luminosity;
+    pointer-events: none;
+    z-index: 0;
+}
+.footer > * {
+    position: relative;
+    z-index: 1;
 }
 .footer > .container {
     padding-top: 3.5rem;
@@ -1528,13 +1675,9 @@ h1, h2, h3, h4, h5, h6 {
         grid-template-columns: 1fr;
         gap: 2.5rem;
     }
-    .about-features {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    .feature-card {
-        flex: 1;
-        min-width: 200px;
+    .about-features-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
     }
 
     .products-grid {
@@ -1603,6 +1746,18 @@ h1, h2, h3, h4, h5, h6 {
         grid-template-columns: 1fr;
         max-width: 360px;
         margin: 0 auto;
+    }
+
+    .about-features-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .about-emblem-card {
+        padding: 1.5rem 1rem;
+    }
+    .about-emblem-img {
+        width: 190px;
+        height: 190px;
     }
 
     .contact-grid {
