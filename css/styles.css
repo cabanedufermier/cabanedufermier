@@ -1501,7 +1501,7 @@ h1, h2, h3, h4, h5, h6 {
    ============================================ */
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
 }
 
@@ -1748,6 +1748,10 @@ h1, h2, h3, h4, h5, h6 {
     }
     .order-content {
         text-align: center;
+    }
+
+    .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .footer-grid {

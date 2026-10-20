@@ -40,7 +40,9 @@
 
     <!-- ========== GÉO-CIBLAGE (Bénin) ========== -->
     <meta name="geo.region" content="BJ">
-    <meta name="geo.placename" content="Cotonou, Bénin">
+    <meta name="geo.placename" content="Abomey-Calavi, Cococodji, Bénin">
+    <meta name="geo.position" content="6.384188;2.274313">
+    <meta name="ICBM" content="6.384188, 2.274313">
     <meta name="language" content="French">
 
     <!-- ========== OPEN GRAPH (Facebook / WhatsApp) ========== -->
@@ -98,16 +100,19 @@
       "url": "https://www.cabanedufermier.com/",
       "logo": "https://www.cabanedufermier.com/images/Logo.png",
       "image": "https://www.cabanedufermier.com/images/Logo.png",
-      "telephone": "",
+      "telephone": "+2290191666617",
+      "hasMap": "https://maps.app.goo.gl/nL7BRfYhFAhQNSCh9",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "BJ",
-        "addressLocality": "Cotonou"
+        "streetAddress": "Cococodji",
+        "addressLocality": "Abomey-Calavi",
+        "addressRegion": "Atlantique",
+        "addressCountry": "BJ"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 6.3654,
-        "longitude": 2.4183
+        "latitude": 6.3841875,
+        "longitude": 2.2743125
       },
       "openingHoursSpecification": [
         {
@@ -119,7 +124,13 @@
       ],
       "priceRange": "XOF",
       "servesCuisine": "Produits fermiers",
-      "sameAs": []
+      "sameAs": [
+        "https://maps.app.goo.gl/nL7BRfYhFAhQNSCh9",
+        "https://web.facebook.com/profile.php?id=61573416285155",
+        "https://www.instagram.com/cabanedufermier/",
+        "https://www.tiktok.com/@cabane.du.fermier",
+        "https://www.linkedin.com/company/la-cabane-du-fermier/"
+      ]
     }
     </script>
 
@@ -144,7 +155,7 @@
             "offers": {
               "@type": "Offer",
               "priceCurrency": "XOF",
-              "price": "2500",
+              "price": "3500",
               "priceValidUntil": "2027-12-31",
               "availability": "https://schema.org/InStock",
               "url": "https://www.cabanedufermier.com/#produits",
@@ -452,14 +463,13 @@
                             
                             <div class="product-options-wrapper mt-3">
                                 <div class="options-toggle">
-                                    <button type="button" class="option-pill active" data-option="under500" data-price="2500" data-name="< 500g">&lt; 500g</button>
-                                    <button type="button" class="option-pill" data-option="500to700" data-price="3000" data-name="500g - 700g">500g - 700g</button>
+                                    <button type="button" class="option-pill active" data-option="500to700" data-price="3500" data-name="500g - 700g">500g - 700g</button>
                                     <button type="button" class="option-pill" data-option="700to1kg" data-price="4000" data-name="700g - 1kg">700g - 1kg</button>
                                 </div>
                             </div>
 
                             <div class="product-bottom mt-3">
-                                <span class="product-price-display">2500 F</span>
+                                <span class="product-price-display">3500 F</span>
                                 <div class="product-cart-controls">
                                     <button type="button" class="btn-icon-link add-to-order add-btn" title="Ajouter à ma commande">
                                         <i data-lucide="shopping-cart" class="icon-sm"></i>
@@ -941,6 +951,18 @@
                             Discuter sur WhatsApp
                         </a>
                     </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon bg-primary-light text-white">
+                            <i data-lucide="map-pin"></i>
+                        </div>
+                        <h3>Localisation</h3>
+                        <p class="text-muted">Abomey-Calavi, Cococodji</p>
+                        <a href="https://maps.app.goo.gl/nL7BRfYhFAhQNSCh9" target="_blank" rel="noopener noreferrer"
+                            class="contact-link">
+                            Voir sur Google Maps
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -989,8 +1011,13 @@
 
                 <div class="footer-contact">
                     <h4>Nous Trouver</h4>
-                    <p>ATLANTIQUE, ABOMEY-CALAVI</p>
-                    <p>Cotonou, Bénin</p>
+                    <p><strong>Abomey-Calavi, Cococodji</strong></p>
+                    <p>Atlantique, Bénin</p>
+                    <p style="margin-top: 0.4rem; margin-bottom: 0.6rem;">
+                        <a href="https://maps.app.goo.gl/nL7BRfYhFAhQNSCh9" target="_blank" rel="noopener noreferrer" style="color: var(--accent-light); font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <i data-lucide="map-pin" class="icon-xs"></i> Ouvrir dans Google Maps
+                        </a>
+                    </p>
                     <p>contact@cabanedufermier.com</p>
                     <p>+229 01 91 66 66 17 / +229 01 61 97 04 37</p>
                     <p>N° RCCM RB/ABC/22 A 42321</p>

@@ -262,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let deliveryMarker = null;
     let mapInitialized = false;
 
-    // Default center: Cotonou, Bénin
-    const DEFAULT_LAT = 6.3703;
-    const DEFAULT_LNG = 2.3912;
+    // Default center: Abomey-Calavi (Cococodji), Bénin
+    const DEFAULT_LAT = 6.3842;
+    const DEFAULT_LNG = 2.2743;
 
     function setGeoStatus(msg, type) {
         if (!geoStatus) return;
@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addressSection.style.display = 'flex';
             if (typeof lucide !== 'undefined') lucide.createIcons();
 
-            // Initialiser la carte sur Cotonou par défaut si pas encore initialisée
+            // Initialiser la carte sur Abomey-Calavi (Cococodji) par défaut si pas encore initialisée
             if (!mapInitialized) {
                 setTimeout(() => initMap(DEFAULT_LAT, DEFAULT_LNG), 150);
             } else {
