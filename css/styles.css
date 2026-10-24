@@ -555,58 +555,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-secondary);
 }
 
-/* Notification Fraîcheur & Délai 24h */
-.freshness-notice-banner {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.85rem;
-    padding: 0.95rem 1.25rem;
-    margin-top: 1.25rem;
-    background: rgba(233, 163, 25, 0.12);
-    border: 1px solid rgba(233, 163, 25, 0.35);
-    border-left: 4px solid var(--accent);
-    border-radius: var(--radius-md);
-    color: var(--white);
-    font-size: 0.92rem;
-    line-height: 1.5;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-.freshness-notice-banner .notice-icon {
-    width: 20px;
-    height: 20px;
-    color: var(--accent-light);
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-.freshness-notice-banner strong {
-    color: var(--accent-light);
-}
-
-.products-advance-notice {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    max-width: 680px;
-    margin: -1.5rem auto 2.5rem;
-    padding: 0.75rem 1.25rem;
-    background: rgba(45, 106, 79, 0.06);
-    border: 1px solid rgba(45, 106, 79, 0.16);
-    border-radius: var(--radius-full);
-    font-size: 0.9rem;
-    color: var(--primary-dark);
-    text-align: center;
-}
-.products-advance-notice .notice-info-icon {
-    width: 18px;
-    height: 18px;
-    color: var(--primary);
-    flex-shrink: 0;
-}
-.products-advance-notice strong {
-    color: var(--primary);
-}
-
 /* ============================================
    ABOUT SECTION REVAMPED (Avec Grand Emblème)
    ============================================ */
