@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listEl.innerHTML = '';
         let hasItems = false;
 
-        Object.values(cart).forEach(item => {
+        Object.entries(cart).forEach(([cartKey, item]) => {
             if (item.qty > 0) {
                 hasItems = true;
                 const subtotal = item.price * item.qty;
@@ -110,12 +110,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.innerHTML = `
                     <div class="cart-item-info">
                         <span class="cart-item-name">${item.product}</span>
-                        <span class="cart-item-option">${item.optionName} x ${item.qty}</span>
+                        <span class="cart-item-option">${item.optionName} × ${item.qty}</span>
                     </div>
-                    <span class="cart-item-price">${subtotal} F</span>
+                    <div class="cart-item-actions">
+                        <span class="cart-item-price">${subtotal} F</span>
+                        <button type="button" class="cart-item-del-btn" data-cart-key="${cartKey}" title="Supprimer du panier" aria-label="Supprimer ${item.product}">
+                            &times;
+                        </button>
+                    </div>
                 `;
                 listEl.appendChild(li);
             }
+        });
+
+        // Handler pour supprimer un item du panier
+        listEl.querySelectorAll('.cart-item-del-btn').forEach(delBtn => {
+            delBtn.addEventListener('click', (e) => {
+                const k = e.currentTarget.getAttribute('data-cart-key');
+                if (k && cart[k]) {
+                    delete cart[k];
+                    updateCartUI();
+                }
+            });
         });
 
         if (hasItems) {
@@ -188,13 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activeOptionBtn) {
                 const optionId = activeOptionBtn.getAttribute('data-option');
                 const optionName = activeOptionBtn.getAttribute('data-name');
-                const price = parseInt(activeOptionBtn.getAttribute('data-price'));
+                const price = parseInt(activeOptionBtn.getAttribute('data-price'), 10);
                 const cartKey = productId + "_" + optionId;
 
-                if (!cart[cartKey]) {
-                    cart[cartKey] = { product: productName, optionId, optionName, price, qty: 0 };
+                if (!cart[cartKey] || cart[cartKey].qty === 0) {
+                    cart[cartKey] = { product: productName, optionId, optionName, price, qty: 1 };
+                } else {
+                    cart[cartKey].qty++;
                 }
-                cart[cartKey].qty = 1;
                 updateCartUI();
                 
                 // Scroll to commander section on first add
@@ -226,6 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cartKey = productId + "_" + optionId;
                 if (cart[cartKey] && cart[cartKey].qty > 0) {
                     cart[cartKey].qty--;
+                    if (cart[cartKey].qty === 0) {
+                        delete cart[cartKey];
+                    }
                     updateCartUI();
                 }
             }
@@ -235,14 +255,19 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             const productId = card.getAttribute('data-product-id');
+            const productName = card.querySelector('.product-name').textContent;
             const activeOptionBtn = card.querySelector('.option-pill.active');
             if (activeOptionBtn) {
                 const optionId = activeOptionBtn.getAttribute('data-option');
+                const optionName = activeOptionBtn.getAttribute('data-name');
+                const price = parseInt(activeOptionBtn.getAttribute('data-price'), 10);
                 const cartKey = productId + "_" + optionId;
-                if (cart[cartKey]) {
+                if (!cart[cartKey]) {
+                    cart[cartKey] = { product: productName, optionId, optionName, price, qty: 1 };
+                } else {
                     cart[cartKey].qty++;
-                    updateCartUI();
                 }
+                updateCartUI();
             }
         });
     });
@@ -557,3 +582,114 @@ document.addEventListener('DOMContentLoaded', () => {
         dataLayer.push({'event': 'consent_update'});
     }
 });
+
+// ============================================
+// PWA : Service Worker, Installation & Splash Screen
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+
+    // 1. Enregistrement du Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => {
+                    console.log('[PWA] Service Worker actif, scope:', reg.scope);
+                })
+                .catch(err => {
+                    console.warn('[PWA] Service Worker non disponible:', err);
+                });
+        });
+    }
+
+    // 2. Detection du mode Application installee (Standalone PWA)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                         window.navigator.standalone === true ||
+                         window.location.search.includes('source=pwa');
+
+    const splashEl = document.getElementById('pwaSplashScreen');
+
+    if (isStandalone && splashEl) {
+        // Afficher l'animation Splash Screen elegante lors de l'ouverture de l'application
+        splashEl.classList.add('active');
+        // Masquer doucement apres un bref chargement (1.6s)
+        setTimeout(() => {
+            splashEl.style.opacity = '0';
+            setTimeout(() => {
+                splashEl.classList.remove('active');
+                splashEl.style.display = 'none';
+            }, 500);
+        }, 1600);
+    }
+
+    // 3. Gestion du bouton d'installation & du prompt Chrome / Android / Desktop
+    let deferredPrompt = null;
+    const btnInstall = document.getElementById('btnInstallApp');
+    const btnInstallMobile = document.getElementById('btnInstallAppMobile');
+    const bannerInstall = document.getElementById('pwaInstallBanner');
+    const btnBannerInstall = document.getElementById('btnBannerInstall');
+    const btnCloseBanner = document.getElementById('btnCloseInstallBanner');
+
+    function showInstallButtons() {
+        if (btnInstall) btnInstall.style.display = 'inline-flex';
+        if (btnInstallMobile) btnInstallMobile.style.display = 'flex';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        
+        // Afficher la banniere flottante si pas encore refusee recemment
+        const bannerDismissed = localStorage.getItem('pwa_banner_dismissed');
+        if (bannerInstall && !bannerDismissed && !isStandalone) {
+            setTimeout(() => bannerInstall.classList.add('show'), 2000);
+        }
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Empecher l'affichage de la mini-infobar native par defaut
+        e.preventDefault();
+        deferredPrompt = e;
+        showInstallButtons();
+    });
+
+    async function triggerInstallFlow() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('[PWA] Application installee avec succes !');
+                if (bannerInstall) bannerInstall.classList.remove('show');
+            }
+            deferredPrompt = null;
+        } else {
+            // Sur iOS Safari ou navigateurs sans prompt direct
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                alert("Pour installer l'application sur votre iPhone :\n\n1. Appuyez sur le bouton de Partage (icone carre avec fleche vers le haut en bas)\n2. Selectionnez 'Sur l'ecran d'accueil'");
+            } else {
+                alert("Pour installer l'application sur votre telephone :\n\nOuvrez le menu du navigateur (3 points en haut a droite) puis selectionnez 'Installer l'application' ou 'Ajouter a l'ecran d'accueil'.");
+            }
+        }
+    }
+
+    if (btnInstall) btnInstall.addEventListener('click', triggerInstallFlow);
+    if (btnInstallMobile) btnInstallMobile.addEventListener('click', triggerInstallFlow);
+    if (btnBannerInstall) btnBannerInstall.addEventListener('click', triggerInstallFlow);
+
+    if (btnCloseBanner && bannerInstall) {
+        btnCloseBanner.addEventListener('click', () => {
+            bannerInstall.classList.remove('show');
+            localStorage.setItem('pwa_banner_dismissed', 'true');
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        console.log('[PWA] Application enregistree sur le systeme.');
+        if (btnInstall) btnInstall.style.display = 'none';
+        if (btnInstallMobile) btnInstallMobile.style.display = 'none';
+        if (bannerInstall) bannerInstall.classList.remove('show');
+    });
+
+    // Si sur mobile ou iOS et pas standalone, afficher le bouton d'installation
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobileDevice && !isStandalone) {
+        setTimeout(showInstallButtons, 1200);
+    }
+});
+

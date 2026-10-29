@@ -60,6 +60,14 @@
     <meta name="twitter:description" content="Poulets fermiers, lapins, cailles, escargots et légumes précuits livrés frais au Bénin.">
     <meta name="twitter:image" content="https://www.cabanedufermier.com/images/Logo.png">
 
+    <!-- PWA & Mobile Icons -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1b4332">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Cabane Fermier">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/Logo.png">
 
@@ -295,6 +303,9 @@
                 <a href="#propos" class="nav-link">À Propos</a>
                 <a href="#produits" class="nav-link">Nos Produits</a>
                 <a href="#contact" class="nav-link">Contact</a>
+                <button type="button" class="btn-install-app" id="btnInstallApp" style="display: none;" title="Installer l'application sur votre téléphone">
+                    <i data-lucide="smartphone" class="icon-sm"></i> Installer l'App
+                </button>
                 <a href="#commander" class="btn btn-primary nav-btn">
                     <i data-lucide="shopping-bag" class="icon-sm"></i> Commander
                 </a>
@@ -311,6 +322,9 @@
             <a href="#propos" class="mobile-nav-link">À Propos</a>
             <a href="#produits" class="mobile-nav-link">Nos Produits</a>
             <a href="#contact" class="mobile-nav-link">Contact</a>
+            <button type="button" class="btn-install-app mobile-install-btn" id="btnInstallAppMobile" style="display: none;">
+                <i data-lucide="download" class="icon-sm"></i> Installer l'App sur votre téléphone
+            </button>
             <a href="#commander" class="btn btn-primary mobile-nav-btn">Commander</a>
         </div>
     </nav>
@@ -1015,6 +1029,48 @@
             </div>
         </div>
     </footer>
+
+    <!-- PWA In-App Splash Screen (S'affiche lors du lancement PWA ou rechargement) -->
+    <div id="pwaSplashScreen" class="pwa-splash-screen" aria-hidden="true">
+        <div class="splash-content">
+            <div class="splash-logo-wrapper">
+                <picture>
+                    <source srcset="images/Logo.webp" type="image/webp">
+                    <img src="images/Logo.png" alt="Cabane du Fermier" class="splash-logo" width="100" height="100">
+                </picture>
+                <div class="splash-pulse-ring"></div>
+            </div>
+            <h2 class="splash-title">Cabane du Fermier</h2>
+            <p class="splash-subtitle">Terroir & Fraîcheur du Bénin</p>
+            <div class="splash-loader">
+                <span class="splash-loader-bar"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Bottom Install Prompt Banner (Mobile & Desktop) -->
+    <div id="pwaInstallBanner" class="pwa-install-banner" style="display: none;">
+        <div class="pwa-banner-content">
+            <div class="pwa-banner-icon">
+                <picture>
+                    <source srcset="images/Logo.webp" type="image/webp">
+                    <img src="images/Logo.png" alt="Logo" width="44" height="44">
+                </picture>
+            </div>
+            <div class="pwa-banner-text">
+                <strong>Installer Cabane du Fermier</strong>
+                <p>Commandez vos volailles et produits frais directement depuis votre écran d'accueil.</p>
+            </div>
+            <div class="pwa-banner-actions">
+                <button type="button" class="btn btn-primary btn-sm" id="btnBannerInstall">
+                    <i data-lucide="download" class="icon-xs"></i> Installer
+                </button>
+                <button type="button" class="pwa-banner-close" id="btnCloseInstallBanner" aria-label="Fermer la notification d'installation">
+                    &times;
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom Scripts -->
     <script src="script.js"></script>

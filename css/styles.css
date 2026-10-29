@@ -524,35 +524,52 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     bottom: 1.5rem;
     left: 1.5rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1.25rem;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: var(--radius-md);
-    border-left: 4px solid var(--accent);
-    box-shadow: var(--shadow-md);
-    animation: slideUp 0.8s ease-out 0.5s both;
+    gap: 0.85rem;
+    padding: 0.85rem 1.35rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-left: 5px solid var(--accent);
+    box-shadow: 0 10px 30px rgba(27, 67, 50, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+    transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+    z-index: 2;
+}
+
+.hero-stats-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 36px rgba(27, 67, 50, 0.22);
 }
 
 @keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
+    from { transform: translateY(24px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
 
 .stat-icon {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    color: var(--primary);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
 }
+
 .stat-text {
-    font-size: 0.78rem;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--primary-dark);
 }
 
 /* ============================================
@@ -2201,6 +2218,31 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     color: var(--accent-light);
 }
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.cart-item-del-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.25rem;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--duration) var(--ease);
+}
+.cart-item-del-btn:hover {
+    background: #e63946;
+    color: #ffffff;
+    transform: scale(1.1);
+}
 .cart-total-container {
     display: flex;
     justify-content: space-between;
@@ -2354,5 +2396,234 @@ h1, h2, h3, h4, h5, h6 {
         transform: scale(2.5);
         opacity: 0;
     }
+}
+
+/* ============================================
+   PWA & APP INSTALL STYLES
+   ============================================ */
+
+/* Bouton d'installation dans la navbar */
+.btn-install-app {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.05rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(45, 106, 79, 0.08);
+    border: 1.5px solid rgba(45, 106, 79, 0.25);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--duration) var(--ease);
+}
+.btn-install-app:hover {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.mobile-install-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    background: linear-gradient(135deg, rgba(233,163,25,0.15), rgba(45,106,79,0.12));
+    border-color: var(--accent);
+    color: var(--primary-dark);
+}
+
+/* Bannière d'installation PWA flottante */
+.pwa-install-banner {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    width: calc(100% - 2.5rem);
+    max-width: 520px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(45, 106, 79, 0.2);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 16px 48px rgba(27, 67, 50, 0.22);
+    padding: 1rem 1.25rem;
+    z-index: 9998;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+    opacity: 0;
+}
+.pwa-install-banner.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+.pwa-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+}
+.pwa-banner-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+.pwa-banner-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.pwa-banner-text {
+    flex: 1;
+    min-width: 0;
+}
+.pwa-banner-text strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.15rem;
+}
+.pwa-banner-text p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+    margin: 0;
+}
+.pwa-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+.pwa-banner-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: color var(--duration) var(--ease);
+}
+.pwa-banner-close:hover {
+    color: var(--text);
+}
+
+/* ============================================
+   PWA IN-APP SPLASH SCREEN
+   ============================================ */
+.pwa-splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #245841 0%, #163628 100%);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.pwa-splash-screen.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+.splash-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+.splash-logo-wrapper {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 12px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+.splash-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: splashLogoPop 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes splashLogoPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.splash-pulse-ring {
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    animation: splashRingPulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    pointer-events: none;
+}
+@keyframes splashRingPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+.splash-title {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+}
+.splash-subtitle {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+.splash-loader {
+    width: 140px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+}
+.splash-loader-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 35%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: var(--radius-full);
+    animation: splashLoading 1.4s infinite ease-in-out;
+}
+@keyframes splashLoading {
+    0% { left: -35%; }
+    100% { left: 100%; }
 }
 
