@@ -309,14 +309,21 @@
                 <button type="button" class="btn-install-app" id="btnInstallApp" style="display: none;" title="Installer l'application sur votre téléphone">
                     <i data-lucide="smartphone" class="icon-sm"></i> Installer l'App
                 </button>
-                <a href="#commander" class="btn btn-primary nav-btn">
-                    <i data-lucide="shopping-bag" class="icon-sm"></i> Commander
-                </a>
+                <button type="button" class="btn-nav-cart" id="btnOpenCartDesktop">
+                    <i data-lucide="shopping-bag" class="icon-sm"></i> Panier
+                    <span class="nav-cart-badge" id="navCartBadge">0</span>
+                </button>
             </div>
 
-            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Ouvrir le menu">
-                <i data-lucide="menu" id="menu-icon"></i>
-            </button>
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <button type="button" class="btn-mobile-nav-cart" id="btnOpenCartMobile" aria-label="Voir mon panier">
+                    <i data-lucide="shopping-bag" class="icon-sm"></i>
+                    <span class="nav-cart-badge" id="mobileCartBadge">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Ouvrir le menu">
+                    <i data-lucide="menu" id="menu-icon"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Mobile Menu -->
@@ -328,7 +335,9 @@
             <button type="button" class="btn-install-app mobile-install-btn" id="btnInstallAppMobile" style="display: none;">
                 <i data-lucide="download" class="icon-sm"></i> Installer l'App sur votre téléphone
             </button>
-            <a href="#commander" class="btn btn-primary mobile-nav-btn">Commander</a>
+            <button type="button" class="btn btn-primary mobile-nav-btn" id="btnOpenCartMobileMenu">
+                <i data-lucide="shopping-bag" class="icon-sm"></i> Voir mon panier (<span id="mobileMenuCartCount">0</span>)
+            </button>
         </div>
     </nav>
 
@@ -757,133 +766,7 @@
         <!-- African Ribbon Divider -->
         <div class="african-ribbon" aria-hidden="true"></div>
 
-        <!-- Order Form Section -->
-        <section id="commander" class="order-section section motif-bg-dark reveal">
-            <div class="container">
-                <div class="order-wrapper">
-                    <div class="order-content">
-                        <span class="section-badge badge-white">Passer Commande</span>
-                        <h2 class="text-white">Votre Panier</h2>
-                        <p class="text-white-muted">
-                            Vérifiez les articles sélectionnés et remplissez le formulaire pour finaliser votre commande directement via WhatsApp.
-                        </p>
-                        
-                        <div class="cart-summary-container mt-12">
-                            <div id="cart-empty-msg" class="cart-empty-msg">
-                                <i data-lucide="shopping-cart" class="icon-lg"></i>
-                                <p>Votre panier est vide. Sélectionnez des produits ci-dessus.</p>
-                            </div>
-                            <ul id="cart-items-list" class="cart-items-list" style="display: none;">
-                                <!-- Items injected by JS -->
-                            </ul>
-                            <div id="cart-discount-row" class="cart-discount-row" style="display: none;">
-                                <span>Réduction promo (-5%)</span>
-                                <span id="cart-discount-amount">-0 F</span>
-                            </div>
-                            <div id="cart-discount-hint" class="cart-discount-hint" style="display: none;">
-                                <small>Appliquée sur les viandes fraîches (poulet, lapin, cailles) et le gombo.</small>
-                            </div>
-                            <div id="cart-total-container" class="cart-total-container" style="display: none;">
-                                <span>Total</span>
-                                <span id="cart-total-price">0 F</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="order-form-container">
-                        <form id="orderForm" class="order-form">
-                            <div class="form-group">
-                                <label for="name">Votre Nom & Prénoms</label>
-                                <input type="text" id="name" name="name" placeholder="Ex: Ariane Amoussou" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email">Votre Adresse Email</label>
-                                <input type="email" id="email" name="email" placeholder="Ex: ariane.amoussou@email.com" required>
-                                <small class="form-hint"><i data-lucide="receipt" class="icon-xs"></i> Nécessaire pour l'envoi de votre reçu / facture de commande.</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="contactInfo">Votre Numéro WhatsApp</label>
-                                <input type="tel" id="contactInfo" name="contactInfo" placeholder="+229 XX XX XX XX" required>
-                            </div>
-
-                            <!-- Bloc Code Promo (uniquement première commande) -->
-                            <div class="form-group promo-group" id="promo-code-section">
-                                <label for="promo_code">
-                                    <i data-lucide="tag" class="icon-xs"></i> Avez-vous un code promo ?
-                                </label>
-                                <small class="form-hint" style="margin-bottom: 0.5rem; display: block;">Renseignez votre code ici et bénéficiez de 5% de réduction sur votre première commande.</small>
-                                <div class="promo-input-row">
-                                    <input type="text" id="promo_code" name="promo_code" placeholder="Entrez votre code" autocomplete="off" autocapitalize="characters">
-                                    <button type="button" id="apply-promo-btn" class="btn-promo-apply">Appliquer</button>
-                                </div>
-                                <div id="promo-feedback" class="promo-feedback" style="display: none;"></div>
-                            </div>
-
-                            <!-- Consentement offres exclusives / newsletter -->
-                            <div class="form-checkbox-group">
-                                <label class="checkbox-label" for="marketingConsent">
-                                    <input type="checkbox" id="marketingConsent" name="marketingConsent" checked>
-                                    <span class="checkbox-custom"></span>
-                                    <span class="checkbox-text">J'accepte de recevoir par email les arrivages frais, réductions et offres exclusives de la Cabane du Fermier.</span>
-                                </label>
-                            </div>
-
-                            <!-- Livraison Toggle -->
-                            <div class="form-group">
-                                <label>Mode de réception</label>
-                                <div class="livraison-toggle">
-                                    <button type="button" class="toggle-btn active" id="livraisonNon" data-value="Non">
-                                        <i data-lucide="store" class="icon-sm"></i> Retrait sur place
-                                    </button>
-                                    <button type="button" class="toggle-btn" id="livraisonOui" data-value="Oui">
-                                        <i data-lucide="truck" class="icon-sm"></i> Livraison à domicile
-                                    </button>
-                                </div>
-                                <input type="hidden" id="livraisonValue" value="Non">
-                            </div>
-
-                            <!-- Bloc adresse avec carte -->
-                            <div class="form-group" id="addressSection" style="display:none;">
-                                <label>Localisation de livraison</label>
-
-                                <!-- Carte interactive -->
-                                <div class="map-wrapper">
-                                    <div id="delivery-map"></div>
-                                    <div class="map-overlay-hint" id="mapHint">
-                                        <i data-lucide="map-pin" class="icon-sm"></i>
-                                        <span>Déplacez l'épingle pour ajuster</span>
-                                    </div>
-                                </div>
-
-                                <!-- Bouton géolocalisation automatique -->
-                                <button type="button" class="btn-geolocate" id="btnGeolocate">
-                                    <i data-lucide="crosshair" class="icon-sm"></i>
-                                    Sélectionner automatiquement ma localisation actuelle
-                                </button>
-                                <div class="geo-status" id="geoStatus"></div>
-
-                                <!-- Champ adresse manuelle (rempli auto ou modifiable) -->
-                                <label for="address" class="mt-3" style="font-size:0.85rem; opacity:0.85;">Adresse détectée ou saisie manuelle</label>
-                                <textarea id="address" name="address" placeholder="Quartier, rue, repère exact... (modifiable)" rows="2"></textarea>
-                                <input type="hidden" id="deliveryLat" name="deliveryLat">
-                                <input type="hidden" id="deliveryLng" name="deliveryLng">
-                            </div>
-                            <div class="payment-note mt-2 mb-3" style="color: rgba(255,255,255,0.85); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i data-lucide="info" class="icon-xs"></i> 
-                                <span><strong>Paiement à la livraison</strong> ou au retrait.</span>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-full shadow-md" id="submitOrderBtn" disabled>
-                                <i data-lucide="message-circle" class="icon-sm"></i>
-                                Confirmer sur WhatsApp
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Engagement Section -->
         <section class="engagement-section section motif-bg-dark reveal">
@@ -1052,6 +935,161 @@
             </div>
         </div>
     </footer>
+
+    <!-- ============================================
+         MODERN CART DRAWER (PANIER COULISSANT)
+         ============================================ -->
+    <div id="cartDrawerOverlay" class="cart-drawer-overlay"></div>
+
+    <aside id="cartDrawer" class="cart-drawer" aria-label="Votre Panier">
+        <!-- En-tête du Panier -->
+        <div class="cart-drawer-header">
+            <div class="cart-drawer-title-wrap">
+                <i data-lucide="shopping-bag" class="icon-sm"></i>
+                <h3>Votre Panier</h3>
+                <span class="cart-drawer-count" id="cartDrawerCount">0 article</span>
+            </div>
+            <button type="button" class="btn-close-cart-drawer" id="btnCloseCartDrawer" aria-label="Fermer le panier">
+                <i data-lucide="x" class="icon-sm"></i>
+            </button>
+        </div>
+
+        <!-- Corps du Panier (Scrollable) -->
+        <div class="cart-drawer-body">
+            <!-- État Panier Vide -->
+            <div id="cart-empty-msg" class="cart-empty-msg">
+                <i data-lucide="shopping-cart" class="icon-lg" style="margin-bottom: 0.5rem; opacity: 0.45;"></i>
+                <p><strong>Votre panier est vide</strong></p>
+                <small style="color: var(--text-muted);">Ajoutez nos volailles fermières et produits frais pour commencer !</small>
+            </div>
+
+            <!-- Liste des articles -->
+            <ul id="cart-items-list" class="cart-items-list" style="display: none;">
+                <!-- Injecté par script.js -->
+            </ul>
+
+            <!-- Récapitulatif et Totaux -->
+            <div id="cartTotalsBox" class="cart-drawer-totals" style="display: none;">
+                <div class="cart-totals-row">
+                    <span>Sous-total articles</span>
+                    <span id="cartSubtotalAmount">0 F</span>
+                </div>
+                <div id="cart-discount-row" class="cart-totals-row discount" style="display: none;">
+                    <span>Réduction promo (-5%)</span>
+                    <span id="cart-discount-amount">-0 F</span>
+                </div>
+                <div id="cart-discount-hint" class="cart-discount-hint" style="display: none; font-size: 0.75rem; color: #059669; margin-bottom: 0.5rem;">
+                    <small>Appliquée sur les viandes fraîches et le gombo.</small>
+                </div>
+                <div id="cart-total-container" class="cart-totals-row total-final">
+                    <span>Total final</span>
+                    <span id="cart-total-price">0 F</span>
+                </div>
+            </div>
+
+            <!-- Formulaire de commande WhatsApp -->
+            <div class="cart-drawer-form-box" id="cartFormBox" style="display: none;">
+                <h4><i data-lucide="clipboard-list" class="icon-xs"></i> Finaliser la commande</h4>
+                
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="name">Votre Nom & Prénoms</label>
+                        <input type="text" id="name" name="name" placeholder="Ex: Ariane Amoussou" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Votre Adresse Email</label>
+                        <input type="email" id="email" name="email" placeholder="Ex: ariane.amoussou@email.com" required>
+                        <small class="form-hint" style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 0.25rem;"><i data-lucide="receipt" class="icon-xs"></i> Requis pour l'envoi de votre reçu / facture.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactInfo">Votre Numéro WhatsApp</label>
+                        <input type="tel" id="contactInfo" name="contactInfo" placeholder="+229 XX XX XX XX" required>
+                    </div>
+
+                    <!-- Bloc Code Promo -->
+                    <div class="form-group promo-group" id="promo-code-section">
+                        <label for="promo_code">
+                            <i data-lucide="tag" class="icon-xs"></i> Code Promo
+                        </label>
+                        <div class="promo-input-row" style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
+                            <input type="text" id="promo_code" name="promo_code" placeholder="Ex: CDF-ALAIN" autocomplete="off" autocapitalize="characters" style="flex: 1;">
+                            <button type="button" id="apply-promo-btn" class="btn-promo-apply">Appliquer</button>
+                        </div>
+                        <div id="promo-feedback" class="promo-feedback" style="display: none; font-size: 0.8rem; margin-top: 0.35rem;"></div>
+                    </div>
+
+                    <!-- Consentement offres exclusives -->
+                    <div class="form-checkbox-group" style="margin-bottom: 1rem;">
+                        <label class="checkbox-label" for="marketingConsent" style="display: flex; gap: 0.5rem; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
+                            <input type="checkbox" id="marketingConsent" name="marketingConsent" checked>
+                            <span>Recevoir par email les arrivages frais et réductions.</span>
+                        </label>
+                    </div>
+
+                    <!-- Mode de réception -->
+                    <div class="form-group">
+                        <label>Mode de réception</label>
+                        <div class="livraison-toggle" style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
+                            <button type="button" class="toggle-btn active" id="livraisonNon" data-value="Non" style="flex: 1; padding: 0.65rem; font-size: 0.85rem;">
+                                <i data-lucide="store" class="icon-xs"></i> Retrait sur place
+                            </button>
+                            <button type="button" class="toggle-btn" id="livraisonOui" data-value="Oui" style="flex: 1; padding: 0.65rem; font-size: 0.85rem;">
+                                <i data-lucide="truck" class="icon-xs"></i> Livraison à domicile
+                            </button>
+                        </div>
+                        <input type="hidden" id="livraisonValue" value="Non">
+                    </div>
+
+                    <!-- Bloc adresse avec carte -->
+                    <div class="form-group" id="addressSection" style="display:none;">
+                        <label>Localisation de livraison</label>
+
+                        <div class="map-wrapper" style="height: 180px; border-radius: var(--radius-sm); overflow: hidden; margin: 0.5rem 0;">
+                            <div id="delivery-map" style="height: 100%; width: 100%;"></div>
+                        </div>
+
+                        <button type="button" class="btn-geolocate" id="btnGeolocate" style="width: 100%; padding: 0.6rem; font-size: 0.82rem; margin-bottom: 0.5rem;">
+                            <i data-lucide="crosshair" class="icon-xs"></i> Ma position actuelle
+                        </button>
+                        <div class="geo-status" id="geoStatus" style="font-size: 0.8rem; margin-bottom: 0.4rem;"></div>
+
+                        <label for="address" style="font-size:0.8rem; color: var(--text-muted);">Adresse ou repère exact</label>
+                        <textarea id="address" name="address" placeholder="Quartier, rue, repère..." rows="2" style="font-size: 0.85rem;"></textarea>
+                        <input type="hidden" id="deliveryLat" name="deliveryLat">
+                        <input type="hidden" id="deliveryLng" name="deliveryLng">
+                    </div>
+
+                    <div class="payment-note" style="color: var(--text-muted); font-size: 0.82rem; display: flex; align-items: center; gap: 0.4rem; margin: 0.75rem 0;">
+                        <i data-lucide="info" class="icon-xs" style="color: var(--primary);"></i> 
+                        <span>Paiement à la livraison ou au retrait.</span>
+                    </div>
+
+                    <button type="submit" class="btn-submit-drawer" id="submitOrderBtn" disabled>
+                        <i data-lucide="message-circle" class="icon-sm"></i>
+                        <span>Confirmer sur WhatsApp</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Pilule Panier Flottante (Visible dès qu'un article est ajouté) -->
+    <button type="button" class="floating-cart-pill" id="floatingCartPill" aria-label="Ouvrir le panier">
+        <span class="icon-wrap">
+            <i data-lucide="shopping-bag" class="icon-sm"></i>
+            <span class="badge" id="floatingCartBadge">0</span>
+        </span>
+        <span class="text-info">Voir mon panier</span>
+        <span class="pill-total" id="floatingCartTotal">0 F</span>
+    </button>
+
+    <!-- Toast Notification Ajout Produit -->
+    <div id="cartToast" class="cart-toast" role="status" aria-live="polite">
+        <i data-lucide="check-circle" class="icon-sm" style="color: var(--primary);"></i>
+        <span id="cartToastMsg">Produit ajouté au panier !</span>
+    </div>
 
     <!-- PWA In-App Splash Screen (S'affiche lors du lancement PWA ou rechargement) -->
     <div id="pwaSplashScreen" class="pwa-splash-screen" aria-hidden="true">

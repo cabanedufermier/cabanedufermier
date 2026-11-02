@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace DAF & Direction | Validation des Versements — Cabane du Fermier</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="images/Logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.460.0" defer></script>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+
+    <style>
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --accent: #e9a319;
+            --bg: #f4f7f2;
+            --card-bg: #ffffff;
+            --border: #e2ecd9;
+            --text: #1a2e1a;
+            --text-muted: #5c735c;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-full: 999px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 6px 20px rgba(27,67,50,0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .admin-nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        .admin-nav .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+        .admin-nav .brand img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+        }
+        .badge-daf {
+            background: rgba(233, 163, 25, 0.18);
+            color: #92400e;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Écran de verrouillage / Code PIN */
+        .lock-card {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: #ffffff;
+            padding: 2.25rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+        .lock-card h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary-dark);
+            font-size: 1.45rem;
+            margin-bottom: 0.5rem;
+        }
+        .lock-card p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+        }
+        .lock-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 4px;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .lock-input:focus {
+            border-color: var(--primary);
+        }
+        .btn-unlock {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-unlock:hover {
+            background: var(--primary-dark);
+        }
+
+        /* En-tête Dashboard DAF */
+        .daf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+        .daf-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.65rem;
+            color: var(--primary-dark);
+        }
+        .daf-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* KPI Stats Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .kpi-card {
+            background: #ffffff;
+            padding: 1.35rem 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card.pending {
+            border-left: 5px solid #f59e0b;
+        }
+        .kpi-card.validated {
+            border-left: 5px solid #10b981;
+        }
+        .kpi-card.amount {
+            border-left: 5px solid var(--accent);
+        }
+        .kpi-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+        .kpi-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        /* Filter Tabs */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .tabs-wrap {
+            display: flex;
+            background: #eaf1e7;
+            padding: 0.3rem;
+            border-radius: var(--radius-full);
+            gap: 0.3rem;
+        }
+        .tab-filter-btn {
+            padding: 0.45rem 1.15rem;
+            border-radius: var(--radius-full);
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-filter-btn.active {
+            background: #ffffff;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        /* Cartes Commandes */
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .order-card-daf {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.35rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+        }
+        .order-card-daf:hover {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(45, 106, 79, 0.35);
+        }
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .order-date {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        .status-en_attente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-validee {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-annulee {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .order-body-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .info-col label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+        }
+        .info-col .value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .info-col .value.promo {
+            color: #d97706;
+            background: #fef3c7;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .info-col .value.commission {
+            color: #059669;
+            font-size: 1.1rem;
+        }
+
+        .order-actions-row {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-validate-pay {
+            background: #10b981;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.7rem 1.35rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-validate-pay:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        .btn-reject-order {
+            background: #f3f4f6;
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reject-order:hover {
+            background: #fee2e2;
+        }
+        .btn-whatsapp-client {
+            background: #f0fdf4;
+            color: #166534;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #bbf7d0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Toast */
+        .toast-box {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #ffffff;
+            color: var(--primary-dark);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
+            border-left: 5px solid #10b981;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            font-weight: 700;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="admin-nav">
+        <a href="/" class="brand">
+            <picture>
+                <source srcset="images/Logo.webp" type="image/webp">
+                <img src="images/Logo.png" alt="Cabane du Fermier">
+            </picture>
+            <span>Cabane du Fermier <span class="badge-daf">Portail DAF</span></span>
+        </a>
+
+        <div id="navAdminActions" style="display: none;">
+            <button type="button" id="btnAdminLogout" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.82rem; cursor: pointer; color: var(--text-muted);">
+                Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 1. Écran de déverrouillage PIN DAF -->
+        <div id="lockScreen" class="lock-card">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: #eaf1e7; color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i data-lucide="shield-check" class="icon-md"></i>
+            </div>
+            <h2>Accès Direction / DAF</h2>
+            <p>Saisissez le code d'accès pour valider les versements et commissions en un clic.</p>
+
+            <form id="pinForm">
+                <input type="password" id="pinInput" class="lock-input" placeholder="••••••••" autocomplete="current-password" required autofocus>
+                <button type="submit" class="btn-unlock">Déverrouiller le portail</button>
+            </form>
+            <div id="lockError" style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-top: 0.75rem; display: none;">
+                Code d'accès incorrect.
+            </div>
+        </div>
+
+        <!-- 2. Dashboard Principal DAF -->
+        <div id="adminDashboard" style="display: none;">
+            <div class="daf-header">
+                <div>
+                    <h1>Validation des Versements</h1>
+                    <p>Confirmez la réception des paiements clients pour créditer les wallets des vendeurs.</p>
+                </div>
+                <button type="button" id="btnRefresh" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1rem; border-radius: var(--radius-md); background: #ffffff; border: 1px solid var(--border); font-weight: 600; cursor: pointer;">
+                    <i data-lucide="refresh-cw" class="icon-xs"></i> Actualiser
+                </button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card pending">
+                    <div class="kpi-title">En attente de versement</div>
+                    <div class="kpi-val" id="kpiPendingCount">0</div>
+                </div>
+                <div class="kpi-card amount">
+                    <div class="kpi-title">Commissions en attente</div>
+                    <div class="kpi-val" id="kpiPendingAmount">0 F</div>
+                </div>
+                <div class="kpi-card validated">
+                    <div class="kpi-title">Commandes Validées</div>
+                    <div class="kpi-val" id="kpiValidatedCount">0</div>
+                </div>
+            </div>
+
+            <!-- Filtres -->
+            <div class="filter-bar">
+                <div class="tabs-wrap">
+                    <button type="button" class="tab-filter-btn active" data-filter="en_attente">⏳ En attente (<span id="tabCountPending">0</span>)</button>
+                    <button type="button" class="tab-filter-btn" data-filter="validee">✅ Validées (<span id="tabCountValid">0</span>)</button>
+                    <button type="button" class="tab-filter-btn" data-filter="all">Toutes (<span id="tabCountAll">0</span>)</button>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+                    <span id="displayCount">0</span> commande(s) affichée(s)
+                </div>
+            </div>
+
+            <!-- Liste des commandes -->
+            <div id="ordersList" class="orders-list">
+                <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    Chargement des commandes en cours...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast de notification -->
+    <div id="toastBox" class="toast-box"></div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

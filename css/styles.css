@@ -63,6 +63,9 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 body {
@@ -71,6 +74,9 @@ body {
     background: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
 }
 
 img {
@@ -2691,5 +2697,419 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes splashLoading {
     0% { left: -35%; }
     100% { left: 100%; }
+}
+
+/* ====================================================================
+   MODERN CART DRAWER (PANIER COULISSANT) & FLOATING CART UI
+   ==================================================================== */
+
+/* Overlay sombre */
+.cart-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 35, 25, 0.65);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
+}
+.cart-drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Le Tiroir Latéral (Cart Drawer) */
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    background: #ffffff;
+    z-index: 10002;
+    box-shadow: -12px 0 45px rgba(27, 67, 50, 0.22);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(105%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 1px solid var(--border);
+}
+.cart-drawer.active {
+    transform: translateX(0);
+}
+
+/* En-tête du Drawer */
+.cart-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+.cart-drawer-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--primary-dark);
+}
+.cart-drawer-title-wrap h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--primary-dark);
+}
+.cart-drawer-count {
+    background: rgba(45, 106, 79, 0.1);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+}
+.btn-close-cart-drawer {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #f1f5ee;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+.btn-close-cart-drawer:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+/* Corps du Drawer (Scrollable) */
+.cart-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Style des cartes articles dans le Drawer */
+.cart-drawer .cart-empty-msg {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+.cart-drawer .cart-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin: 0;
+}
+.cart-drawer .cart-item {
+    background: #fbfdfa;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.95rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.cart-drawer .cart-item-name {
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+.cart-drawer .cart-item-option {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+.cart-drawer .cart-item-price {
+    color: var(--primary);
+    font-weight: 700;
+}
+.cart-drawer .cart-item-del-btn {
+    background: #f0f4ee;
+    color: var(--text-muted);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.cart-drawer .cart-item-del-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+/* Section Récap Total dans le Drawer */
+.cart-drawer-totals {
+    background: #f8faf6;
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+}
+.cart-totals-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+.cart-totals-row.discount {
+    color: #10b981;
+    font-weight: 700;
+}
+.cart-totals-row.total-final {
+    border-top: 1.5px dashed var(--border);
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+/* Formulaire Coordonnées dans le Drawer */
+.cart-drawer-form-box {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+}
+.cart-drawer-form-box h4 {
+    font-size: 1rem;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.cart-drawer .form-group {
+    margin-bottom: 1rem;
+}
+.cart-drawer .form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+    display: block;
+}
+.cart-drawer .form-group input, 
+.cart-drawer .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 0.95rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    background: #fbfdfa;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+.cart-drawer .form-group input:focus, 
+.cart-drawer .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #ffffff;
+}
+
+/* Footer du Drawer avec le gros bouton WhatsApp */
+.cart-drawer-footer {
+    padding: 1.25rem 1.5rem;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+}
+.btn-submit-drawer {
+    width: 100%;
+    padding: 0.95rem 1.25rem;
+    background: var(--whatsapp);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+    transition: all 0.25s var(--ease);
+}
+.btn-submit-drawer:hover:not(:disabled) {
+    background: #20bd5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+}
+.btn-submit-drawer:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: #9ca3af;
+    box-shadow: none;
+}
+
+/* Bouton Panier dans la Navbar Desktop */
+.btn-nav-cart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 1.15rem;
+    background: var(--primary);
+    color: #ffffff !important;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(45, 106, 79, 0.25);
+    transition: all 0.25s;
+    position: relative;
+}
+.btn-nav-cart:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+.nav-cart-badge {
+    background: var(--accent);
+    color: #1b4332;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-full);
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Bouton Panier Icône pour Mobile Navbar */
+.btn-mobile-nav-cart {
+    display: none;
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #f1f5ee;
+    color: var(--primary-dark);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+}
+.btn-mobile-nav-cart .nav-cart-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    border: 2px solid #ffffff;
+}
+
+/* Pilule Panier Flottante (en bas à droite / centre bas sur mobile) */
+.floating-cart-pill {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    padding: 0.85rem 1.35rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    box-shadow: 0 10px 30px rgba(27, 67, 50, 0.35), 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 9990;
+    cursor: pointer;
+    border: 2px solid rgba(245, 197, 90, 0.4);
+    transform: translateY(140%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+.floating-cart-pill.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+.floating-cart-pill:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 38px rgba(27, 67, 50, 0.42);
+}
+.floating-cart-pill .icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.floating-cart-pill .badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: var(--accent);
+    color: #1b4332;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--primary-dark);
+}
+.floating-cart-pill .text-info {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+.floating-cart-pill .pill-total {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--accent-light);
+}
+
+/* Toast de notification lors de l'ajout d'un produit */
+.cart-toast {
+    position: fixed;
+    top: 5.5rem;
+    right: 1.5rem;
+    background: #ffffff;
+    color: var(--primary-dark);
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-left: 4px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 10000;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+    pointer-events: none;
+}
+.cart-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .btn-mobile-nav-cart {
+        display: inline-flex;
+    }
+    .floating-cart-pill {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1.25rem;
+        justify-content: space-between;
+        padding: 0.85rem 1.25rem;
+    }
+    .cart-drawer {
+        max-width: 100%;
+    }
 }
 
