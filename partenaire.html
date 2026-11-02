@@ -483,6 +483,84 @@
             border: 1px solid #bbf7d0;
             color: #166534;
         }
+
+        /* Password Strength Meter */
+        .password-meter-wrap {
+            margin-top: 0.4rem;
+        }
+        .password-meter-bar {
+            height: 6px;
+            background: #e2ecd9;
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            position: relative;
+        }
+        .password-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: var(--radius-full);
+        }
+        .password-meter-fill.weak { width: 25%; background: #ef4444; }
+        .password-meter-fill.medium { width: 50%; background: #f59e0b; }
+        .password-meter-fill.good { width: 75%; background: #3b82f6; }
+        .password-meter-fill.strong { width: 100%; background: #10b981; }
+        .password-meter-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* OTP Code Input */
+        .otp-input-field {
+            text-align: center;
+            font-size: 1.6rem !important;
+            letter-spacing: 8px;
+            font-weight: 800;
+            color: var(--partner-dark);
+            font-family: monospace;
+        }
+
+        /* Checkbox CGU */
+        .cgu-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.82rem;
+            color: var(--text);
+            line-height: 1.4;
+            cursor: pointer;
+            margin-top: 0.75rem;
+        }
+        .cgu-checkbox-label input {
+            width: 17px;
+            height: 17px;
+            margin-top: 2px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .cgu-link {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* Phone Hint */
+        .phone-validation-hint {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: block;
+            color: var(--text-muted);
+        }
+        .phone-validation-hint.valid {
+            color: #10b981;
+        }
+        .phone-validation-hint.invalid {
+            color: #ef4444;
+        }
     </style>
 </head>
 
@@ -546,28 +624,30 @@
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="regEmail">Adresse Email</label>
+                    <label for="regEmail">Adresse Email (un code de validation y sera envoyé)</label>
                     <input type="email" id="regEmail" placeholder="votre.email@exemple.com" required>
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="regTel">Numéro WhatsApp</label>
-                    <input type="tel" id="regTel" placeholder="+229 XX XX XX XX" required>
+                    <label for="regTel">Numéro WhatsApp (Bénin 01 requis)</label>
+                    <input type="tel" id="regTel" placeholder="+229 01 XX XX XX XX" required>
+                    <span id="regTelHint" class="phone-validation-hint">Format exigé : +229 01 XX XX XX XX ou 01XXXXXXXX (10 chiffres)</span>
                 </div>
 
                 <div class="form-group-partner">
                     <label for="regCodePromo">Votre Code Promo Souhaité</label>
                     <input type="text" id="regCodePromo" placeholder="Ex: CDF-VOTRENOM" style="text-transform: uppercase;" required>
-                    <small style="font-size: 0.75rem; color: var(--text-muted);">Ce code donnera -5% à vos clients sur viandes et gombo.</small>
+                    <small style="font-size: 0.75rem; color: var(--text-muted);">Ce code donnera -5% à vos clients sur les viandes et le gombo.</small>
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="regMomo">Numéro Mobile Money (pour vos retraits)</label>
-                    <input type="tel" id="regMomo" placeholder="+229 XX XX XX XX" required>
+                    <label for="regMomo">Numéro Mobile Money de retrait (01 requis)</label>
+                    <input type="tel" id="regMomo" placeholder="+229 01 XX XX XX XX" required>
+                    <span id="regMomoHint" class="phone-validation-hint">Format exigé : +229 01 XX XX XX XX</span>
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="regMomoReseau">Réseau MoMo</label>
+                    <label for="regMomoReseau">Réseau Mobile Money</label>
                     <select id="regMomoReseau">
                         <option value="MTN">MTN Mobile Money</option>
                         <option value="MOOV">Moov Money</option>
@@ -577,12 +657,56 @@
 
                 <div class="form-group-partner">
                     <label for="regPassword">Mot de passe</label>
-                    <input type="password" id="regPassword" placeholder="8 caractères minimum" minlength="8" required>
+                    <input type="password" id="regPassword" placeholder="Minimum 8 car., majuscule, chiffre..." required autocomplete="new-password">
+                    
+                    <!-- Jauge de robustesse -->
+                    <div class="password-meter-wrap">
+                        <div class="password-meter-bar">
+                            <div class="password-meter-fill" id="pwdMeterFill"></div>
+                        </div>
+                        <div class="password-meter-text">
+                            <span id="pwdStrengthLabel">Force : Trop court</span>
+                            <span id="pwdStrengthReq">8+ car. | Maj | Chiffre | Spécial</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkbox CGU Obligatoire -->
+                <div class="form-group-partner">
+                    <label class="cgu-checkbox-label" for="regCgu">
+                        <input type="checkbox" id="regCgu" required>
+                        <span>J'ai lu et j'accepte les <a href="javascript:void(0)" class="cgu-link" id="btnOpenCgu">Conditions d'Utilisation du Programme Ambassadeur</a> (1 retrait/mois avant le 15, interdiction d'auto-parrainage frauduleux).</span>
+                    </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-full shadow-md" id="btnRegisterSubmit">
                     Créer mon compte Ambassadeur
                 </button>
+            </form>
+
+            <!-- 3. Formulaire Validation OTP Email -->
+            <form id="otpVerifyForm" style="display: none;">
+                <h2>Validation de votre Email</h2>
+                <p class="subtitle" style="margin-bottom: 1rem;">
+                    Un code de sécurité à 6 chiffres a été envoyé à :<br>
+                    <strong id="otpEmailTarget" style="color: var(--primary);">votre.email@domaine.com</strong>
+                </p>
+
+                <div class="form-group-partner">
+                    <label for="otpCodeInput">Code de validation (6 chiffres)</label>
+                    <input type="text" id="otpCodeInput" class="otp-input-field" maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+                    <small style="display: block; text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">
+                        Vérifiez aussi vos spams / courriers indésirables si besoin.
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full shadow-md" id="btnVerifyOtpSubmit">
+                    Valider mon compte & Accéder au Dashboard
+                </button>
+
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btnResendOtp">Renvoyer le code</button>
+                </div>
             </form>
         </div>
 
@@ -767,6 +891,42 @@
                     <button type="submit" class="btn btn-primary flex-1 shadow-md" id="btnSubmitRetrait">Confirmer</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modale CGU Ambassadeur -->
+    <div id="cguModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div style="background: #ffffff; max-width: 540px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin: 0;">Conditions du Programme Ambassadeur</h3>
+                <button type="button" id="btnCloseCguModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+            </div>
+            
+            <div style="font-size: 0.85rem; line-height: 1.6; color: var(--text);">
+                <p><strong>1. Objet du Programme</strong><br>
+                Le Programme Ambassadeur de la Cabane du Fermier permet aux partenaires de promouvoir les produits locaux frais et de percevoir des commissions sur les ventes effectives.</p>
+
+                <p><strong>2. Produits Éligibles & Taux</strong><br>
+                La commission de 5% à 10% s'applique exclusivement sur les viandes fraîches (poulets fermiers, cailles, lapins) et le gombo. Les escargots et légumes précuits sont expressément exclus du calcul des remises et commissions.</p>
+
+                <p><strong>3. Gamification des Paliers Mensuels</strong><br>
+                Le taux de commission est calculé sur le nombre de clients livrés dans le mois civil en cours :<br>
+                • De 0 à 10 clients : <strong>5 %</strong><br>
+                • De 11 à 30 clients : <strong>7 %</strong><br>
+                • Plus de 30 clients : <strong>10 %</strong></p>
+
+                <p><strong>4. Modalités de Retrait & Paiements</strong><br>
+                • <strong>Un seul retrait par mois civil</strong> est autorisé.<br>
+                • Seuil minimum de retrait : <strong>2 000 FCFA</strong>.<br>
+                • Tout retrait validé est versé sur votre compte Mobile Money béninois (MTN, Moov, Celtiis avec préfixe 01) <strong>avant le 15 du mois suivant</strong>.</p>
+
+                <p><strong>5. Règle Anti-Fraude & Révocation</strong><br>
+                L'auto-parrainage abusif (commander pour son propre foyer en utilisant son propre code promo), les fausses commandes et les déclarations trompeuses sont formellement interdits. Toute fraude entraîne le gel immédiat du Wallet et l'exclusion définitive du programme.</p>
+            </div>
+
+            <button type="button" class="btn btn-primary w-full shadow-md" id="btnAcceptCguModal" style="margin-top: 1.5rem;">
+                J'ai compris et j'accepte ces règles
+            </button>
         </div>
     </div>
 

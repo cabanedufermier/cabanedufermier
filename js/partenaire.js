@@ -17,11 +17,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     const navUserActions = document.getElementById('navUserActions');
     const authAlert = document.getElementById('authAlert');
 
-    // Onglets Auth
+    // Onglets Auth & OTP
     const tabLoginBtn = document.getElementById('tabLoginBtn');
     const tabRegisterBtn = document.getElementById('tabRegisterBtn');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
+    const otpVerifyForm = document.getElementById('otpVerifyForm');
+    const otpEmailTarget = document.getElementById('otpEmailTarget');
+    const otpCodeInput = document.getElementById('otpCodeInput');
+    const btnResendOtp = document.getElementById('btnResendOtp');
+
+    // Jauge mot de passe & CGU
+    const regPassword = document.getElementById('regPassword');
+    const pwdMeterFill = document.getElementById('pwdMeterFill');
+    const pwdStrengthLabel = document.getElementById('pwdStrengthLabel');
+    const btnOpenCgu = document.getElementById('btnOpenCgu');
+    const cguModal = document.getElementById('cguModal');
+    const btnCloseCguModal = document.getElementById('btnCloseCguModal');
+    const btnAcceptCguModal = document.getElementById('btnAcceptCguModal');
+    const regCgu = document.getElementById('regCgu');
+
+    // Validation Téléphone Bénin 01
+    const regTel = document.getElementById('regTel');
+    const regTelHint = document.getElementById('regTelHint');
+    const regMomo = document.getElementById('regMomo');
+    const regMomoHint = document.getElementById('regMomoHint');
 
     // Boutons & Modale
     const btnSignOut = document.getElementById('btnSignOut');
@@ -55,6 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentVendeur = null;
     let qrCodeInstance = null;
+    let pendingRegistration = null; // Stocke temporairement les infos à enregistrer post-OTP
 
     function showAlert(msg, type = 'error') {
         if (!authAlert) return;
@@ -67,12 +88,88 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (authAlert) authAlert.style.display = 'none';
     }
 
+    // ----- VALIDATION NUMÉRO BÉNIN (+229 01... ou 01...) -----
+    function normalizeBeninPhone(phoneStr) {
+        // Enlève espaces, tirets, parenthèses
+        const clean = phoneStr.replace(/[\s\-\(\)]/g, '');
+        // Doit matcher soit +22901xxxxxxxx (14 car), soit 22901xxxxxxxx (13 car), soit 01xxxxxxxx (10 chiffres)
+        if (/^(\+?229)?01\d{8}$/.test(clean)) {
+            if (clean.startsWith('+229')) return clean;
+            if (clean.startsWith('229')) return '+' + clean;
+            return '+229' + clean;
+        }
+        return null;
+    }
+
+    function setupPhoneValidation(inputEl, hintEl) {
+        if (!inputEl || !hintEl) return;
+        inputEl.addEventListener('input', () => {
+            const val = inputEl.value.trim();
+            if (!val) {
+                hintEl.textContent = 'Format exigé : +229 01 XX XX XX XX (10 chiffres béninois avec 01)';
+                hintEl.className = 'phone-validation-hint';
+                return;
+            }
+            const normalized = normalizeBeninPhone(val);
+            if (normalized) {
+                hintEl.textContent = `✓ Numéro valide : ${normalized}`;
+                hintEl.className = 'phone-validation-hint valid';
+            } else {
+                hintEl.textContent = '❌ Le numéro doit obligatoirement commencer par 01 (ex: +229 01 XX XX XX XX)';
+                hintEl.className = 'phone-validation-hint invalid';
+            }
+        });
+    }
+    setupPhoneValidation(regTel, regTelHint);
+    setupPhoneValidation(regMomo, regMomoHint);
+
+    // ----- JAUGE ROBUSTESSE DU MOT DE PASSE -----
+    function checkPasswordStrength(pwd) {
+        let score = 0;
+        if (!pwd) return { score: 0, text: 'Trop court', class: '' };
+
+        if (pwd.length >= 8) score++;
+        if (/[A-Z]/.test(pwd)) score++;
+        if (/[0-9]/.test(pwd)) score++;
+        if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+        if (score <= 1) return { score: 1, text: 'Faible', class: 'weak' };
+        if (score === 2) return { score: 2, text: 'Moyen', class: 'medium' };
+        if (score === 3) return { score: 3, text: 'Bon', class: 'good' };
+        return { score: 4, text: 'Très Robuste (Sécurisé)', class: 'strong' };
+    }
+
+    regPassword?.addEventListener('input', () => {
+        const pwd = regPassword.value;
+        const res = checkPasswordStrength(pwd);
+        if (pwdMeterFill) {
+            pwdMeterFill.className = `password-meter-fill ${res.class}`;
+        }
+        if (pwdStrengthLabel) {
+            pwdStrengthLabel.textContent = `Force : ${res.text}`;
+            pwdStrengthLabel.style.color = res.score >= 3 ? '#10b981' : (res.score === 2 ? '#f59e0b' : '#ef4444');
+        }
+    });
+
+    // ----- GESTION MODALE CGU -----
+    btnOpenCgu?.addEventListener('click', () => {
+        if (cguModal) cguModal.style.display = 'flex';
+    });
+    btnCloseCguModal?.addEventListener('click', () => {
+        if (cguModal) cguModal.style.display = 'none';
+    });
+    btnAcceptCguModal?.addEventListener('click', () => {
+        if (regCgu) regCgu.checked = true;
+        if (cguModal) cguModal.style.display = 'none';
+    });
+
     // Gestion des onglets Login / Register
     tabLoginBtn?.addEventListener('click', () => {
         tabLoginBtn.classList.add('active');
         tabRegisterBtn.classList.remove('active');
         loginForm.style.display = 'block';
         registerForm.style.display = 'none';
+        if (otpVerifyForm) otpVerifyForm.style.display = 'none';
         clearAlert();
     });
 
@@ -81,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         tabLoginBtn.classList.remove('active');
         loginForm.style.display = 'none';
         registerForm.style.display = 'block';
+        if (otpVerifyForm) otpVerifyForm.style.display = 'none';
         clearAlert();
     });
 
@@ -102,7 +200,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 password
             });
 
-            if (error) throw error;
+            if (error) {
+                if (error.message.includes('Email not confirmed')) {
+                    throw new Error('Votre adresse email n\'a pas encore été validée. Saisissez le code OTP reçu par email.');
+                }
+                throw error;
+            }
             await loadVendeurDashboard(data.user);
         } catch (err) {
             showAlert(err.message || 'Identifiants incorrects.');
@@ -112,19 +215,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // ----- 2. INSCRIPTION VENDEUR -----
+    // ----- 2. INSCRIPTION VENDEUR (AVEC VÉRIFICATION 01, PWD, CGU & ENVOI OTP) -----
     registerForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearAlert();
 
         const nom = document.getElementById('regNom').value.trim();
         const email = document.getElementById('regEmail').value.trim();
-        const tel = document.getElementById('regTel').value.trim();
+        const rawTel = document.getElementById('regTel').value.trim();
         const codePromo = document.getElementById('regCodePromo').value.trim().toUpperCase();
-        const momo = document.getElementById('regMomo').value.trim();
+        const rawMomo = document.getElementById('regMomo').value.trim();
         const reseau = document.getElementById('regMomoReseau').value;
         const password = document.getElementById('regPassword').value;
+        const cguAccepted = document.getElementById('regCgu')?.checked;
         const btn = document.getElementById('btnRegisterSubmit');
+
+        // 1. Validation préfixe 01 Bénin
+        const tel = normalizeBeninPhone(rawTel);
+        if (!tel) {
+            showAlert('Numéro WhatsApp invalide : le préfixe béninois 01 est obligatoire (ex: +229 01 XX XX XX XX).');
+            return;
+        }
+
+        const momo = normalizeBeninPhone(rawMomo);
+        if (!momo) {
+            showAlert('Numéro Mobile Money invalide : le préfixe béninois 01 est obligatoire (ex: +229 01 XX XX XX XX).');
+            return;
+        }
+
+        // 2. Validation robustesse mot de passe
+        const strength = checkPasswordStrength(password);
+        if (strength.score < 2 || password.length < 8) {
+            showAlert('Mot de passe trop faible. Il doit contenir au minimum 8 caractères, une majuscule et un chiffre.');
+            return;
+        }
+
+        // 3. Validation CGU
+        if (!cguAccepted) {
+            showAlert('Veuillez lire et accepter les Conditions du Programme Ambassadeur.');
+            return;
+        }
 
         if (!codePromo.startsWith('CDF-')) {
             showAlert('Votre code promo doit commencer par CDF- (ex: CDF-ALAIN).');
@@ -132,10 +262,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         btn.disabled = true;
-        btn.textContent = 'Création du compte...';
+        btn.textContent = 'Envoi du code de sécurité...';
 
         try {
-            // Création de l'utilisateur Auth
+            // Création de l'utilisateur Auth Supabase (envoie l'OTP à l'email)
             const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                 email,
                 password
@@ -143,34 +273,111 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (authError) throw authError;
 
-            // Insertion dans la table vendeurs
-            const { error: profileError } = await supabaseClient.from('vendeurs').insert([{
-                id: authData.user.id,
-                nom_complet: nom,
-                telephone: tel,
-                code_promo: codePromo,
-                numero_momo: momo,
-                reseau_momo: reseau,
-                solde_wallet: 0
-            }]);
+            // Sauvegarder les données de profil en mémoire pour insertion post-validation OTP
+            pendingRegistration = {
+                id: authData.user ? authData.user.id : null,
+                email,
+                nom,
+                tel,
+                codePromo,
+                momo,
+                reseau
+            };
 
-            if (profileError) {
-                if (profileError.message.includes('unique')) {
-                    throw new Error('Ce code promo est déjà pris par un autre vendeur. Choisissez-en un autre.');
-                }
-                throw profileError;
+            // Basculer vers l'écran de validation OTP
+            registerForm.style.display = 'none';
+            if (otpVerifyForm) {
+                otpVerifyForm.style.display = 'block';
+                if (otpEmailTarget) otpEmailTarget.textContent = email;
             }
-
-            showAlert('Compte créé avec succès ! Chargement de votre espace...', 'success');
-            setTimeout(async () => {
-                await loadVendeurDashboard(authData.user);
-            }, 800);
+            showAlert('Code de validation envoyé avec succès par email !', 'success');
 
         } catch (err) {
             showAlert(err.message || 'Erreur lors de la création du compte.');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Créer mon compte Ambassadeur';
+        }
+    });
+
+    // ----- 2b. VALIDATION DU CODE OTP EMAIL -----
+    otpVerifyForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+
+        const token = otpCodeInput?.value.trim();
+        if (!token || token.length < 6) {
+            showAlert('Veuillez saisir le code complet à 6 chiffres.');
+            return;
+        }
+
+        const btn = document.getElementById('btnVerifyOtpSubmit');
+        btn.disabled = true;
+        btn.textContent = 'Vérification...';
+
+        try {
+            const email = pendingRegistration?.email || document.getElementById('regEmail').value.trim();
+
+            const { data, error } = await supabaseClient.auth.verifyOtp({
+                email,
+                token,
+                type: 'signup'
+            });
+
+            if (error) throw error;
+
+            const userId = data.user?.id || pendingRegistration?.id;
+
+            // Insérer le profil dans la table vendeurs une fois l'email validé
+            if (pendingRegistration) {
+                const { error: profileError } = await supabaseClient.from('vendeurs').insert([{
+                    id: userId,
+                    nom_complet: pendingRegistration.nom,
+                    telephone: pendingRegistration.tel,
+                    code_promo: pendingRegistration.codePromo,
+                    numero_momo: pendingRegistration.momo,
+                    reseau_momo: pendingRegistration.reseau,
+                    solde_wallet: 0
+                }]);
+
+                if (profileError && !profileError.message.includes('duplicate')) {
+                    throw profileError;
+                }
+            }
+
+            showAlert('Email vérifié et compte activé avec succès !', 'success');
+            setTimeout(async () => {
+                await loadVendeurDashboard(data.user);
+            }, 600);
+
+        } catch (err) {
+            showAlert(err.message || 'Code de validation invalide ou expiré.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Valider mon compte & Accéder au Dashboard';
+        }
+    });
+
+    // Renvoyer l'OTP
+    btnResendOtp?.addEventListener('click', async () => {
+        const email = pendingRegistration?.email || document.getElementById('regEmail').value.trim();
+        if (!email) return;
+        btnResendOtp.disabled = true;
+        btnResendOtp.textContent = 'Envoi...';
+        try {
+            const { error } = await supabaseClient.auth.resend({
+                type: 'signup',
+                email
+            });
+            if (error) throw error;
+            showAlert('Un nouveau code de validation a été envoyé par email.', 'success');
+        } catch (err) {
+            showAlert(err.message || 'Erreur lors du renvoi du code.');
+        } finally {
+            setTimeout(() => {
+                btnResendOtp.disabled = false;
+                btnResendOtp.textContent = 'Renvoyer le code';
+            }, 30000);
         }
     });
 
