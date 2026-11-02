@@ -293,6 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 otpVerifyForm.style.display = 'block';
                 if (otpEmailTarget) otpEmailTarget.textContent = email;
             }
+            startResendCountdown(120);
             showAlert('Code de validation envoyé avec succès par email !', 'success');
 
         } catch (err) {
@@ -399,26 +400,74 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // ----- GESTION COMPTE À REBOURS 2 MINUTES (120s) POUR RENVOI OTP -----
+    let resendCountdownTimer = null;
+
+    function startResendCountdown(durationSeconds = 120) {
+        if (!btnResendOtp) return;
+        if (resendCountdownTimer) clearInterval(resendCountdownTimer);
+
+        let remaining = durationSeconds;
+        btnResendOtp.disabled = true;
+        btnResendOtp.style.opacity = '0.65';
+        btnResendOtp.style.cursor = 'not-allowed';
+
+        const updateBtn = () => {
+            const min = Math.floor(remaining / 60);
+            const sec = remaining % 60;
+            const formatted = min > 0 ? `${min} min ${sec < 10 ? '0' : ''}${sec}s` : `${sec}s`;
+            btnResendOtp.textContent = `Renvoyer le code (${formatted})`;
+        };
+
+        updateBtn();
+
+        resendCountdownTimer = setInterval(() => {
+            remaining--;
+            if (remaining <= 0) {
+                clearInterval(resendCountdownTimer);
+                resendCountdownTimer = null;
+                btnResendOtp.disabled = false;
+                btnResendOtp.style.opacity = '1';
+                btnResendOtp.style.cursor = 'pointer';
+                btnResendOtp.textContent = 'Renvoyer un nouveau code';
+            } else {
+                updateBtn();
+            }
+        }, 1000);
+    }
+
     // Renvoyer l'OTP
     btnResendOtp?.addEventListener('click', async () => {
-        const email = pendingRegistration?.email || document.getElementById('regEmail').value.trim();
-        if (!email) return;
+        if (btnResendOtp.disabled) return;
+        clearAlert();
+
+        const email = (pendingRegistration?.email || document.getElementById('regEmail')?.value || '').trim().toLowerCase();
+        if (!email) {
+            showAlert("Adresse email introuvable pour le renvoi. Veuillez recommencer l'inscription.");
+            return;
+        }
+
         btnResendOtp.disabled = true;
-        btnResendOtp.textContent = 'Envoi...';
+        btnResendOtp.textContent = 'Envoi en cours...';
+
         try {
             const { error } = await supabaseClient.auth.resend({
                 type: 'signup',
                 email
             });
             if (error) throw error;
-            showAlert('Un nouveau code de validation a été envoyé par email.', 'success');
+            showAlert('Un tout nouveau code de validation a été envoyé dans votre boîte mail !', 'success');
+            startResendCountdown(120);
         } catch (err) {
-            showAlert(err.message || 'Erreur lors du renvoi du code.');
-        } finally {
-            setTimeout(() => {
+            console.error('Erreur resend:', err);
+            if (err.message && err.message.toLowerCase().includes('security purposes')) {
+                showAlert('Pour des raisons de sécurité, veuillez patienter avant de redemander un code.');
+                startResendCountdown(120);
+            } else {
+                showAlert(err.message || 'Erreur lors du renvoi du code.');
                 btnResendOtp.disabled = false;
-                btnResendOtp.textContent = 'Renvoyer le code';
-            }, 30000);
+                btnResendOtp.textContent = 'Renvoyer un nouveau code';
+            }
         }
     });
 
