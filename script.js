@@ -86,10 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----- 5b. Cart Logic & Dynamic Ordering -----
     const cart = {}; // cart state: key = productId + "_" + optionId, value = { product, optionId, optionName, price, qty }
 
+    // ----- Code Promo State & First Order Check -----
+    const PROMO_STORAGE_KEY = 'cdf_has_ordered';
+    const VALID_PROMO_CODE = 'CDF-COUSTEAU';
+    let appliedPromo = null; // { code: 'CDF-COUSTEAU', discountRate: 0.05 }
+
+    const promoSection = document.getElementById('promo-code-section');
+    const hasOrdered = localStorage.getItem(PROMO_STORAGE_KEY);
+    if (hasOrdered && promoSection) {
+        // Le client a déjà commandé : ne plus jamais afficher le code promo
+        promoSection.style.display = 'none';
+    }
+
     function updateCartUI() {
         let total = 0;
         const listEl = document.getElementById('cart-items-list');
         const emptyMsg = document.getElementById('cart-empty-msg');
+        const discountRow = document.getElementById('cart-discount-row');
+        const discountAmountEl = document.getElementById('cart-discount-amount');
         const totalContainer = document.getElementById('cart-total-container');
         const totalPriceEl = document.getElementById('cart-total-price');
         const submitBtn = document.getElementById('submitOrderBtn');
@@ -137,12 +151,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hasItems) {
             emptyMsg.style.display = 'none';
             listEl.style.display = 'flex';
+
+            let finalTotal = total;
+            if (appliedPromo && appliedPromo.discountRate > 0) {
+                const discountAmount = Math.round(total * appliedPromo.discountRate);
+                finalTotal = Math.max(0, total - discountAmount);
+                if (discountRow && discountAmountEl) {
+                    discountRow.style.display = 'flex';
+                    discountAmountEl.textContent = `-${discountAmount} F`;
+                }
+            } else if (discountRow) {
+                discountRow.style.display = 'none';
+            }
+
             totalContainer.style.display = 'flex';
-            totalPriceEl.textContent = total + ' F';
+            totalPriceEl.textContent = finalTotal + ' F';
             submitBtn.removeAttribute('disabled');
         } else {
             emptyMsg.style.display = 'flex';
             listEl.style.display = 'none';
+            if (discountRow) discountRow.style.display = 'none';
             totalContainer.style.display = 'none';
             submitBtn.setAttribute('disabled', 'true');
         }
@@ -432,6 +460,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ----- Gestionnaire d'application du code promo -----
+    const applyPromoBtn = document.getElementById('apply-promo-btn');
+    const promoInput = document.getElementById('promo_code');
+    const promoFeedback = document.getElementById('promo-feedback');
+
+    function applyPromoCodeAction() {
+        if (!promoInput || !promoFeedback) return;
+        const code = promoInput.value.trim().toUpperCase();
+
+        if (!code) {
+            promoFeedback.textContent = 'Veuillez saisir un code promo.';
+            promoFeedback.className = 'promo-feedback error';
+            promoFeedback.style.display = 'block';
+            return;
+        }
+
+        if (code === VALID_PROMO_CODE) {
+            appliedPromo = { code: VALID_PROMO_CODE, discountRate: 0.05 };
+            promoFeedback.textContent = '✓ Code CDF-COUSTEAU appliqué : 5% de réduction accordée !';
+            promoFeedback.className = 'promo-feedback success';
+            promoFeedback.style.display = 'block';
+            promoInput.setAttribute('disabled', 'true');
+            if (applyPromoBtn) {
+                applyPromoBtn.setAttribute('disabled', 'true');
+                applyPromoBtn.textContent = 'Appliqué';
+            }
+            updateCartUI();
+        } else {
+            promoFeedback.textContent = 'Code promo invalide.';
+            promoFeedback.className = 'promo-feedback error';
+            promoFeedback.style.display = 'block';
+        }
+    }
+
+    if (applyPromoBtn) {
+        applyPromoBtn.addEventListener('click', applyPromoCodeAction);
+    }
+    if (promoInput) {
+        promoInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applyPromoCodeAction();
+            }
+        });
+    }
+
     // ----- 7. WhatsApp Order Form Submit -----
     const orderForm = document.getElementById('orderForm');
     if (orderForm) {
@@ -474,7 +548,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            msg += `\n*Total : ${orderTotal} F*\n\n`;
+            let finalPrice = orderTotal;
+            if (appliedPromo && appliedPromo.discountRate > 0) {
+                const discount = Math.round(orderTotal * appliedPromo.discountRate);
+                finalPrice = Math.max(0, orderTotal - discount);
+                msg += `\nSous-total : ${orderTotal} F\n`;
+                msg += `🎟️ *Code Promo (${appliedPromo.code}) :* -${discount} F (-5%)\n`;
+                msg += `*Total final : ${finalPrice} F*\n\n`;
+            } else {
+                msg += `\n*Total : ${orderTotal} F*\n\n`;
+            }
+
             msg += `👤 *Nom :* ${name}\n`;
             msg += `📧 *Email (Facture) :* ${email}\n`;
             msg += `📱 *WhatsApp / Contact :* ${contactInfo}\n`;
@@ -490,6 +574,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             msg += `\nMerci de traiter ma commande. 🙏`;
+
+            // Enregistrer que le client a déjà commandé (masque définitivement le champ code promo pour les prochaines visites)
+            try {
+                localStorage.setItem(PROMO_STORAGE_KEY, 'true');
+            } catch (err) {
+                // Ignore si stockage désactivé
+            }
 
             window.open(
                 `https://wa.me/2290191666617?text=${encodeURIComponent(msg)}`,

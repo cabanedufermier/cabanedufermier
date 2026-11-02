@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traçabilité & Rencontre avec nos Éleveurs | Cabane du Fermier</title>
+    <meta name="description" content="Découvrez nos producteurs partenaires au Bénin : leur histoire, leurs méthodes d'élevage en plein air et leur promesse qualité pour votre famille.">
+    <link rel="canonical" href="https://www.cabanedufermier.com/tracabilite.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="" defer></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.460.0" defer></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=3">
+
+    <style>
+        :root {
+            --trace-bg: #f5f8f3;
+            --trace-primary: #1b4332;
+            --trace-accent: #e9a319;
+            --trace-soft-green: #eef6f0;
+        }
+
+        body {
+            background-color: var(--trace-bg);
+            color: var(--text);
+            font-family: var(--font-body);
+        }
+
+        /* Hero */
+        .trace-hero {
+            padding: 6.5rem 1.25rem 2.5rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 20%, rgba(45, 106, 79, 0.08) 0%, transparent 70%);
+        }
+
+        .trace-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 1.15rem;
+            background: rgba(45, 106, 79, 0.12);
+            color: var(--primary-dark);
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .trace-hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1.2;
+            margin-bottom: 0.85rem;
+        }
+
+        .trace-hero-sub {
+            font-size: clamp(0.95rem, 2.5vw, 1.12rem);
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        /* Sélecteur de filières */
+        .product-selector-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .trace-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-full);
+            border: 1.5px solid var(--border);
+            background: #ffffff;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .trace-tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .trace-tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 6px 18px rgba(27, 67, 50, 0.25);
+        }
+
+        /* Conteneur principal */
+        .trace-passport-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(45, 106, 79, 0.12);
+            box-shadow: 0 16px 48px rgba(27, 67, 50, 0.08);
+            overflow: hidden;
+            margin-bottom: 3.5rem;
+        }
+
+        /* En-tête du passeport */
+        .passport-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 2.25rem;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .passport-title-wrap h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.35rem;
+        }
+
+        .passport-title-wrap p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+        }
+
+        .passport-certified-stamp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.15rem;
+            background: rgba(233, 163, 25, 0.2);
+            border: 1.5px dashed var(--accent-light);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Grille des 3 modules */
+        .passport-body {
+            padding: 2.5rem;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 960px) {
+            .passport-body {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+            .passport-header {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Module 1 : Carte Producteur */
+        .farmer-card {
+            background: linear-gradient(145deg, #fbfdfa 0%, #f4f8f2 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (max-width: 600px) {
+            .farmer-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .farmer-avatar {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #ffffff;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+            background: #ffffff;
+        }
+
+        .farmer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .farmer-details h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .farmer-farm-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--accent-dark);
+            margin-bottom: 0.45rem;
+        }
+
+        .farmer-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .farmer-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .farmer-quote {
+            margin-top: 0.85rem;
+            font-size: 0.88rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
+            padding-left: 0.75rem;
+            line-height: 1.45;
+        }
+
+        /* Modules stylisés */
+        .module-section {
+            margin-bottom: 2.25rem;
+        }
+
+        .module-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .method-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .method-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .method-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.15rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .method-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .method-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Module 3 : Message direct à la famille */
+        .family-message-box {
+            background: linear-gradient(135deg, rgba(233,163,25,0.12) 0%, rgba(45,106,79,0.08) 100%);
+            border: 1.5px solid rgba(233,163,25,0.4);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .family-message-box h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .family-message-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Colonne droite : Localisation & Carte */
+        .location-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .map-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .map-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .map-card-header strong {
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .map-distance-badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent-dark);
+            background: rgba(233, 163, 25, 0.15);
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-full);
+        }
+
+        #trace-map {
+            width: 100%;
+            height: 250px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            z-index: 1;
+        }
+
+        /* Section Expérience Ludique (Quiz Terroir & Famille) */
+        .interactive-zone {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbf6 100%);
+            border-radius: var(--radius-xl);
+            border: 2px solid rgba(233, 163, 25, 0.3);
+            padding: 2.25rem 2rem;
+            margin-bottom: 3.5rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .interactive-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            background: rgba(233, 163, 25, 0.2);
+            color: var(--accent-dark);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .interactive-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .quiz-question {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1.25rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quiz-options {
+            display: flex;
+            justify-content: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+
+        .quiz-btn {
+            background: #ffffff;
+            border: 2px solid var(--border);
+            padding: 0.75rem 1.35rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all var(--duration) var(--ease);
+        }
+
+        .quiz-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .quiz-btn.correct {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+            transform: scale(1.03);
+        }
+
+        .quiz-btn.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .quiz-feedback {
+            font-size: 0.95rem;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
+        /* Section Packaging QR */
+        .qr-packaging-box {
+            background: linear-gradient(135deg, #1b4332 0%, #103417 100%);
+            border-radius: var(--radius-xl);
+            padding: 2.25rem;
+            color: #ffffff;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .qr-packaging-box {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .qr-packaging-preview {
+            width: 140px;
+            height: 140px;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
+
+        .qr-packaging-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar simple -->
+    <nav class="navbar scrolled" style="position: sticky; top: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);">
+        <div class="container navbar-container">
+            <a href="/" class="logo">
+                <picture>
+                    <source srcset="images/Logo.webp" type="image/webp">
+                    <img src="images/Logo.png" alt="Cabane du Fermier" width="44" height="44">
+                </picture>
+            </a>
+
+            <div class="desktop-menu">
+                <a href="/" class="nav-link">Accueil</a>
+                <a href="/#produits" class="nav-link">Nos Produits</a>
+                <a href="/#propos" class="nav-link">À Propos</a>
+                <a href="/tracabilite.html" class="nav-link" style="color: var(--primary); font-weight: 700;">🌱 Traçabilité</a>
+                <a href="/#commander" class="btn btn-primary nav-btn">
+                    <i data-lucide="shopping-bag" class="icon-sm"></i> Commander
+                </a>
+            </div>
+
+            <a href="/" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.45rem 0.95rem;">
+                <i data-lucide="arrow-left" class="icon-xs"></i> Retour au site
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="trace-hero">
+            <div class="container">
+                <span class="trace-badge">
+                    <i data-lucide="shield-check" class="icon-xs"></i> Transparence & Filières Locales du Bénin
+                </span>
+                <h1 class="trace-hero-title">
+                    Rencontrez l'éleveur derrière votre assiette
+                </h1>
+                <p class="trace-hero-sub">
+                    Chaque semaine, nous travaillons main dans la main avec des producteurs béninois passionnés. Découvrez qui ils sont, leurs méthodes d'élevage sain et le message qu'ils transmettent à votre famille.
+                </p>
+
+                <!-- Sélecteur de Produits -->
+                <div class="product-selector-bar" id="productSelector">
+                    <button type="button" class="trace-tab-btn active" data-prod="poulet">
+                        🐔 Poulet Bicyclette
+                    </button>
+                    <button type="button" class="trace-tab-btn" data-prod="lapin">
+                        🐇 Lapin Fermier
+                    </button>
+                    <button type="button" class="trace-tab-btn" data-prod="cailles">
+                        🪶 Cailles Fermières
+                    </button>
+                    <button type="button" class="trace-tab-btn" data-prod="escargot">
+                        🐌 Escargot Géant
+                    </button>
+                    <button type="button" class="trace-tab-btn" data-prod="tchayo">
+                        🥬 Légumes Précuits (Tchayo / Gboma)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fiche Passeport Structurée selon les 3 Modules -->
+        <section class="container">
+            <div class="trace-passport-card">
+                <!-- En-tête -->
+                <div class="passport-header">
+                    <div class="passport-title-wrap">
+                        <h2 id="cardProductName">Poulet Bicyclette Fermier</h2>
+                        <p id="cardProductSub">Filière Avicole Éthique & Plein Air au Bénin</p>
+                    </div>
+                    <div class="passport-certified-stamp">
+                        <i data-lucide="badge-check" class="icon-sm"></i> Filière Locale Contrôlée
+                    </div>
+                </div>
+
+                <!-- Contenu structuré -->
+                <div class="passport-body">
+                    <!-- Colonne Gauche : Modules 1, 2, 3 -->
+                    <div>
+                        <!-- MODULE 1 : Qui est le producteur ? -->
+                        <div class="farmer-card">
+                            <div class="farmer-avatar">
+                                <picture>
+                                    <source id="farmerImgWebp" srcset="images/Agriculteur 1.webp" type="image/webp">
+                                    <img id="farmerImg" src="images/Agriculteur 1.jpg" alt="Éleveur partenaire">
+                                </picture>
+                            </div>
+                            <div class="farmer-details">
+                                <h3 id="farmerName">Séraphin HOUNDO</h3>
+                                <div class="farmer-farm-name" id="farmerFarm">Ferme Avicole Espoir & Terroir</div>
+                                <div class="farmer-meta">
+                                    <span><i data-lucide="map-pin" class="icon-xs"></i> <strong id="farmerLocation">Allada (Village Attogon)</strong></span>
+                                    <span><i data-lucide="award" class="icon-xs"></i> <span id="farmerExp">14 ans d'expérience</span></span>
+                                </div>
+                                <div class="farmer-quote" id="farmerPassion">
+                                    « J'ai choisi l'élevage traditionnel parce que voir des volailles grandir saines sous le soleil sans produits chimiques est une fierté. Pour moi, nourrir son pays avec des aliments purs est une vocation. »
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MODULE 2 : Les méthodes de production -->
+                        <div class="module-section">
+                            <h3 class="module-title">
+                                <i data-lucide="feather" class="icon-sm" style="color: var(--primary);"></i>
+                                Méthodes d'Élevage & Alimentation
+                            </h3>
+                            <div class="method-cards-grid">
+                                <div class="method-card">
+                                    <div class="method-card-header">
+                                        <i data-lucide="sun" class="icon-xs"></i>
+                                        <span>Cadre de vie</span>
+                                    </div>
+                                    <p id="methodLiving">
+                                        Élevage 100% en plein air dans un parcours herbeux clôturé et sécurisé. Bâtiments en matériaux aérés réservés à la nuit.
+                                    </p>
+                                </div>
+                                <div class="method-card">
+                                    <div class="method-card-header">
+                                        <i data-lucide="wheat" class="icon-xs"></i>
+                                        <span>Nourriture</span>
+                                    </div>
+                                    <p id="methodDiet">
+                                        Alimentation à base de maïs local concassé, tourteau de soja, verdure fraîche et graines du terroir, sans activateurs de croissance.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MODULE 3 : La promesse client & message aux familles -->
+                        <div class="module-section">
+                            <h3 class="module-title">
+                                <i data-lucide="heart-handshake" class="icon-sm" style="color: var(--accent-dark);"></i>
+                                La Promesse pour votre Famille
+                            </h3>
+
+                            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.15rem; margin-bottom: 1rem;">
+                                <strong style="font-size: 0.85rem; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;">
+                                    <i data-lucide="check-circle" class="icon-xs"></i> Pourquoi ce produit est meilleur et plus propre ?
+                                </strong>
+                                <p id="promisePurity" style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                                    Une chair plus ferme et parfumée grâce au temps de croissance naturel (3 à 4 mois), abattage respectueux et hygiène stricte garantie dès la sortie de ferme.
+                                </p>
+                            </div>
+
+                            <div class="family-message-box">
+                                <h4>
+                                    <i data-lucide="message-square" class="icon-sm" style="color: var(--accent-dark);"></i>
+                                    Le mot de l'éleveur pour votre table :
+                                </h4>
+                                <p id="farmerFamilyMsg">
+                                    « Chères mamans et chers papas, quand vous servez ce poulet à vos enfants le dimanche, sachez qu'il a été soigné avec tout l'amour de notre terre. Merci de faire vivre les producteurs locaux. Bon appétit ! »
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Colonne Droite : Localisation & Carte interactive -->
+                    <div class="location-column">
+                        <div class="map-card">
+                            <div class="map-card-header">
+                                <strong><i data-lucide="navigation" class="icon-xs" style="color: var(--primary);"></i> Localisation de l'Exploitation</strong>
+                                <span class="map-distance-badge" id="mapDistance">~ 45 km de Cotonou</span>
+                            </div>
+                            <div id="trace-map"></div>
+                            <div style="margin-top: 0.85rem; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+                                <i data-lucide="map-pin" class="icon-xs" style="color: var(--primary);"></i>
+                                <span id="mapExactLoc">Allada, Département de l'Atlantique, Bénin</span>
+                            </div>
+                        </div>
+
+                        <!-- Garanties Clés Récapitulatives -->
+                        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem;">
+                            <h4 style="font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.75rem;">
+                                Les Engagements Cabane du Fermier
+                            </h4>
+                            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.85rem; color: var(--text-secondary);">
+                                <li style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i data-lucide="check" class="icon-xs" style="color: var(--primary);"></i>
+                                    <span>Partenariat direct sans intermédiaires abusifs</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i data-lucide="check" class="icon-xs" style="color: var(--primary);"></i>
+                                    <span>Rémunération juste et valorisation de l'éleveur</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <i data-lucide="check" class="icon-xs" style="color: var(--primary);"></i>
+                                    <span>Respect strict de la chaîne du froid</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expérience Ludique (Quiz Terroir & Famille) -->
+            <div class="interactive-zone">
+                <span class="interactive-badge">
+                    <i data-lucide="sparkles" class="icon-xs"></i> Découverte en Famille
+                </span>
+                <h3 class="interactive-title">Le saviez-vous ?</h3>
+                <p class="quiz-question" id="quizQuestion">
+                    Pourquoi les poulets élevés en liberté par Séraphin ont-ils des os plus solides et une viande plus dense ?
+                </p>
+                
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+            </div>
+
+            <!-- Bloc Packaging : Votre QR code officiel permanent -->
+            <div class="qr-packaging-box">
+                <div>
+                    <h3 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">
+                        Le QR Code permanent imprimé sur vos emballages
+                    </h3>
+                    <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem; max-width: 600px;">
+                        Scannable depuis n'importe quel smartphone, ce QR code unique permet à chaque client qui reçoit sa commande de rencontrer l'éleveur partenaire et de découvrir l'histoire de ce qu'il mange.
+                    </p>
+                    <a href="images/qr-tracabilite-hd.png" download="QR-Code-Cabane-du-Fermier.png" class="btn btn-primary" style="background: var(--accent); border-color: var(--accent); color: #103417; font-weight: 700;">
+                        <i data-lucide="download" class="icon-sm"></i> Télécharger le QR Code Packaging (HD)
+                    </a>
+                </div>
+                <div class="qr-packaging-preview">
+                    <img src="images/qr-tracabilite-hd.png" alt="QR Code Traçabilité Cabane du Fermier">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer minimal -->
+    <footer style="text-align: center; padding: 2rem 1.25rem; border-top: 1px solid var(--border); font-size: 0.88rem; color: var(--text-muted); background: #ffffff;">
+        <p>&copy; <span id="year">2026</span> Cabane du Fermier. Fiers de nos éleveurs et maraîchers béninois.</p>
+    </footer>
+
+    <!-- Logique Interactive -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            const y = document.getElementById('year');
+            if (y) y.textContent = new Date().getFullYear();
+
+            // Structure complète des données basée sur les 3 modules de questions
+            const PRODUCER_DATA = {
+                poulet: {
+                    productTitle: "Poulet Bicyclette Fermier",
+                    productSub: "Filière Volailles Élevées en Plein Air",
+                    // Module 1 : L'Éleveur
+                    farmer: {
+                        name: "Séraphin HOUNDO",
+                        farm: "Ferme Avicole Espoir & Terroir",
+                        location: "Allada (Village Attogon)",
+                        exactLoc: "Attogon, Commune d'Allada, Atlantique",
+                        experience: "14 ans d'expérience",
+                        passion: "« J'ai choisi l'élevage traditionnel parce que voir des volailles grandir en liberté sous le soleil sans produits chimiques est une fierté. Pour moi, nourrir son pays avec des aliments purs est une vocation. »",
+                        img: "images/Agriculteur 1.jpg",
+                        imgWebp: "images/Agriculteur 1.webp"
+                    },
+                    // Module 2 : Les méthodes
+                    methods: {
+                        living: "Élevage 100% en plein air dans un vaste parcours arboré et clôturé. Bâtiments en terre battue et grillage bien aérés pour la nuit.",
+                        diet: "Maïs blanc local concassé, son de riz, tourteau de soja béninois et insectes picorés dans l'herbe. Zéro antibiotique préventif."
+                    },
+                    // Module 3 : La promesse
+                    promise: {
+                        purity: "Une texture ferme incomparable et un goût authentique de campagne. Abattage manuel soigné et plumage à l'eau chaude propre sans brûlure.",
+                        familyMessage: "« Chères familles béninoises, quand vous partagez ce poulet le dimanche, sachez qu'il a couru dans nos champs et a grandi au rythme de la nature. Merci de donner de la force aux éleveurs d'ici ! »"
+                    },
+                    // Géo
+                    geo: {
+                        lat: 6.6655,
+                        lng: 2.1514,
+                        distance: "~ 45 km de Cotonou"
+                    },
+                    // Quiz
+                    quiz: {
+                        q: "Pourquoi le poulet élevé en liberté par Séraphin a-t-il une chair plus ferme et savoureuse ?",
+                        options: [
+                            { text: "Il court tous les jours et grandit pendant 120 jours", correct: true, explain: "Exactement ! Le grand air et l'effort physique développent une masse musculaire naturelle et saine !" },
+                            { text: "On lui donne des farines industrielles importées", correct: false, explain: "Non ! Séraphin utilise uniquement des grains locaux béninois." },
+                            { text: "Il reste enfermé dans le noir", correct: false, explain: "Jamais de cage à la Cabane du Fermier : liberté totale garantie !" }
+                        ]
+                    }
+                },
+                lapin: {
+                    productTitle: "Lapin Fermier Sélectionné",
+                    productSub: "Cuniculture Hygiénique & Alimentation Végétale",
+                    farmer: {
+                        name: "Benoît DOSSOU",
+                        farm: "Clapiers du Sud Bénin",
+                        location: "Ouidah (Zone Savi)",
+                        exactLoc: "Savi, Commune de Ouidah, Atlantique",
+                        experience: "9 ans d'expérience",
+                        passion: "« Le lapin est un animal noble et délicat. Ce qui me passionne, c'est la rigueur sanitaire et le plaisir de fournir une viande blanche si saine pour les personnes qui surveillent leur santé. »",
+                        img: "images/Agriculteur 2.jpg",
+                        imgWebp: "images/Agriculteur 2.webp"
+                    },
+                    methods: {
+                        living: "Élevés dans des clapiers individuels surélevés, à l'abri des prédateurs et constamment ventilés pour garantir une hygiène irréprochable.",
+                        diet: "Fourrage vert frais fauché chaque matin (panicum, herbes sélectionnées) complété par des granulés de céréales et son de blé équilibrés."
+                    },
+                    promise: {
+                        purity: "Viande d'une grande tendreté, très digeste, naturellement pauvre en sodium et en graisses saturées. Aucune utilisation d'hormones.",
+                        familyMessage: "« Pour vos enfants et vos aînés, la viande de lapin est un cadeau de santé. Mes lapins grandissent dans un calme absolu. Cuisinez-les avec amour, la tendreté fera le reste ! »"
+                    },
+                    geo: {
+                        lat: 6.3631,
+                        lng: 2.0851,
+                        distance: "~ 38 km de Cotonou"
+                    },
+                    quiz: {
+                        q: "Pourquoi la viande de lapin fermier de Benoît est-elle recommandée par les nutritionnistes ?",
+                        options: [
+                            { text: "Elle est très riche en protéines et la plus pauvre en cholestérol", correct: true, explain: "Tout à fait ! C'est la viande diététique par excellence pour prendre soin du cœur." },
+                            { text: "Elle contient du sucre naturel", correct: false, explain: "Non, sa force réside dans ses protéines pures et digestes." }
+                        ]
+                    }
+                },
+                cailles: {
+                    productTitle: "Cailles Fermières Délicates",
+                    productSub: "Micro-Élevage Avicole d'Excellence",
+                    farmer: {
+                        name: "Mariette GBÉGNO",
+                        farm: "Ferme Avicole Les Cailles Dorées",
+                        location: "Abomey-Calavi (Akassato)",
+                        exactLoc: "Akassato, Abomey-Calavi, Atlantique",
+                        experience: "7 ans d'expérience",
+                        passion: "« Élever des cailles demande une douceur et une attention de chaque instant. J'adore voir la satisfaction de nos clientes quand elles préparent un repas de fête rapide et raffiné. »",
+                        img: "images/Agriculteur 3.jpg",
+                        imgWebp: "images/Agriculteur 3.webp"
+                    },
+                    methods: {
+                        living: "Élevage en volières semi-ouvertes, avec une densité réduite pour éviter tout stress aux oiseaux et favoriser leur bien-être.",
+                        diet: "Graines concassées de haute qualité, farine de poisson locale et compléments minéraux naturels pour des coquilles et chairs parfaites."
+                    },
+                    promise: {
+                        purity: "Plumage et vidage d'une précision chirurgicale. Prêtes à être enfournées ou dorées à la poêle en seulement 15 minutes.",
+                        familyMessage: "« C'est le petit plaisir gastronomique accessible à tous. Faites frire mes cailles avec un peu de piment et d'oignons doux : vos convives vont en redemander ! »"
+                    },
+                    geo: {
+                        lat: 6.4485,
+                        lng: 2.3557,
+                        distance: "~ 18 km de Cotonou"
+                    },
+                    quiz: {
+                        q: "Combien de temps faut-il pour rôtir une caille de Mariette ?",
+                        options: [
+                            { text: "15 à 20 minutes seulement", correct: true, explain: "Exactement ! Sa chair fine cuit très vite tout en restant juteuse." },
+                            { text: "1 heure et demie", correct: false, explain: "Ce serait trop long ! La caille cuit très rapidement." }
+                        ]
+                    }
+                },
+                escargot: {
+                    productTitle: "Escargot Géant d'Afrique (Achatine)",
+                    productSub: "Héliciculture Naturelle & Hygiène Garantie",
+                    farmer: {
+                        name: "Théophile ALIHONOU",
+                        farm: "Éco-Ferme Hélicicole de la Vallée",
+                        location: "Zè (Arrondissement de Djigbé)",
+                        exactLoc: "Djigbé, Commune de Zè, Atlantique",
+                        experience: "11 ans d'expérience",
+                        passion: "« Beaucoup de gens aiment les escargots mais ont peur du sable ou des escargots ramassés n'importe où. Mon défi a été de professionnaliser cet élevage pour offrir une propreté absolue. »",
+                        img: "images/Agriculteur 1.jpg",
+                        imgWebp: "images/Agriculteur 1.webp"
+                    },
+                    methods: {
+                        living: "Parcs ombragés en litière végétale humide naturelle (feuilles de bananiers, terre noire tamisée et désinfectée naturellement).",
+                        diet: "Fruits tropicaux mûrs (papayes, pastèques), courges et feuilles de papayer riches en enzymes digestives."
+                    },
+                    promise: {
+                        purity: "Purge rigoureuse de 72 heures suivie d'un lavage en trois temps selon la méthode ancestrale béninoise. Garanti sans mauvaise odeur ni bave résiduelle.",
+                        familyMessage: "« Plus besoin de passer des heures à nettoyer et stresser pour le sable. Plongez mes escargots directement dans vos sauces : vous découvrirez le vrai goût du terroir ! »"
+                    },
+                    geo: {
+                        lat: 6.5861,
+                        lng: 2.2706,
+                        distance: "~ 48 km de Cotonou"
+                    },
+                    quiz: {
+                        q: "Pourquoi l'escargot de Théophile est-il particulièrement bon pour lutter contre la fatigue ?",
+                        options: [
+                            { text: "Il a une teneur exceptionnelle en fer et en minéraux sans aucune graisse", correct: true, explain: "Bravo ! C'est l'un des aliments les plus riches en fer de notre gastronomie !" },
+                            { text: "Il contient de la vitamine C comme une orange", correct: false, explain: "C'est sa richesse en fer et en magnésium qui fait sa réputation !" }
+                        ]
+                    }
+                },
+                tchayo: {
+                    productTitle: "Légumes Précuits (Tchayo & Gboma)",
+                    productSub: "Maraîchage Responsable & Zéro Sable",
+                    farmer: {
+                        name: "Awaou BIO",
+                        farm: "Jardins Verts du Littoral",
+                        location: "Sèmè-Kpodji & Calavi",
+                        exactLoc: "Plaine maraîchère, Atlantique / Ouémé",
+                        experience: "16 ans de maraîchage",
+                        passion: "« La terre béninoise est généreuse. Ce qui me rend heureuse, c'est de voir nos feuilles traditionnelles arriver intactes, bien vertes et prêtes à cuisiner dans la cuisine des femmes actives. »",
+                        img: "images/Agriculteur 2.jpg",
+                        imgWebp: "images/Agriculteur 2.webp"
+                    },
+                    methods: {
+                        living: "Cultures sur planches enrichies en compost organique de feuilles et fumier naturel. Aucun pesticide chimique dangereux.",
+                        diet: "Arrosage quotidien à l'eau de nappe propre et paillage naturel pour conserver la fraîcheur des feuilles tendres."
+                    },
+                    promise: {
+                        purity: "Tri feuille par feuille, triple bain d'eau claire et précuisson douce à la vapeur pour bloquer les nutriments. Zéro grain de sable garanti !",
+                        familyMessage: "« Vous n'avez plus d'excuse pour ne pas manger local en semaine ! Ouvrez le sachet, votre sauce tchayo ou gboma est sur la table en 15 minutes chrono. Que du bonheur ! »"
+                    },
+                    geo: {
+                        lat: 6.3686,
+                        lng: 2.4500,
+                        distance: "~ 22 km de Cotonou"
+                    },
+                    quiz: {
+                        q: "Quel est le plus grand gain de temps du Tchayo précuit d'Awaou ?",
+                        options: [
+                            { text: "Économiser 45 minutes de tri et de lavage de sable", correct: true, explain: "Exactement ! Le travail le plus pénible est déjà fait avec une hygiène certifiée." },
+                            { text: "On n'a plus besoin d'assaisonner la sauce", correct: false, explain: "Il reste neutre pour que vous ajoutiez vos épices et condiments favoris !" }
+                        ]
+                    }
+                }
+            };
+
+            // Carte Leaflet
+            let map = null;
+            let marker = null;
+
+            function initOrUpdateMap(lat, lng, label) {
+                if (typeof L === 'undefined') return;
+                const container = document.getElementById('trace-map');
+                if (!container) return;
+
+                if (!map) {
+                    map = L.map('trace-map', { zoomControl: false, attributionControl: false }).setView([lat, lng], 10);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                        subdomains: 'abcd',
+                        maxZoom: 18
+                    }).addTo(map);
+
+                    const customIcon = L.divIcon({
+                        className: 'custom-trace-pin',
+                        html: '<div style="background:#1b4332; width:30px; height:30px; border-radius:50%; border:3px solid #e9a319; display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 3px 10px rgba(0,0,0,0.3); font-size:13px;">👨‍🌾</div>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+
+                    marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+                } else {
+                    map.setView([lat, lng], 10);
+                    marker.setLatLng([lat, lng]);
+                }
+            }
+
+            // Mise à jour de l'affichage d'un produit
+            function displayProducer(key) {
+                const data = PRODUCER_DATA[key];
+                if (!data) return;
+
+                // En-tête
+                document.getElementById('cardProductName').textContent = data.productTitle;
+                document.getElementById('cardProductSub').textContent = data.productSub;
+
+                // Module 1
+                document.getElementById('farmerName').textContent = data.farmer.name;
+                document.getElementById('farmerFarm').textContent = data.farmer.farm;
+                document.getElementById('farmerLocation').textContent = data.farmer.location;
+                document.getElementById('farmerExp').textContent = data.farmer.experience;
+                document.getElementById('farmerPassion').textContent = data.farmer.passion;
+                
+                const fImg = document.getElementById('farmerImg');
+                const fImgWebp = document.getElementById('farmerImgWebp');
+                if (fImg) fImg.src = data.farmer.img;
+                if (fImgWebp) fImgWebp.srcset = data.farmer.imgWebp;
+
+                // Module 2
+                document.getElementById('methodLiving').textContent = data.methods.living;
+                document.getElementById('methodDiet').textContent = data.methods.diet;
+
+                // Module 3
+                document.getElementById('promisePurity').textContent = data.promise.purity;
+                document.getElementById('farmerFamilyMsg').textContent = data.promise.familyMessage;
+
+                // Colonne Carte
+                document.getElementById('mapDistance').textContent = data.geo.distance;
+                document.getElementById('mapExactLoc').textContent = data.farmer.exactLoc;
+                initOrUpdateMap(data.geo.lat, data.geo.lng, data.farmer.farm);
+
+                // Quiz
+                document.getElementById('quizQuestion').textContent = data.quiz.q;
+                const optsContainer = document.getElementById('quizOptions');
+                optsContainer.innerHTML = '';
+                const fb = document.getElementById('quizFeedback');
+                fb.textContent = '';
+
+                data.quiz.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'quiz-btn';
+                    btn.textContent = opt.text;
+                    btn.addEventListener('click', () => {
+                        optsContainer.querySelectorAll('.quiz-btn').forEach(b => b.disabled = true);
+                        if (opt.correct) {
+                            btn.classList.add('correct');
+                            fb.style.color = '#1b4332';
+                            fb.innerHTML = `🎉 <strong>Bravo !</strong> ${opt.explain}`;
+                            if (typeof confetti === 'function') {
+                                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+                            }
+                        } else {
+                            btn.classList.add('wrong');
+                            fb.style.color = '#b91c1c';
+                            fb.innerHTML = `💡 <em>Indice :</em> ${opt.explain}`;
+                        }
+                    });
+                    optsContainer.appendChild(btn);
+                });
+
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+                setTimeout(() => { if (map) map.invalidateSize(); }, 200);
+            }
+
+            // Gestion des clics d'onglets
+            const tabBtns = document.querySelectorAll('.trace-tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const prodKey = btn.getAttribute('data-prod');
+                    displayProducer(prodKey);
+                });
+            });
+
+            // Initialiser sur le premier produit (poulet)
+            displayProducer('poulet');
+        });
+    </script>
+</body>
+
+</html>

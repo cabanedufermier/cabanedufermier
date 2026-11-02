@@ -162,20 +162,43 @@
         .quick-links a:hover {
             color: var(--accent-dark);
         }
+
+        /* Header & Footer */
+        .error-header {
+            padding: 1.25rem 0;
+        }
+
+        .error-header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error-header-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .error-footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 
 <body class="error-page-wrapper">
     <!-- Navbar simple -->
-    <header style="padding: 1.25rem 0;">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+    <header class="error-header">
+        <div class="container error-header-inner">
             <a href="/" class="logo" aria-label="Retour à l'accueil">
                 <picture>
                     <source srcset="images/Logo.webp" type="image/webp">
                     <img src="images/Logo.png" alt="Cabane du Fermier - Logo" width="48" height="48">
                 </picture>
             </a>
-            <a href="/" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+            <a href="/" class="btn btn-outline error-header-btn">
                 <i data-lucide="home" class="icon-xs"></i> Accueil
             </a>
         </div>
@@ -195,12 +218,7 @@
             </span>
 
             <div class="error-code">404</div>
-            <h1 class="error-title">Oups ! Cette page s'est envolée...</h1>
-            <p class="error-desc">
-                L'adresse renseignée est peut-être erronée, ou la page que vous recherchez a été déplacée. 
-                Ne vous inquiétez pas, nos poulets fermiers et nos produits frais sont toujours sont bien disponibles. 
-            </p>
-
+            <h1 class="error-title">Oups&nbsp;! Cette page n&rsquo;existe pas&hellip;</h1>
             <div class="error-actions">
                 <a href="/" class="btn btn-primary shadow-md">
                     <i data-lucide="home" class="icon-sm"></i> Retourner à l'accueil
@@ -219,7 +237,7 @@
     </main>
 
     <!-- Footer minimal -->
-    <footer style="text-align: center; padding: 1.5rem; font-size: 0.82rem; color: var(--text-muted);">
+    <footer class="error-footer">
         <p>&copy; <span id="year">2026</span> Cabane du Fermier. Tous droits réservés.</p>
     </footer>
 

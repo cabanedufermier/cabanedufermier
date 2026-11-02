@@ -773,6 +773,10 @@
                             <ul id="cart-items-list" class="cart-items-list" style="display: none;">
                                 <!-- Items injected by JS -->
                             </ul>
+                            <div id="cart-discount-row" class="cart-discount-row" style="display: none;">
+                                <span>Réduction promo (-5%)</span>
+                                <span id="cart-discount-amount">-0 F</span>
+                            </div>
                             <div id="cart-total-container" class="cart-total-container" style="display: none;">
                                 <span>Total</span>
                                 <span id="cart-total-price">0 F</span>
@@ -796,6 +800,19 @@
                             <div class="form-group">
                                 <label for="contactInfo">Votre Numéro WhatsApp</label>
                                 <input type="tel" id="contactInfo" name="contactInfo" placeholder="+229 XX XX XX XX" required>
+                            </div>
+
+                            <!-- Bloc Code Promo (uniquement première commande) -->
+                            <div class="form-group promo-group" id="promo-code-section">
+                                <label for="promo_code">
+                                    <i data-lucide="tag" class="icon-xs"></i> Avez-vous un code promo ?
+                                </label>
+                                <small class="form-hint" style="margin-bottom: 0.5rem; display: block;">Renseignez votre code ici et bénéficiez de 5% de réduction sur votre première commande.</small>
+                                <div class="promo-input-row">
+                                    <input type="text" id="promo_code" name="promo_code" placeholder="Ex: CDF-COUSTEAU" autocomplete="off" autocapitalize="characters">
+                                    <button type="button" id="apply-promo-btn" class="btn-promo-apply">Appliquer</button>
+                                </div>
+                                <div id="promo-feedback" class="promo-feedback" style="display: none;"></div>
                             </div>
 
                             <!-- Consentement offres exclusives / newsletter -->
