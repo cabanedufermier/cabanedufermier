@@ -84,26 +84,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ----- 5b. Cart Logic & Dynamic Ordering -----
-    const cart = {}; // cart state: key = productId + "_" + optionId, value = { product, optionId, optionName, price, qty }
+    const cart = {}; // cart state: key = productId + "_" + optionId, value = { productId, product, optionId, optionName, price, qty }
 
-    // ----- Code Promo State & First Order Check -----
+    // ----- Code Promo & Affiliation Vendeur -----
     const PROMO_STORAGE_KEY = 'cdf_has_ordered';
     const VALID_PROMO_CODE = 'CDF-COUSTEAU';
+    // Produits éligibles à la réduction de 5% (selon validation DAF) :
+    // Poulet bicyclette, Lapin, Cailles, Gombo. (Escargots et Légumes précuits exclus)
+    const ELIGIBLE_PRODUCT_IDS = ['poulet', 'lapin', 'cailles', 'gombo'];
+
     let appliedPromo = null; // { code: 'CDF-COUSTEAU', discountRate: 0.05 }
 
     const promoSection = document.getElementById('promo-code-section');
     const hasOrdered = localStorage.getItem(PROMO_STORAGE_KEY);
     if (hasOrdered && promoSection) {
-        // Le client a déjà commandé : ne plus jamais afficher le code promo
+        // Le client a déjà commandé : ne plus jamais afficher le champ code promo
         promoSection.style.display = 'none';
+    }
+
+    // Détection automatique du code promo ou QR Code affilié via URL (ex: ?ref=CDF-COUSTEAU ou ?promo=CDF-COUSTEAU)
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCodeFromUrl = urlParams.get('ref') || urlParams.get('promo');
+    if (refCodeFromUrl && !hasOrdered) {
+        const promoInput = document.getElementById('promo_code');
+        if (promoInput) {
+            promoInput.value = refCodeFromUrl.trim().toUpperCase();
+        }
     }
 
     function updateCartUI() {
         let total = 0;
+        let eligibleTotal = 0; // Total des produits éligibles à la réduction
         const listEl = document.getElementById('cart-items-list');
         const emptyMsg = document.getElementById('cart-empty-msg');
         const discountRow = document.getElementById('cart-discount-row');
         const discountAmountEl = document.getElementById('cart-discount-amount');
+        const discountHint = document.getElementById('cart-discount-hint');
         const totalContainer = document.getElementById('cart-total-container');
         const totalPriceEl = document.getElementById('cart-total-price');
         const submitBtn = document.getElementById('submitOrderBtn');
@@ -118,6 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 hasItems = true;
                 const subtotal = item.price * item.qty;
                 total += subtotal;
+
+                if (ELIGIBLE_PRODUCT_IDS.includes(item.productId)) {
+                    eligibleTotal += subtotal;
+                }
 
                 const li = document.createElement('li');
                 li.className = 'cart-item';
@@ -154,14 +174,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let finalTotal = total;
             if (appliedPromo && appliedPromo.discountRate > 0) {
-                const discountAmount = Math.round(total * appliedPromo.discountRate);
+                // La réduction s'applique UNIQUEMENT sur les articles éligibles
+                const discountAmount = Math.round(eligibleTotal * appliedPromo.discountRate);
                 finalTotal = Math.max(0, total - discountAmount);
                 if (discountRow && discountAmountEl) {
                     discountRow.style.display = 'flex';
                     discountAmountEl.textContent = `-${discountAmount} F`;
                 }
-            } else if (discountRow) {
-                discountRow.style.display = 'none';
+                if (discountHint) {
+                    discountHint.style.display = eligibleTotal > 0 ? 'block' : 'none';
+                }
+            } else {
+                if (discountRow) discountRow.style.display = 'none';
+                if (discountHint) discountHint.style.display = 'none';
             }
 
             totalContainer.style.display = 'flex';
@@ -171,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             emptyMsg.style.display = 'flex';
             listEl.style.display = 'none';
             if (discountRow) discountRow.style.display = 'none';
+            if (discountHint) discountHint.style.display = 'none';
             totalContainer.style.display = 'none';
             submitBtn.setAttribute('disabled', 'true');
         }
@@ -236,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cartKey = productId + "_" + optionId;
 
                 if (!cart[cartKey] || cart[cartKey].qty === 0) {
-                    cart[cartKey] = { product: productName, optionId, optionName, price, qty: 1 };
+                    cart[cartKey] = { productId, product: productName, optionId, optionName, price, qty: 1 };
                 } else {
                     cart[cartKey].qty++;
                 }
@@ -291,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const price = parseInt(activeOptionBtn.getAttribute('data-price'), 10);
                 const cartKey = productId + "_" + optionId;
                 if (!cart[cartKey]) {
-                    cart[cartKey] = { product: productName, optionId, optionName, price, qty: 1 };
+                    cart[cartKey] = { productId, product: productName, optionId, optionName, price, qty: 1 };
                 } else {
                     cart[cartKey].qty++;
                 }
@@ -533,12 +559,16 @@ document.addEventListener('DOMContentLoaded', () => {
             let msg = `🛒 *Nouvelle commande — Cabane du Fermier*\n\n`;
             
             let orderTotal = 0;
+            let eligibleTotal = 0;
             let hasItems = false;
             Object.values(cart).forEach(item => {
                 if (item.qty > 0) {
                     hasItems = true;
                     const subtotal = item.price * item.qty;
                     orderTotal += subtotal;
+                    if (ELIGIBLE_PRODUCT_IDS.includes(item.productId)) {
+                        eligibleTotal += subtotal;
+                    }
                     msg += `- ${item.product} (${item.optionName}) x${item.qty} : ${subtotal} F\n`;
                 }
             });
@@ -550,10 +580,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let finalPrice = orderTotal;
             if (appliedPromo && appliedPromo.discountRate > 0) {
-                const discount = Math.round(orderTotal * appliedPromo.discountRate);
+                const discount = Math.round(eligibleTotal * appliedPromo.discountRate);
                 finalPrice = Math.max(0, orderTotal - discount);
                 msg += `\nSous-total : ${orderTotal} F\n`;
-                msg += `🎟️ *Code Promo (${appliedPromo.code}) :* -${discount} F (-5%)\n`;
+                if (discount > 0) {
+                    msg += `🎟️ *Code Promo (${appliedPromo.code}) :* -${discount} F (-5% sur viandes/gombo)\n`;
+                }
                 msg += `*Total final : ${finalPrice} F*\n\n`;
             } else {
                 msg += `\n*Total : ${orderTotal} F*\n\n`;

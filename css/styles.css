@@ -2253,6 +2253,13 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--accent-light);
     padding-top: 0.75rem;
 }
+.cart-discount-hint {
+    text-align: right;
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.65);
+    margin-top: -0.2rem;
+    margin-bottom: 0.25rem;
+}
 .cart-total-container {
     display: flex;
     justify-content: space-between;
