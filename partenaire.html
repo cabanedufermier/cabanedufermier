@@ -604,7 +604,10 @@
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="loginPassword">Mot de passe</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                        <label for="loginPassword" style="margin: 0;">Mot de passe</label>
+                        <a href="javascript:void(0)" id="linkForgotPassword" style="font-size: 0.78rem; color: var(--primary); font-weight: 600;">Mot de passe oublié ?</a>
+                    </div>
                     <input type="password" id="loginPassword" placeholder="••••••••" required>
                 </div>
 
@@ -707,6 +710,59 @@
                 <div style="text-align: center; margin-top: 1rem;">
                     <button type="button" class="btn btn-outline btn-sm" id="btnResendOtp">Renvoyer le code</button>
                 </div>
+            </form>
+
+            <!-- 4. Formulaire Demande Réinitialisation Mot de Passe -->
+            <form id="forgotPasswordForm" style="display: none;">
+                <h2>Mot de passe oublié</h2>
+                <p class="subtitle">Entrez votre email pour recevoir un code de réinitialisation.</p>
+
+                <div class="form-group-partner">
+                    <label for="forgotEmail">Votre adresse Email</label>
+                    <input type="email" id="forgotEmail" placeholder="votre.email@exemple.com" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full shadow-md" id="btnForgotSubmit">
+                    Envoyer le code de réinitialisation
+                </button>
+
+                <div style="text-align: center; margin-top: 1.25rem;">
+                    <a href="javascript:void(0)" id="linkBackToLogin" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                        ← Retour à la connexion
+                    </a>
+                </div>
+            </form>
+
+            <!-- 5. Formulaire Saisie Nouveau Mot de Passe avec Code OTP -->
+            <form id="resetPasswordForm" style="display: none;">
+                <h2>Nouveau mot de passe</h2>
+                <p class="subtitle" style="margin-bottom: 1rem;">
+                    Saisissez le code reçu par email à :<br>
+                    <strong id="resetEmailTarget" style="color: var(--primary);">votre.email@domaine.com</strong>
+                </p>
+
+                <div class="form-group-partner">
+                    <label for="resetOtpCode">Code à 6 chiffres</label>
+                    <input type="text" id="resetOtpCode" class="otp-input-field" maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="resetNewPassword">Nouveau mot de passe</label>
+                    <input type="password" id="resetNewPassword" placeholder="Minimum 8 car., majuscule, chiffre..." required autocomplete="new-password">
+                    
+                    <div class="password-meter-wrap">
+                        <div class="password-meter-bar">
+                            <div class="password-meter-fill" id="resetPwdMeterFill"></div>
+                        </div>
+                        <div class="password-meter-text">
+                            <span id="resetPwdStrengthLabel">Force : Trop court</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full shadow-md" id="btnResetSubmit">
+                    Mettre à jour mon mot de passe
+                </button>
             </form>
         </div>
 
