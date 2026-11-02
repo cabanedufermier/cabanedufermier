@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         clearAlert();
 
-        const email = document.getElementById('loginEmail').value.trim();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
         const password = document.getElementById('loginPassword').value;
         const btn = document.getElementById('btnLoginSubmit');
 
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearAlert();
 
         const nom = document.getElementById('regNom').value.trim();
-        const email = document.getElementById('regEmail').value.trim();
+        const email = document.getElementById('regEmail').value.trim().toLowerCase();
         const rawTel = document.getElementById('regTel').value.trim();
         const codePromo = document.getElementById('regCodePromo').value.trim().toUpperCase();
         const rawMomo = document.getElementById('regMomo').value.trim();
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Nettoyer le code (enlève tout espace accidentel)
         const token = otpCodeInput?.value.trim().replace(/\s+/g, '');
         if (!token || token.length < 6) {
-            showAlert('Veuillez saisir le code complet à 6 chiffres.');
+            showAlert('Veuillez saisir le code complet reçu par email.');
             return;
         }
 
@@ -339,26 +339,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error("Adresse email introuvable. Veuillez recommencer l'inscription.");
             }
 
-            // Tentative 1 : type 'signup'
+            // Tentative 1 : type 'email' (standard officiel Supabase v2 pour les codes OTP 6 chiffres par email)
+            console.log('Validation OTP en cours...', { email, token });
             let verifyResult = await supabaseClient.auth.verifyOtp({
                 email,
                 token,
-                type: 'signup'
+                type: 'email'
             });
 
-            // Tentative 2 : fallback 'email' si Supabase l'a classé comme OTP générique
+            // Tentative 2 : fallback 'signup' si 'email' a été rejeté
             if (verifyResult.error) {
+                console.warn("Échec avec type 'email', tentative avec type 'signup'...", verifyResult.error);
                 const retryResult = await supabaseClient.auth.verifyOtp({
                     email,
                     token,
-                    type: 'email'
+                    type: 'signup'
                 });
                 if (!retryResult.error) {
                     verifyResult = retryResult;
                 }
             }
 
-            if (verifyResult.error) throw verifyResult.error;
+            if (verifyResult.error) {
+                console.error("Échec définitif verifyOtp:", verifyResult.error);
+                throw verifyResult.error;
+            }
 
             const data = verifyResult.data;
             const userId = data.user?.id || pendingRegistration?.id;
@@ -542,11 +547,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         clearAlert();
 
-        const token = document.getElementById('resetOtpCode')?.value.trim();
+        const token = document.getElementById('resetOtpCode')?.value.trim().replace(/\s+/g, '');
         const newPassword = resetNewPassword?.value;
 
         if (!token || token.length < 6) {
-            showAlert('Veuillez renseigner le code complet à 6 chiffres.');
+            showAlert('Veuillez renseigner le code complet reçu par email.');
             return;
         }
 
