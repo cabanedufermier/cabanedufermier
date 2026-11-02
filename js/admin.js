@@ -4,7 +4,7 @@
 
 const SUPABASE_URL = 'https://tfsbmtsyegbxijyvxpta.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_OAr80mY9z0eXbMh5VxxF-A_ps9xk61R';
-const DAF_PIN = 'CDF-DAF-2026'; // Code d'accès rapide DAF (peut être personnalisé)
+const DAF_PIN = 'cdf@gmail.com'; // Code d'accès rapide DAF (peut être personnalisé)
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
