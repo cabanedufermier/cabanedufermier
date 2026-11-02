@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (authError) throw authError;
 
-            // Sauvegarder les données de profil en mémoire pour insertion post-validation OTP
+            // Sauvegarder les données de profil en mémoire et sessionStorage pour insertion post-validation OTP
             pendingRegistration = {
                 id: authData.user ? authData.user.id : null,
                 email,
@@ -283,6 +283,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 momo,
                 reseau
             };
+            try {
+                sessionStorage.setItem('cdf_pending_reg', JSON.stringify(pendingRegistration));
+            } catch (e) {}
 
             // Basculer vers l'écran de validation OTP
             registerForm.style.display = 'none';
@@ -300,12 +303,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // Récupération éventuelle de la session d'inscription en attente
+    try {
+        const savedReg = sessionStorage.getItem('cdf_pending_reg');
+        if (savedReg) pendingRegistration = JSON.parse(savedReg);
+    } catch (e) {}
+
     // ----- 2b. VALIDATION DU CODE OTP EMAIL -----
     otpVerifyForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearAlert();
 
-        const token = otpCodeInput?.value.trim();
+        // Nettoyer le code (enlève tout espace accidentel)
+        const token = otpCodeInput?.value.trim().replace(/\s+/g, '');
         if (!token || token.length < 6) {
             showAlert('Veuillez saisir le code complet à 6 chiffres.');
             return;
@@ -316,20 +326,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.textContent = 'Vérification...';
 
         try {
-            const email = pendingRegistration?.email || document.getElementById('regEmail').value.trim();
+            if (!pendingRegistration) {
+                try {
+                    const saved = sessionStorage.getItem('cdf_pending_reg');
+                    if (saved) pendingRegistration = JSON.parse(saved);
+                } catch (e) {}
+            }
 
-            const { data, error } = await supabaseClient.auth.verifyOtp({
+            const email = (pendingRegistration?.email || document.getElementById('regEmail')?.value || '').trim().toLowerCase();
+            if (!email) {
+                throw new Error("Adresse email introuvable. Veuillez recommencer l'inscription.");
+            }
+
+            // Tentative 1 : type 'signup'
+            let verifyResult = await supabaseClient.auth.verifyOtp({
                 email,
                 token,
                 type: 'signup'
             });
 
-            if (error) throw error;
+            // Tentative 2 : fallback 'email' si Supabase l'a classé comme OTP générique
+            if (verifyResult.error) {
+                const retryResult = await supabaseClient.auth.verifyOtp({
+                    email,
+                    token,
+                    type: 'email'
+                });
+                if (!retryResult.error) {
+                    verifyResult = retryResult;
+                }
+            }
 
+            if (verifyResult.error) throw verifyResult.error;
+
+            const data = verifyResult.data;
             const userId = data.user?.id || pendingRegistration?.id;
 
             // Insérer le profil dans la table vendeurs une fois l'email validé
-            if (pendingRegistration) {
+            if (pendingRegistration && userId) {
                 const { error: profileError } = await supabaseClient.from('vendeurs').insert([{
                     id: userId,
                     nom_complet: pendingRegistration.nom,
@@ -341,9 +375,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }]);
 
                 if (profileError && !profileError.message.includes('duplicate')) {
-                    throw profileError;
+                    console.warn('Note profil vendeur:', profileError);
                 }
             }
+
+            try { sessionStorage.removeItem('cdf_pending_reg'); } catch (e) {}
 
             showAlert('Email vérifié et compte activé avec succès !', 'success');
             setTimeout(async () => {
@@ -351,7 +387,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 600);
 
         } catch (err) {
-            showAlert(err.message || 'Code de validation invalide ou expiré.');
+            console.error('Erreur OTP:', err);
+            if (err.message && err.message.toLowerCase().includes('expired')) {
+                showAlert('Ce code a expiré ou a déjà été utilisé. Cliquez sur "Renvoyer le code" ci-dessous pour en recevoir un tout nouveau.');
+            } else {
+                showAlert(err.message || 'Code de validation invalide.');
+            }
         } finally {
             btn.disabled = false;
             btn.textContent = 'Valider mon compte & Accéder au Dashboard';
