@@ -8,8 +8,13 @@
     <meta name="description" content="Espace Ambassadeur & Vendeur Cabane du Fermier : suivez vos commandes affiliées, votre QR Code et vos gains en direct.">
     <link rel="canonical" href="https://www.cabanedufermier.com/partenaire.html">
 
-    <!-- Favicon -->
+    <!-- Favicon & PWA -->
     <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#103417">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -568,6 +573,49 @@
             font-weight: 700 !important;
             font-family: monospace, sans-serif !important;
         }
+
+        /* Fix Boutons Mobiles : Centrage parfait & Empêcher le texte de déborder */
+        .btn, button.btn, a.btn {
+            white-space: normal !important;
+            word-break: break-word;
+            text-align: center !important;
+            justify-content: center !important;
+            line-height: 1.35;
+            padding: 0.85rem 1.25rem;
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 1.5rem 1.15rem;
+                margin: 1.5rem auto;
+            }
+            .auth-tabs {
+                flex-direction: column;
+                gap: 0.35rem;
+            }
+            .auth-tab-btn {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.88rem;
+                text-align: center;
+            }
+            .btn, button.btn, a.btn {
+                font-size: 0.88rem !important;
+                padding: 0.8rem 1rem !important;
+                width: 100%;
+            }
+            .btn-retrait {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+            }
+            .dash-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -625,8 +673,24 @@
 
             <!-- Formulaire Inscription -->
             <form id="registerForm" style="display: none;">
-                <h2>Rejoindre l'équipe</h2>
-                <p class="subtitle">Gagnez jusqu'à 10% de commission sur chaque client apporté.</p>
+                <h2>Devenir Ambassadeur</h2>
+                <p class="subtitle">Recommandez des produits frais locaux et soyez rémunéré en toute transparence.</p>
+
+                <!-- Bloc explicatif concret du rôle d'Ambassadeur -->
+                <div style="background: #f0f7ed; border: 1px solid #d4ded2; border-radius: var(--radius-md); padding: 1.15rem; margin-bottom: 1.5rem; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem;">
+                        <i data-lucide="sparkles" class="icon-xs" style="color: var(--primary);"></i>
+                        <strong style="color: var(--partner-dark); font-size: 0.92rem; font-family: var(--font-heading);">C'est quoi concrètement être Ambassadeur ?</strong>
+                    </div>
+                    <p style="font-size: 0.84rem; color: var(--text); line-height: 1.5; margin-bottom: 0.75rem;">
+                        En devenant Ambassadeur de la <strong>Cabane du Fermier</strong>, vous faites découvrir à votre communauté nos volailles fermières, lapins et gombo frais tracés au Bénin :
+                    </p>
+                    <ul style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li><strong>Un code promo personnel :</strong> vos proches et abonnés bénéficient de <strong>-5% de remise</strong> sur leur 1ère commande.</li>
+                        <li><strong>Jusqu'à 10% de commission :</strong> vous touchez de <strong>5% à 10%</strong> sur la 1ère commande, puis <strong>5%</strong> sur les 2e et 3e commandes du client (durant 60 jours).</li>
+                        <li><strong>Retrait Mobile Money :</strong> vos gains cumulés sont virés directement sur votre compte MoMo chaque mois dès 5 000 FCFA.</li>
+                    </ul>
+                </div>
 
                 <div class="form-group-partner">
                     <label for="regNom">Nom & Prénoms</label>
@@ -770,14 +834,17 @@
                 <button type="submit" class="btn btn-primary w-full shadow-md" id="btnResetSubmit">
                     Mettre à jour mon mot de passe
                 </button>
+
+                <div style="text-align: center; margin-top: 1.25rem;">
+                    <a href="javascript:void(0)" id="linkBackToLoginFromReset" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                        ← Annuler et retourner à la connexion
+                    </a>
+                </div>
             </form>
         </div>
 
         <!-- 2. VUE DASHBOARD DU VENDEUR -->
         <div id="dashSection" style="display: none;">
-            
-            <!-- Bandeau de confirmation notification WhatsApp Admin (nouveau vendeur) -->
-            <div id="newSellerNotifBanner" style="display: none;"></div>
 
             <!-- Header Profil -->
             <div class="dash-header">
@@ -915,6 +982,23 @@
                 </div>
             </div>
 
+            <!-- Conditions & Modalités Financières de l'Administration -->
+            <div class="table-card" style="background: #f9fbf8; border: 1.5px solid rgba(45, 106, 79, 0.18);">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
+                    <i data-lucide="info" class="icon-sm" style="color: var(--primary);"></i>
+                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--partner-dark);">Modalités de Retrait & Calendrier — Administration Cabane du Fermier</h3>
+                </div>
+                <div style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
+                    <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li><strong>Période de demande :</strong> Soumission ouverte chaque mois <strong>entre le 1er et le 5 du mois</strong> pour les commissions acquises du mois écoulé.</li>
+                        <li><strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, vos commissions sont cumulées et reportées sur les mois suivants, sans aucune perte.</li>
+                        <li><strong>Fréquence :</strong> 1 seule demande par mois civil.</li>
+                        <li><strong>Versement :</strong> Effectué sur votre compte Mobile Money béninois (MTN, Moov, Celtiis) <strong>au plus tard le 15 du même mois</strong> par l'Administration.</li>
+                        <li><strong>Traçabilité :</strong> Chaque versement fait l'objet d'un récapitulatif détaillé consultable sur ce tableau de bord.</li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -922,12 +1006,11 @@
     <!-- Modale Demande de Retrait -->
     <div id="retraitModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
         <div style="background: #ffffff; max-width: 440px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-            <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un retrait mensuel</h3>
+            <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un retrait</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.4;">
-                Conformément aux règles de gestion du DAF :<br>
-                • Demande autorisée <strong>entre le 1er et le 5 du mois</strong>.<br>
+                • Période de soumission : <strong>du 1er au 5 du mois</strong>.<br>
                 • Seuil minimum requis : <strong>5 000 FCFA</strong>.<br>
-                • Virement effectué sur votre MoMo <strong>avant le 15 du mois</strong>.
+                • Virement effectué sur votre Mobile Money <strong>au plus tard le 15 du mois</strong>.
             </p>
 
             <form id="retraitForm">
@@ -972,37 +1055,46 @@
             </div>
             
             <div style="font-size: 0.85rem; line-height: 1.6; color: var(--text);">
-                <p><strong>1. Objet du Programme</strong><br>
-                Le Programme Ambassadeur de la Cabane du Fermier permet aux partenaires de promouvoir les produits locaux frais et de percevoir des commissions sur les ventes effectives.</p>
+                <p style="background: #f0f7ed; border-left: 3px solid var(--primary); padding: 0.6rem 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
+                    <strong>Cadre du Partenariat :</strong> La Cabane du Fermier (entreprise béninoise de transformation agroalimentaire fondée en 2022) et l'Ambassadeur conviennent d'une collaboration durable, équitable et transparente pour faire connaître les produits locaux frais et tracés au Bénin.
+                </p>
 
-                <p><strong>2. Produits Éligibles</strong><br>
-                La remise client et la commission vendeur s'appliquent exclusivement sur les <strong>viandes fraîches</strong> (poulets fermiers bicyclette, cailles, lapins) et le <strong>gombo frais</strong>. Les escargots et légumes précuits (tchayo, gboma, amanvivè) sont expressément exclus.</p>
+                <p><strong>1. Produits Concernés & Éligibilité</strong><br>
+                • <strong>Produits éligibles (Remise client 5% + Commission Partenaire) :</strong> Poulet bicyclette fraîchement abattu, Cailles fraîchement abattues, Lapin, et Gombo prêt à cuisiner.<br>
+                • <strong>Produits exclus (0% remise, 0% commission) :</strong> Escargots et Légumes précuits (tchayo, gboman, amanvivè), pour lesquels la marge ne permet pas l'application de remise et commission.</p>
 
-                <p><strong>3. Règle des 3 Premières Commandes (Fidélisation)</strong><br>
-                • <strong>1ère commande du client</strong> : 5% de réduction immédiate pour le client + <strong>5% à 10%</strong> de commission pour l'Ambassadeur.<br>
-                • <strong>2ème et 3ème commandes</strong> : 0% de remise client + <strong>5%</strong> de commission de fidélisation pour l'Ambassadeur.<br>
-                • <strong>À partir de la 4ème commande</strong> : 0% de commission vendeur (le client est considéré comme acquis à la marque).</p>
+                <p><strong>2. Rémunération de l'Ambassadeur & Remise Client</strong><br>
+                • <strong>Remise client :</strong> Les clients utilisant votre code promo bénéficient de <strong>5 % de remise</strong> sur le prix affiché des produits éligibles, sur leur <strong>première commande uniquement</strong>.<br>
+                • <strong>Commission Partenaire (calculée sur le prix affiché avant remise, hors livraison) :</strong><br>
+                &nbsp;&nbsp;– <strong>1ère commande (acquisition) :</strong> <strong>5 % à 10 %</strong> selon vos paliers mensuels.<br>
+                &nbsp;&nbsp;– <strong>2ème et 3ème commandes (fidélisation) :</strong> <strong>5 %</strong> de commission pour vous (sans remise pour le client).<br>
+                &nbsp;&nbsp;– <strong>À partir de la 4ème commande :</strong> 0 % (le client est considéré comme acquis à l'enseigne).</p>
 
-                <p><strong>4. Gamification des Paliers Mensuels</strong><br>
-                Le taux de base d'acquisition évolue selon le nombre de nouveaux clients livrés dans le mois civil en cours :<br>
-                • De 0 à 10 clients : <strong>5 %</strong><br>
-                • De 11 à 30 clients : <strong>7 %</strong><br>
-                • Plus de 30 clients : <strong>10 %</strong></p>
+                <p><strong>3. Gamification des Paliers Mensuels (1ère commande)</strong><br>
+                Le taux applicable à la première commande de chaque nouveau client évolue selon le nombre de clients livrés dans le mois civil :<br>
+                • De 0 à 10 nouveaux clients : <strong>5 %</strong><br>
+                • De 11 à 30 nouveaux clients : <strong>7 %</strong><br>
+                • Plus de 30 nouveaux clients : <strong>10 %</strong></p>
+
+                <p><strong>4. Rattachement du Client Apporté (Règle des 60 jours)</strong><br>
+                Est considérée comme apportée toute 1ère commande passée avec votre code promo par un client qui n’a jamais commandé. La Cabane du Fermier rattache automatiquement ce client à votre profil via son numéro WhatsApp pour ses 2e et 3e commandes. Ce commissionnement s’applique sur les 3 premières commandes, ou pendant <strong>60 jours</strong> à compter de la première commande (au premier des deux termes atteint).</p>
 
                 <p><strong>5. Modalités de Retrait & Calendrier Financier</strong><br>
-                • <strong>Période de soumission</strong> : La demande de retrait doit être effectuée obligatoirement <strong>entre le 1er et le 5 du mois</strong>.<br>
-                • <strong>Seuil minimum de retrait</strong> : <strong>5 000 FCFA</strong>.<br>
-                • <strong>Fréquence</strong> : 1 seule demande par mois civil.<br>
-                • <strong>Paiement</strong> : Virement effectif sur votre compte Mobile Money béninois (MTN, Moov, Celtiis avec préfixe 01) <strong>avant le 15 du mois</strong> après audit par le DAF.</p>
+                • <strong>Période de soumission :</strong> La demande de retrait s'effectue obligatoirement <strong>entre le 1er et le 5 du mois</strong> pour les commissions du mois écoulé.<br>
+                • <strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, les commissions sont cumulées et reportées sur les mois suivants, sans aucune perte pour le Partenaire.<br>
+                • <strong>Paiement :</strong> Versé par l'Administration par Mobile Money (MTN, Moov, Celtiis) <strong>au plus tard le 15 du même mois</strong> avec récapitulatif détaillé.</p>
+
+                <p><strong>6. Éthique, Image & Indépendance</strong><br>
+                Le Partenaire agit de manière indépendante. Il s’engage à présenter les produits fidèlement, à indiquer son code promo et les moyens de commande (WhatsApp, site web), et à respecter l’image de marque de la Cabane du Fermier.</p>
 
                 <p style="background: #fef2f2; border-left: 3px solid #dc2626; padding: 0.6rem 0.8rem; border-radius: 4px;">
-                <strong>6. Tolérance Zéro Anti-Fraude & Auto-Parrainage</strong><br>
-                Il est formellement interdit à un Ambassadeur de commander pour son propre compte, son propre numéro ou son propre domicile en utilisant son code affilié. Toute tentative d'auto-parrainage, de fausses commandes ou de tricherie entraîne le <strong>blocage immédiat et irréversible du compte</strong> ainsi que la confiscation définitive du solde du Wallet.
+                    <strong>7. Interdiction Stricte de l'Auto-Parrainage</strong><br>
+                    Le code promo est destiné exclusivement à votre communauté. Constitue un auto-parrainage toute commande passée par l'Ambassadeur pour lui-même, son foyer, ses propres coordonnées ou moyens de paiement dans le but de cumuler remise et commission. Toute fraude entraîne l'annulation des commissions et la suspension du compte conformément aux règles de l'Administration.
                 </p>
             </div>
 
             <button type="button" class="btn btn-primary w-full shadow-md" id="btnAcceptCguModal" style="margin-top: 1.5rem;">
-                J'ai compris et j'accepte ces règles
+                J'ai lu et j'accepte les conditions de partenariat
             </button>
         </div>
     </div>

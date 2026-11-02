@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----- Code Promo & Affiliation Vendeur -----
     const PROMO_STORAGE_KEY = 'cdf_has_ordered';
     const VALID_PROMO_CODE = 'CDF-COUSTEAU';
-    // Produits éligibles à la réduction de 5% (selon validation DAF) :
+    // Produits éligibles à la réduction de 5% (selon l'Administration Cabane du Fermier) :
     // Poulet bicyclette, Lapin, Cailles, Gombo. (Escargots et Légumes précuits exclus)
     const ELIGIBLE_PRODUCT_IDS = ['poulet', 'lapin', 'cailles', 'gombo'];
 

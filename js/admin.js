@@ -1,15 +1,28 @@
 /* ====================================================================
-   CABANE DU FERMIER — Espace DAF / Direction (Validation des Versements)
+   CABANE DU FERMIER — Administration (Validation des Versements)
    ==================================================================== */
 
 const SUPABASE_URL = 'https://tfsbmtsyegbxijyvxpta.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_OAr80mY9z0eXbMh5VxxF-A_ps9xk61R';
-const DAF_PIN = 'cdf@gmail.com'; // Code d'accès rapide DAF (peut être personnalisé)
+const ADMIN_PIN = 'cdf@gmail.com'; // Code d'accès rapide Admin (peut être personnalisé)
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    // Initialisation icônes Lucide (robuste au chargement différé)
+    function refreshIcons() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+            return true;
+        }
+        return false;
+    }
+    if (!refreshIcons()) {
+        let attempts = 0;
+        const iconInterval = setInterval(() => {
+            if (refreshIcons() || ++attempts > 20) clearInterval(iconInterval);
+        }, 100);
+    }
 
     const lockScreen = document.getElementById('lockScreen');
     const adminDashboard = document.getElementById('adminDashboard');
@@ -34,9 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let allVendeurs = {};
     let currentFilter = 'en_attente';
 
-    // 1. Déverrouillage PIN DAF
+    // 1. Déverrouillage PIN Admin
     function checkAuth() {
-        const isAuth = sessionStorage.getItem('cdf_daf_auth') === 'true';
+        const isAuth = sessionStorage.getItem('cdf_admin_auth') === 'true' || sessionStorage.getItem('cdf_daf_auth') === 'true';
         if (isAuth) {
             lockScreen.style.display = 'none';
             adminDashboard.style.display = 'block';
@@ -52,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pinForm?.addEventListener('submit', (e) => {
         e.preventDefault();
         const code = pinInput.value.trim();
-        if (code === DAF_PIN || code === '2026') {
-            sessionStorage.setItem('cdf_daf_auth', 'true');
+        if (code === ADMIN_PIN || code === '2026') {
+            sessionStorage.setItem('cdf_admin_auth', 'true');
             if (lockError) lockError.style.display = 'none';
             checkAuth();
         } else {
@@ -65,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     btnAdminLogout?.addEventListener('click', () => {
+        sessionStorage.removeItem('cdf_admin_auth');
         sessionStorage.removeItem('cdf_daf_auth');
         window.location.reload();
     });
@@ -237,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // 6. Action DAF : Validation en 1 clic
+    // 6. Action Admin : Validation en 1 clic
     window.validateOrderPayment = async function(orderId, vendeurId, commissionAmount) {
         const card = document.getElementById(`order-card-${orderId}`);
         const btn = card?.querySelector('.btn-validate-pay');
@@ -273,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     .eq('id', vendeurId);
             }
 
-            // Confetti joyeux pour le DAF !
+            // Confetti joyeux pour l'Admin !
             if (typeof confetti !== 'undefined') {
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
             }
@@ -285,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(loadAllData, 500);
 
         } catch (err) {
-            console.error('Erreur validation DAF:', err);
+            console.error('Erreur validation Admin:', err);
             alert(`Erreur lors de la validation : ${err.message}`);
             if (btn) {
                 btn.disabled = false;
@@ -295,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 7. Action DAF : Rejeter / Annuler une commande
+    // 7. Action Admin : Rejeter / Annuler une commande
     window.rejectOrder = async function(orderId) {
         if (!confirm("Voulez-vous vraiment marquer cette commande comme annulée ? Aucune commission ne sera versée.")) {
             return;

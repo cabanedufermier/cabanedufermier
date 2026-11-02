@@ -8,8 +8,20 @@ const SUPABASE_ANON_KEY = 'sb_publishable_OAr80mY9z0eXbMh5VxxF-A_ps9xk61R';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Initialisation icônes Lucide
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    // Initialisation icônes Lucide (robuste au chargement différé)
+    function refreshIcons() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+            return true;
+        }
+        return false;
+    }
+    if (!refreshIcons()) {
+        let attempts = 0;
+        const iconInterval = setInterval(() => {
+            if (refreshIcons() || ++attempts > 20) clearInterval(iconInterval);
+        }, 100);
+    }
 
     // Éléments du DOM
     const authSection = document.getElementById('authSection');
@@ -26,6 +38,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const otpEmailTarget = document.getElementById('otpEmailTarget');
     const otpCodeInput = document.getElementById('otpCodeInput');
     const btnResendOtp = document.getElementById('btnResendOtp');
+
+    // Mot de passe oublié & Réinitialisation
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    const linkForgotPassword = document.getElementById('linkForgotPassword');
+    const linkBackToLogin = document.getElementById('linkBackToLogin');
+    const linkBackToLoginFromReset = document.getElementById('linkBackToLoginFromReset');
+    const resetEmailTarget = document.getElementById('resetEmailTarget');
+    const resetOtpCode = document.getElementById('resetOtpCode');
+    const resetNewPassword = document.getElementById('resetNewPassword');
+    const resetPwdMeterFill = document.getElementById('resetPwdMeterFill');
+    const resetPwdStrengthLabel = document.getElementById('resetPwdStrengthLabel');
 
     // Jauge mot de passe & CGU
     const regPassword = document.getElementById('regPassword');
@@ -163,23 +187,149 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (cguModal) cguModal.style.display = 'none';
     });
 
+    // Fonction pour réafficher le formulaire de connexion
+    function showLoginForm() {
+        tabLoginBtn?.classList.add('active');
+        tabRegisterBtn?.classList.remove('active');
+        if (loginForm) loginForm.style.display = 'block';
+        if (registerForm) registerForm.style.display = 'none';
+        if (otpVerifyForm) otpVerifyForm.style.display = 'none';
+        if (forgotPasswordForm) forgotPasswordForm.style.display = 'none';
+        if (resetPasswordForm) resetPasswordForm.style.display = 'none';
+        clearAlert();
+    }
+
+    // Fonction pour afficher le formulaire d'inscription
+    function showRegisterForm() {
+        tabRegisterBtn?.classList.add('active');
+        tabLoginBtn?.classList.remove('active');
+        if (loginForm) loginForm.style.display = 'none';
+        if (registerForm) registerForm.style.display = 'block';
+        if (otpVerifyForm) otpVerifyForm.style.display = 'none';
+        if (forgotPasswordForm) forgotPasswordForm.style.display = 'none';
+        if (resetPasswordForm) resetPasswordForm.style.display = 'none';
+        clearAlert();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     // Gestion des onglets Login / Register
-    tabLoginBtn?.addEventListener('click', () => {
-        tabLoginBtn.classList.add('active');
-        tabRegisterBtn.classList.remove('active');
-        loginForm.style.display = 'block';
+    tabLoginBtn?.addEventListener('click', showLoginForm);
+    tabRegisterBtn?.addEventListener('click', showRegisterForm);
+
+    // Détection automatique ancre #inscription ou paramètre ?mode=inscription
+    if (window.location.hash === '#inscription' || window.location.search.includes('inscription') || window.location.search.includes('devenir')) {
+        showRegisterForm();
+    }
+
+    // Clic sur "Mot de passe oublié ?"
+    linkForgotPassword?.addEventListener('click', () => {
+        loginForm.style.display = 'none';
         registerForm.style.display = 'none';
         if (otpVerifyForm) otpVerifyForm.style.display = 'none';
+        if (resetPasswordForm) resetPasswordForm.style.display = 'none';
+        if (forgotPasswordForm) {
+            forgotPasswordForm.style.display = 'block';
+            const logEmailVal = document.getElementById('loginEmail')?.value;
+            const forgotEmailInp = document.getElementById('forgotEmail');
+            if (logEmailVal && forgotEmailInp && !forgotEmailInp.value) {
+                forgotEmailInp.value = logEmailVal;
+            }
+        }
         clearAlert();
     });
 
-    tabRegisterBtn?.addEventListener('click', () => {
-        tabRegisterBtn.classList.add('active');
-        tabLoginBtn.classList.remove('active');
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-        if (otpVerifyForm) otpVerifyForm.style.display = 'none';
+    // Retour à la connexion
+    linkBackToLogin?.addEventListener('click', showLoginForm);
+    linkBackToLoginFromReset?.addEventListener('click', showLoginForm);
+
+    // Jauge de force pour le nouveau mot de passe
+    resetNewPassword?.addEventListener('input', () => {
+        const pwd = resetNewPassword.value;
+        const res = checkPasswordStrength(pwd);
+        if (resetPwdMeterFill) {
+            resetPwdMeterFill.className = `password-meter-fill ${res.class}`;
+        }
+        if (resetPwdStrengthLabel) {
+            resetPwdStrengthLabel.textContent = `Force : ${res.text}`;
+            resetPwdStrengthLabel.style.color = res.score >= 3 ? '#10b981' : (res.score === 2 ? '#f59e0b' : '#ef4444');
+        }
+    });
+
+    // Envoi de la demande de réinitialisation de mot de passe (envoi OTP par email)
+    let pendingResetEmail = '';
+    forgotPasswordForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
         clearAlert();
+
+        const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+        const btn = document.getElementById('btnForgotSubmit');
+        btn.disabled = true;
+        btn.textContent = 'Envoi en cours...';
+
+        try {
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+            if (error) throw error;
+
+            pendingResetEmail = email;
+            if (resetEmailTarget) resetEmailTarget.textContent = email;
+
+            forgotPasswordForm.style.display = 'none';
+            if (resetPasswordForm) resetPasswordForm.style.display = 'block';
+            showAlert('Code de réinitialisation envoyé ! Consultez votre boîte de réception.', 'success');
+        } catch (err) {
+            showAlert(err.message || 'Impossible d\'envoyer le code de réinitialisation.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Envoyer le code de réinitialisation';
+        }
+    });
+
+    // Validation du code OTP et enregistrement du nouveau mot de passe
+    resetPasswordForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+
+        const token = resetOtpCode?.value.trim().replace(/\s+/g, '');
+        const newPassword = resetNewPassword?.value;
+        const btn = document.getElementById('btnResetSubmit');
+
+        if (!token || token.length < 6) {
+            showAlert('Veuillez saisir le code complet reçu par email.');
+            return;
+        }
+
+        const strength = checkPasswordStrength(newPassword);
+        if (strength.score < 2 || (newPassword && newPassword.length < 8)) {
+            showAlert('Nouveau mot de passe trop faible. Il doit contenir au moins 8 caractères, une majuscule et un chiffre.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Mise à jour en cours...';
+
+        try {
+            // 1. Vérifier l'OTP de type recovery
+            const { error: otpErr } = await supabaseClient.auth.verifyOtp({
+                email: pendingResetEmail,
+                token,
+                type: 'recovery'
+            });
+            if (otpErr) throw otpErr;
+
+            // 2. Mettre à jour le mot de passe utilisateur
+            const { error: updateErr } = await supabaseClient.auth.updateUser({
+                password: newPassword
+            });
+            if (updateErr) throw updateErr;
+
+            alert('Votre mot de passe a été mis à jour avec succès ! Vous pouvez maintenant vous connecter.');
+            showLoginForm();
+        } catch (err) {
+            showAlert(err.message || 'Code invalide ou expiré.');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Mettre à jour mon mot de passe';
+        }
     });
 
     // ----- 1. CONNEXION -----
@@ -388,42 +538,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             try { sessionStorage.removeItem('cdf_pending_reg'); } catch (e) {}
-
-            // Notification WhatsApp Admin automatique (2290191666617)
-            if (registeredData) {
-                const adminPhone = '2290191666617';
-                const vNom = registeredData.nom || 'Nouveau Vendeur';
-                const vTel = registeredData.tel || 'Non renseigné';
-                const vPromo = registeredData.codePromo || 'N/A';
-                const vMomo = registeredData.momo ? `\n💳 *MoMo :* ${registeredData.momo} (${registeredData.reseau || 'MTN'})` : '';
-                const vEmail = (registeredData.email || email) ? `\n📧 *Email :* ${registeredData.email || email}` : '';
-
-                const notifMsg = `🎉 *Nouveau Vendeur inscrit !*\n\n` +
-                    `👤 *Nom :* ${vNom}\n` +
-                    `📱 *Tél :* ${vTel}\n` +
-                    `🎟️ *Code Promo :* ${vPromo}` +
-                    vMomo +
-                    vEmail +
-                    `\n\n🌿 Plateforme Ambassadeurs — Cabane du Fermier`;
-
-                const waNotifUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(notifMsg)}`;
-
-                // Mémoriser pour afficher le bandeau de confirmation sur le Dashboard au cas où le pop-up soit bloqué
-                try {
-                    sessionStorage.setItem('cdf_new_vendeur_notif', JSON.stringify({
-                        waUrl: waNotifUrl,
-                        nom: vNom,
-                        codePromo: vPromo
-                    }));
-                } catch (e) {}
-
-                // Déclenchement automatique de la fenêtre WhatsApp vers l'admin
-                try {
-                    window.open(waNotifUrl, '_blank');
-                } catch (e) {
-                    console.warn('Tentative ouverture WhatsApp admin:', e);
-                }
-            }
 
             showAlert('Email vérifié et compte activé avec succès !', 'success');
             setTimeout(async () => {
@@ -675,47 +789,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Charger les demandes de retrait
         await loadVendeurWithdrawals(profile.id);
 
-        // Vérifier si une notification WhatsApp admin vient d'être préparée
-        checkAndShowNewSellerNotif();
-
         if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // Bandeau de confirmation notification WhatsApp nouveau vendeur
-    function checkAndShowNewSellerNotif() {
-        try {
-            const raw = sessionStorage.getItem('cdf_new_vendeur_notif');
-            if (!raw) return;
-            const notif = JSON.parse(raw);
-            sessionStorage.removeItem('cdf_new_vendeur_notif');
-
-            const container = document.getElementById('newSellerNotifBanner');
-            if (container) {
-                container.innerHTML = `
-                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1.5px solid #10b981; border-radius: 14px; padding: 1.15rem 1.35rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.12);">
-                        <div style="display: flex; align-items: center; gap: 0.85rem;">
-                            <div style="width: 44px; height: 44px; border-radius: 50%; background: #25D366; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.35);">
-                                📱
-                            </div>
-                            <div>
-                                <div style="font-weight: 800; color: #065f46; font-size: 1rem; font-family: 'Outfit', sans-serif;">
-                                    🎉 Inscription réussie ! Alerte WhatsApp Admin
-                                </div>
-                                <div style="color: #047857; font-size: 0.85rem; margin-top: 0.2rem;">
-                                    Une notification a été préparée pour l'administration (+229 01 91 66 66 17). Si elle ne s'est pas ouverte automatiquement, cliquez sur le bouton ci-contre.
-                                </div>
-                            </div>
-                        </div>
-                        <a href="${notif.waUrl}" target="_blank" rel="noopener noreferrer" style="background: #25D366; color: #ffffff; font-weight: 700; font-size: 0.88rem; padding: 0.65rem 1.25rem; border-radius: 999px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3); transition: transform 0.2s;">
-                            <span>Envoyer la notification WhatsApp</span> →
-                        </a>
-                    </div>
-                `;
-                container.style.display = 'block';
-            }
-        } catch (e) {
-            console.warn('Erreur affichage bandeau nouveau vendeur:', e);
-        }
     }
 
     // ----- 5. QR CODE & PARTAGE -----
@@ -786,7 +860,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         totalCommissionsEver.textContent = `${totalCommissions.toLocaleString('fr-FR')} F`;
 
-        // Barème du DAF :
+        // Barème officiel de l'Administration :
         // 0 à 10 clients => 5%
         // 11 à 30 clients => 7%
         // Plus de 30 clients => 10%
@@ -901,18 +975,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 2. Contrôle Calendrier DAF (Soumission autorisée entre le 1er et le 5 du mois)
+        // 2. Contrôle Calendrier (Soumission autorisée entre le 1er et le 5 du mois)
         const today = new Date();
         const dayOfMonth = today.getDate();
         // Permettre le test si besoin mais afficher l'avertissement formel
         if (dayOfMonth > 5 && dayOfMonth < 28) {
-            const confirmLate = confirm(`Attention : Conformément aux règles financières, les demandes de retrait doivent être soumises entre le 1er et le 5 du mois pour être virées avant le 15.\n\nNous sommes le ${dayOfMonth} du mois. Souhaitez-vous quand même enregistrer votre demande pour la prochaine session ?`);
+            const confirmLate = confirm(`Attention : Conformément aux règles financières, les demandes de retrait doivent être soumises entre le 1er et le 5 du mois pour être virées au plus tard le 15.\n\nNous sommes le ${dayOfMonth} du mois. Souhaitez-vous quand même enregistrer votre demande pour la prochaine session ?`);
             if (!confirmLate) return;
         }
 
         const currentMonth = new Date().toISOString().slice(0, 7);
 
-        // Vérifier si une demande a déjà été faite ce mois-ci (1 retrait par mois max selon le DAF)
+        // Vérifier si une demande a déjà été faite ce mois-ci (1 retrait par mois max selon l'Administration)
         const { data: existingRequests, error: checkErr } = await supabaseClient
             .from('demandes_retrait')
             .select('id')

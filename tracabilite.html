@@ -8,8 +8,13 @@
     <meta name="description" content="Découvrez nos producteurs partenaires au Bénin : leur histoire, leurs méthodes d'élevage en plein air et leur promesse qualité pour votre famille.">
     <link rel="canonical" href="https://www.cabanedufermier.com/tracabilite.html">
 
-    <!-- Favicon -->
+    <!-- Favicon & PWA -->
     <link rel="icon" type="image/png" href="images/Logo.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#103417">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -759,7 +764,19 @@
     <!-- Logique Interactive -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            function refreshIcons() {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                    return true;
+                }
+                return false;
+            }
+            if (!refreshIcons()) {
+                let attempts = 0;
+                const iconInterval = setInterval(() => {
+                    if (refreshIcons() || ++attempts > 20) clearInterval(iconInterval);
+                }, 100);
+            }
             const y = document.getElementById('year');
             if (y) y.textContent = new Date().getFullYear();
 

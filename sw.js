@@ -2,12 +2,15 @@
    CABANE DU FERMIER — Service Worker (PWA)
    ============================================ */
 
-const CACHE_NAME = 'cabane-fermier-v1';
+const CACHE_NAME = 'cabane-fermier-v2';
 const PRECACHE_ASSETS = [
     '/',
     '/index.html',
+    '/tracabilite.html',
+    '/partenaire.html',
     '/css/styles.css?v=3',
     '/script.js',
+    '/js/partenaire.js',
     '/manifest.json',
     '/images/Logo.png',
     '/images/Logo.webp',
