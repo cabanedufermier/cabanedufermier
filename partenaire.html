@@ -92,10 +92,202 @@
             flex: 1;
         }
 
+        /* ===== LANDING HERO SECTION ===== */
+        .ambassador-hero {
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #e9a319 100%);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem 2.5rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ambassador-hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            pointer-events: none;
+        }
+        .ambassador-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -40px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(233,163,25,0.12);
+            pointer-events: none;
+        }
+        .ambassador-hero .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(233,163,25,0.2);
+            border: 1px solid rgba(233,163,25,0.5);
+            color: #f5c842;
+            padding: 0.3rem 0.9rem;
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 1.1rem;
+        }
+        .ambassador-hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+        .ambassador-hero .hero-sub {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.82);
+            max-width: 560px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .btn-hero-primary {
+            background: #e9a319;
+            color: #1b1b1b;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.22s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-heading);
+        }
+        .btn-hero-primary:hover {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(233,163,25,0.35);
+        }
+        .btn-hero-outline {
+            background: transparent;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 0.9rem 2rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.22s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-heading);
+        }
+        .btn-hero-outline:hover {
+            border-color: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Avantages Grid */
+        .avantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+        .avantage-card {
+            background: #ffffff;
+            border: 1px solid var(--partner-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .avantage-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+        }
+        .avantage-icon {
+            width: 52px;
+            height: 52px;
+            background: #eef6f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary);
+        }
+        .avantage-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--partner-dark);
+            margin-bottom: 0.4rem;
+        }
+        .avantage-card p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .avantage-highlight {
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            color: var(--partner-accent);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Section titre auth */
+        .auth-section-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .auth-section-title h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--partner-dark);
+            margin-bottom: 0.35rem;
+        }
+        .auth-section-title p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+        .auth-section-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .auth-section-divider::before, .auth-section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--partner-border);
+        }
+
         /* Auth Card */
         .auth-card {
             max-width: 440px;
-            margin: 3rem auto;
+            margin: 0 auto 3rem;
             background: #ffffff;
             padding: 2.25rem;
             border-radius: var(--radius-lg);
@@ -639,18 +831,88 @@
 
     <div class="partner-container">
 
+        <!-- ===== SECTION LANDING / INFO (toujours visible quand non connecté) ===== -->
+        <div id="landingSection">
+
+            <!-- Hero -->
+            <div class="ambassador-hero">
+                <div class="hero-badge">
+                    <i data-lucide="sparkles" style="width:14px;height:14px;"></i>
+                    Programme Ambassadeur
+                </div>
+                <h1>Gagnez en recommandant<br>les produits Cabane du Fermier</h1>
+                <p class="hero-sub">
+                    Partagez votre code promo avec vos proches, et touchez jusqu'à <strong>10% de commission</strong> sur chaque commande qu'ils passent — directement sur votre Mobile Money.
+                </p>
+                <div class="hero-cta-group">
+                    <button type="button" class="btn-hero-primary" id="btnHeroRegister">
+                        <i data-lucide="user-plus" style="width:18px;height:18px;"></i>
+                        Créer mon compte
+                    </button>
+                    <button type="button" class="btn-hero-outline" id="btnHeroLogin">
+                        <i data-lucide="log-in" style="width:18px;height:18px;"></i>
+                        Se connecter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Avantages -->
+            <div class="avantages-grid">
+                <div class="avantage-card">
+                    <div class="avantage-icon">
+                        <i data-lucide="tag" style="width:26px;height:26px;"></i>
+                    </div>
+                    <span class="avantage-highlight">-5%</span>
+                    <h3>Code Promo Personnel</h3>
+                    <p>Vos proches et abonnés bénéficient de 5% de remise sur leur 1ère commande grâce à votre code exclusif.</p>
+                </div>
+                <div class="avantage-card">
+                    <div class="avantage-icon" style="background:#fff7e6;color:#e9a319;">
+                        <i data-lucide="trending-up" style="width:26px;height:26px;"></i>
+                    </div>
+                    <span class="avantage-highlight" style="color:#e9a319;">5% → 10%</span>
+                    <h3>Commissions Progressives</h3>
+                    <p>5% sur la 1ère commande, 7% dès 11 clients, et jusqu'à <strong>10%</strong> au-delà de 30 clients par mois.</p>
+                </div>
+                <div class="avantage-card">
+                    <div class="avantage-icon" style="background:#eff6ff;color:#3b82f6;">
+                        <i data-lucide="smartphone" style="width:26px;height:26px;"></i>
+                    </div>
+                    <span class="avantage-highlight" style="color:#3b82f6;">MoMo</span>
+                    <h3>Retrait Mobile Money</h3>
+                    <p>Vos gains sont virés sur MTN, Moov ou Celtiis chaque mois dès 5 000 FCFA cumulés.</p>
+                </div>
+                <div class="avantage-card">
+                    <div class="avantage-icon" style="background:#f0fdf4;color:#10b981;">
+                        <i data-lucide="qr-code" style="width:26px;height:26px;"></i>
+                    </div>
+                    <span class="avantage-highlight" style="color:#10b981;">QR Code</span>
+                    <h3>QR Code & Lien Partageable</h3>
+                    <p>Un QR code et un lien personnalisé pour partager facilement votre code en stories, WhatsApp ou en personne.</p>
+                </div>
+            </div>
+
+            <!-- Ancre vers formulaires -->
+            <div id="inscription" class="auth-section-title">
+                <h2>Rejoignez le programme</h2>
+                <p>Créez votre compte ou connectez-vous pour accéder à votre espace ambassadeur.</p>
+            </div>
+            <div class="auth-section-divider">Choisissez une option</div>
+
+        </div><!-- /landingSection -->
+
         <!-- 1. VUE AUTHENTIFICATION (Connexion / Inscription) -->
         <div id="authSection" class="auth-card">
             <div class="auth-tabs">
                 <button type="button" class="auth-tab-btn active" id="tabLoginBtn">Connexion</button>
-                <button type="button" class="auth-tab-btn" id="tabRegisterBtn">Devenir Ambassadeur</button>
+                <button type="button" class="auth-tab-btn" id="tabRegisterBtn">Créer un compte</button>
             </div>
 
             <div id="authAlert" class="alert-box alert-error" style="display: none;"></div>
 
             <!-- Formulaire Connexion -->
             <form id="loginForm">
-                <h2>Espace Vendeur</h2>
+                <h2>Bon retour 👋</h2>
                 <p class="subtitle">Connectez-vous pour suivre votre Wallet et vos commissions.</p>
 
                 <div class="form-group-partner">
@@ -669,28 +931,14 @@
                 <button type="submit" class="btn btn-primary w-full shadow-md" id="btnLoginSubmit">
                     Se Connecter
                 </button>
+
+                <p style="text-align:center;margin-top:1rem;font-size:0.84rem;color:var(--text-muted);">Pas encore ambassadeur ? <a href="javascript:void(0)" id="linkGoRegister" style="color:var(--primary);font-weight:700;">Créer un compte →</a></p>
             </form>
 
             <!-- Formulaire Inscription -->
             <form id="registerForm" style="display: none;">
                 <h2>Devenir Ambassadeur</h2>
-                <p class="subtitle">Recommandez des produits frais locaux et soyez rémunéré en toute transparence.</p>
-
-                <!-- Bloc explicatif concret du rôle d'Ambassadeur -->
-                <div style="background: #f0f7ed; border: 1px solid #d4ded2; border-radius: var(--radius-md); padding: 1.15rem; margin-bottom: 1.5rem; text-align: left;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem;">
-                        <i data-lucide="sparkles" class="icon-xs" style="color: var(--primary);"></i>
-                        <strong style="color: var(--partner-dark); font-size: 0.92rem; font-family: var(--font-heading);">C'est quoi concrètement être Ambassadeur ?</strong>
-                    </div>
-                    <p style="font-size: 0.84rem; color: var(--text); line-height: 1.5; margin-bottom: 0.75rem;">
-                        En devenant Ambassadeur de la <strong>Cabane du Fermier</strong>, vous faites découvrir à votre communauté nos volailles fermières, lapins et gombo frais tracés au Bénin :
-                    </p>
-                    <ul style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.35rem;">
-                        <li><strong>Un code promo personnel :</strong> vos proches et abonnés bénéficient de <strong>-5% de remise</strong> sur leur 1ère commande.</li>
-                        <li><strong>Jusqu'à 10% de commission :</strong> vous touchez de <strong>5% à 10%</strong> sur la 1ère commande, puis <strong>5%</strong> sur les 2e et 3e commandes du client (durant 60 jours).</li>
-                        <li><strong>Retrait Mobile Money :</strong> vos gains cumulés sont virés directement sur votre compte MoMo chaque mois dès 5 000 FCFA.</li>
-                    </ul>
-                </div>
+                <p class="subtitle">Rejoignez notre réseau et soyez rémunéré en toute transparence.</p>
 
                 <div class="form-group-partner">
                     <label for="regNom">Nom & Prénoms</label>

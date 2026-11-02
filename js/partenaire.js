@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Éléments du DOM
     const authSection = document.getElementById('authSection');
     const dashSection = document.getElementById('dashSection');
+    const landingSection = document.getElementById('landingSection');
     const navUserActions = document.getElementById('navUserActions');
     const authAlert = document.getElementById('authAlert');
 
@@ -219,7 +220,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Détection automatique ancre #inscription ou paramètre ?mode=inscription
     if (window.location.hash === '#inscription' || window.location.search.includes('inscription') || window.location.search.includes('devenir')) {
         showRegisterForm();
+        document.getElementById('inscription')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    // ----- BOUTONS HERO CTA -----
+    const btnHeroRegister = document.getElementById('btnHeroRegister');
+    const btnHeroLogin = document.getElementById('btnHeroLogin');
+    const linkGoRegister = document.getElementById('linkGoRegister');
+
+    function scrollToAuth() {
+        const authEl = document.getElementById('authSection');
+        if (authEl) authEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    btnHeroRegister?.addEventListener('click', () => {
+        showRegisterForm();
+        scrollToAuth();
+    });
+
+    btnHeroLogin?.addEventListener('click', () => {
+        showLoginForm();
+        scrollToAuth();
+    });
+
+    linkGoRegister?.addEventListener('click', () => {
+        showRegisterForm();
+        scrollToAuth();
+    });
 
     // Clic sur "Mot de passe oublié ?"
     linkForgotPassword?.addEventListener('click', () => {
@@ -773,6 +800,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Afficher l'interface dashboard
         authSection.style.display = 'none';
+        if (landingSection) landingSection.style.display = 'none';
         dashSection.style.display = 'block';
         navUserActions.style.display = 'block';
 
