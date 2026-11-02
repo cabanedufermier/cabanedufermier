@@ -97,19 +97,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const promoSection = document.getElementById('promo-code-section');
     const hasOrdered = localStorage.getItem(PROMO_STORAGE_KEY);
-    if (hasOrdered && promoSection) {
-        // Le client a déjà commandé : ne plus jamais afficher le champ code promo
-        promoSection.style.display = 'none';
-    }
 
     // Détection automatique du code promo ou QR Code affilié via URL (ex: ?ref=CDF-COUSTEAU ou ?promo=CDF-COUSTEAU)
     const urlParams = new URLSearchParams(window.location.search);
     const refCodeFromUrl = urlParams.get('ref') || urlParams.get('promo');
-    if (refCodeFromUrl && !hasOrdered) {
+
+    if (hasOrdered && promoSection && !refCodeFromUrl) {
+        // Le client a déjà commandé ET il n'arrive pas via un lien affilié :
+        // on masque le champ code promo (pas utile pour un client acquis)
+        promoSection.style.display = 'none';
+    }
+
+    // Si un code vendeur est dans l'URL, on le pré-remplit (même pour un client existant)
+    if (refCodeFromUrl) {
         const promoInput = document.getElementById('promo_code');
         if (promoInput) {
             promoInput.value = refCodeFromUrl.trim().toUpperCase();
         }
+        // Réafficher la section si elle avait été masquée
+        if (promoSection) promoSection.style.display = '';
     }
 
     function updateCartUI() {

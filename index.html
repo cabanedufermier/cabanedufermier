@@ -970,12 +970,24 @@
 
             <!-- Récapitulatif et Totaux -->
             <div id="cartTotalsBox" class="cart-drawer-totals" style="display: none;">
+                <!-- Bloc Code Promo / Vendeur -->
+                <div class="cart-promo-box" id="promo-code-section">
+                    <label for="promo_code" class="cart-promo-label">
+                        <i data-lucide="tag" class="icon-xs"></i> Code promo ou vendeur
+                    </label>
+                    <div class="cart-promo-input-row">
+                        <input type="text" id="promo_code" name="promo_code" placeholder="Ex: CDF-ALAIN" autocomplete="off" autocapitalize="characters">
+                        <button type="button" id="apply-promo-btn" class="btn-promo-apply">Appliquer</button>
+                    </div>
+                    <div id="promo-feedback" class="promo-feedback" style="display: none;"></div>
+                </div>
+
                 <div class="cart-totals-row">
                     <span>Sous-total articles</span>
                     <span id="cartSubtotalAmount">0 F</span>
                 </div>
                 <div id="cart-discount-row" class="cart-totals-row discount" style="display: none;">
-                    <span>Réduction promo (-5%)</span>
+                    <span id="cart-discount-label">Réduction promo (-5%)</span>
                     <span id="cart-discount-amount">-0 F</span>
                 </div>
                 <div id="cart-discount-hint" class="cart-discount-hint" style="display: none; font-size: 0.75rem; color: #059669; margin-bottom: 0.5rem;">
@@ -1006,18 +1018,6 @@
                     <div class="form-group">
                         <label for="contactInfo">Votre Numéro WhatsApp</label>
                         <input type="tel" id="contactInfo" name="contactInfo" placeholder="+229 XX XX XX XX" required>
-                    </div>
-
-                    <!-- Bloc Code Promo -->
-                    <div class="form-group promo-group" id="promo-code-section">
-                        <label for="promo_code">
-                            <i data-lucide="tag" class="icon-xs"></i> Code Promo
-                        </label>
-                        <div class="promo-input-row" style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
-                            <input type="text" id="promo_code" name="promo_code" placeholder="Ex: CDF-ALAIN" autocomplete="off" autocapitalize="characters" style="flex: 1;">
-                            <button type="button" id="apply-promo-btn" class="btn-promo-apply">Appliquer</button>
-                        </div>
-                        <div id="promo-feedback" class="promo-feedback" style="display: none; font-size: 0.8rem; margin-top: 0.35rem;"></div>
                     </div>
 
                     <!-- Consentement offres exclusives -->
