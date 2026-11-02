@@ -649,18 +649,49 @@ document.addEventListener('DOMContentLoaded', () => {
             // Enregistrer la commande affiliée dans Supabase si un vendeur est associé
             if (appliedPromo && appliedPromo.vendeurId && supabaseClient) {
                 try {
-                    await supabaseClient.from('commandes_affiliation').insert([{
-                        vendeur_id: appliedPromo.vendeurId,
-                        client_nom: name,
-                        client_tel: contactInfo,
-                        montant_total: finalPrice,
-                        montant_eligible: eligibleTotal,
-                        taux_commission: 5.00,
-                        montant_commission: Math.round(eligibleTotal * 0.05),
-                        statut: 'en_attente'
-                    }]);
+                    // 1. Contrôle Anti-Auto-Parrainage : vérifier que le client n'est pas le vendeur lui-même
+                    const cleanClientTel = contactInfo.replace(/[\s\-\(\)]/g, '');
+                    const { data: vProfile } = await supabaseClient
+                        .from('vendeurs')
+                        .select('telephone, numero_momo')
+                        .eq('id', appliedPromo.vendeurId)
+                        .single();
+
+                    const isSelfReferral = vProfile && (
+                        (vProfile.telephone && vProfile.telephone.replace(/[\s\-\(\)]/g, '').endsWith(cleanClientTel.slice(-8))) ||
+                        (vProfile.numero_momo && vProfile.numero_momo.replace(/[\s\-\(\)]/g, '').endsWith(cleanClientTel.slice(-8)))
+                    );
+
+                    if (isSelfReferral) {
+                        console.warn('Auto-parrainage détecté : commission bloquée.');
+                    } else {
+                        // 2. Contrôle Règle des 3 commandes max : vérifier le nombre de commandes déjà passées par ce client
+                        const { data: previousOrders } = await supabaseClient
+                            .from('commandes_affiliation')
+                            .select('id')
+                            .eq('vendeur_id', appliedPromo.vendeurId)
+                            .ilike('client_tel', `%${cleanClientTel.slice(-8)}%`);
+
+                        const ordersCount = (previousOrders || []).length;
+
+                        // Commission accordée uniquement sur les 3 premières commandes
+                        if (ordersCount < 3) {
+                            await supabaseClient.from('commandes_affiliation').insert([{
+                                vendeur_id: appliedPromo.vendeurId,
+                                client_nom: name,
+                                client_tel: contactInfo,
+                                montant_total: finalPrice,
+                                montant_eligible: eligibleTotal,
+                                taux_commission: 5.00,
+                                montant_commission: Math.round(eligibleTotal * 0.05),
+                                statut: 'en_attente'
+                            }]);
+                        } else {
+                            console.info('Client ayant déjà passé 3 commandes : commission clôturée (client acquis).');
+                        }
+                    }
                 } catch (err) {
-                    console.warn('Erreur log commande Supabase:', err);
+                    console.warn('Erreur vérification affiliation Supabase:', err);
                 }
             }
 

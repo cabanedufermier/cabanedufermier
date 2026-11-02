@@ -597,9 +597,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         const reseau = document.getElementById('retraitReseau').value;
         const solde = Number(currentVendeur.solde_wallet || 0);
 
-        if (montant <= 0 || montant > solde) {
-            alert('Le montant demandé doit être supérieur à 0 et inférieur ou égal à votre solde disponible.');
+        // 1. Contrôle Seuil minimum 5 000 FCFA
+        const SEUIL_MINIMUM = 5000;
+        if (montant < SEUIL_MINIMUM) {
+            alert(`Le montant minimum de retrait est de ${SEUIL_MINIMUM.toLocaleString('fr-FR')} FCFA.`);
             return;
+        }
+
+        if (montant > solde) {
+            alert(`Solde insuffisant. Vous disposez de ${solde.toLocaleString('fr-FR')} FCFA.`);
+            return;
+        }
+
+        // 2. Contrôle Calendrier DAF (Soumission autorisée entre le 1er et le 5 du mois)
+        const today = new Date();
+        const dayOfMonth = today.getDate();
+        // Permettre le test si besoin mais afficher l'avertissement formel
+        if (dayOfMonth > 5 && dayOfMonth < 28) {
+            const confirmLate = confirm(`Attention : Conformément aux règles financières, les demandes de retrait doivent être soumises entre le 1er et le 5 du mois pour être virées avant le 15.\n\nNous sommes le ${dayOfMonth} du mois. Souhaitez-vous quand même enregistrer votre demande pour la prochaine session ?`);
+            if (!confirmLate) return;
         }
 
         const currentMonth = new Date().toISOString().slice(0, 7);

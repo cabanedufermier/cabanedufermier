@@ -855,10 +855,13 @@
 
     <!-- Modale Demande de Retrait -->
     <div id="retraitModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
-        <div style="background: #ffffff; max-width: 420px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <div style="background: #ffffff; max-width: 440px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
             <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un retrait mensuel</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-                Conformément à la politique du DAF, <strong>1 seul retrait par mois</strong> est autorisé, versé directement sur votre compte Mobile Money <strong>avant le 15 du mois suivant</strong>.
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.4;">
+                Conformément aux règles de gestion du DAF :<br>
+                • Demande autorisée <strong>entre le 1er et le 5 du mois</strong>.<br>
+                • Seuil minimum requis : <strong>5 000 FCFA</strong>.<br>
+                • Virement effectué sur votre MoMo <strong>avant le 15 du mois</strong>.
             </p>
 
             <form id="retraitForm">
@@ -868,13 +871,13 @@
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="retraitMontant">Montant souhaité (FCFA)</label>
-                    <input type="number" id="retraitMontant" min="1000" required>
+                    <label for="retraitMontant">Montant souhaité (min. 5 000 FCFA)</label>
+                    <input type="number" id="retraitMontant" min="5000" step="500" placeholder="Ex: 10000" required>
                 </div>
 
                 <div class="form-group-partner">
-                    <label for="retraitMomoNum">Numéro Mobile Money de réception</label>
-                    <input type="tel" id="retraitMomoNum" required>
+                    <label for="retraitMomoNum">Numéro Mobile Money de réception (01 requis)</label>
+                    <input type="tel" id="retraitMomoNum" placeholder="+229 01 XX XX XX XX" required>
                 </div>
 
                 <div class="form-group-partner">
@@ -896,7 +899,7 @@
 
     <!-- Modale CGU Ambassadeur -->
     <div id="cguModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
-        <div style="background: #ffffff; max-width: 540px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <div style="background: #ffffff; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin: 0;">Conditions du Programme Ambassadeur</h3>
                 <button type="button" id="btnCloseCguModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
@@ -906,22 +909,30 @@
                 <p><strong>1. Objet du Programme</strong><br>
                 Le Programme Ambassadeur de la Cabane du Fermier permet aux partenaires de promouvoir les produits locaux frais et de percevoir des commissions sur les ventes effectives.</p>
 
-                <p><strong>2. Produits Éligibles & Taux</strong><br>
-                La commission de 5% à 10% s'applique exclusivement sur les viandes fraîches (poulets fermiers, cailles, lapins) et le gombo. Les escargots et légumes précuits sont expressément exclus du calcul des remises et commissions.</p>
+                <p><strong>2. Produits Éligibles</strong><br>
+                La remise client et la commission vendeur s'appliquent exclusivement sur les <strong>viandes fraîches</strong> (poulets fermiers bicyclette, cailles, lapins) et le <strong>gombo frais</strong>. Les escargots et légumes précuits (tchayo, gboma, amanvivè) sont expressément exclus.</p>
 
-                <p><strong>3. Gamification des Paliers Mensuels</strong><br>
-                Le taux de commission est calculé sur le nombre de clients livrés dans le mois civil en cours :<br>
+                <p><strong>3. Règle des 3 Premières Commandes (Fidélisation)</strong><br>
+                • <strong>1ère commande du client</strong> : 5% de réduction immédiate pour le client + <strong>5% à 10%</strong> de commission pour l'Ambassadeur.<br>
+                • <strong>2ème et 3ème commandes</strong> : 0% de remise client + <strong>5%</strong> de commission de fidélisation pour l'Ambassadeur.<br>
+                • <strong>À partir de la 4ème commande</strong> : 0% de commission vendeur (le client est considéré comme acquis à la marque).</p>
+
+                <p><strong>4. Gamification des Paliers Mensuels</strong><br>
+                Le taux de base d'acquisition évolue selon le nombre de nouveaux clients livrés dans le mois civil en cours :<br>
                 • De 0 à 10 clients : <strong>5 %</strong><br>
                 • De 11 à 30 clients : <strong>7 %</strong><br>
                 • Plus de 30 clients : <strong>10 %</strong></p>
 
-                <p><strong>4. Modalités de Retrait & Paiements</strong><br>
-                • <strong>Un seul retrait par mois civil</strong> est autorisé.<br>
-                • Seuil minimum de retrait : <strong>2 000 FCFA</strong>.<br>
-                • Tout retrait validé est versé sur votre compte Mobile Money béninois (MTN, Moov, Celtiis avec préfixe 01) <strong>avant le 15 du mois suivant</strong>.</p>
+                <p><strong>5. Modalités de Retrait & Calendrier Financier</strong><br>
+                • <strong>Période de soumission</strong> : La demande de retrait doit être effectuée obligatoirement <strong>entre le 1er et le 5 du mois</strong>.<br>
+                • <strong>Seuil minimum de retrait</strong> : <strong>5 000 FCFA</strong>.<br>
+                • <strong>Fréquence</strong> : 1 seule demande par mois civil.<br>
+                • <strong>Paiement</strong> : Virement effectif sur votre compte Mobile Money béninois (MTN, Moov, Celtiis avec préfixe 01) <strong>avant le 15 du mois</strong> après audit par le DAF.</p>
 
-                <p><strong>5. Règle Anti-Fraude & Révocation</strong><br>
-                L'auto-parrainage abusif (commander pour son propre foyer en utilisant son propre code promo), les fausses commandes et les déclarations trompeuses sont formellement interdits. Toute fraude entraîne le gel immédiat du Wallet et l'exclusion définitive du programme.</p>
+                <p style="background: #fef2f2; border-left: 3px solid #dc2626; padding: 0.6rem 0.8rem; border-radius: 4px;">
+                <strong>6. Tolérance Zéro Anti-Fraude & Auto-Parrainage</strong><br>
+                Il est formellement interdit à un Ambassadeur de commander pour son propre compte, son propre numéro ou son propre domicile en utilisant son code affilié. Toute tentative d'auto-parrainage, de fausses commandes ou de tricherie entraîne le <strong>blocage immédiat et irréversible du compte</strong> ainsi que la confiscation définitive du solde du Wallet.
+                </p>
             </div>
 
             <button type="button" class="btn btn-primary w-full shadow-md" id="btnAcceptCguModal" style="margin-top: 1.5rem;">
