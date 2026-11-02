@@ -368,8 +368,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = verifyResult.data;
             const userId = data.user?.id || pendingRegistration?.id;
 
-            // Insérer le profil dans la table vendeurs une fois l'email validé
+            // Sauvegarder et insérer le profil dans la table vendeurs une fois l'email validé
+            let registeredData = null;
             if (pendingRegistration && userId) {
+                registeredData = { ...pendingRegistration };
                 const { error: profileError } = await supabaseClient.from('vendeurs').insert([{
                     id: userId,
                     nom_complet: pendingRegistration.nom,
@@ -386,6 +388,42 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             try { sessionStorage.removeItem('cdf_pending_reg'); } catch (e) {}
+
+            // Notification WhatsApp Admin automatique (2290191666617)
+            if (registeredData) {
+                const adminPhone = '2290191666617';
+                const vNom = registeredData.nom || 'Nouveau Vendeur';
+                const vTel = registeredData.tel || 'Non renseigné';
+                const vPromo = registeredData.codePromo || 'N/A';
+                const vMomo = registeredData.momo ? `\n💳 *MoMo :* ${registeredData.momo} (${registeredData.reseau || 'MTN'})` : '';
+                const vEmail = (registeredData.email || email) ? `\n📧 *Email :* ${registeredData.email || email}` : '';
+
+                const notifMsg = `🎉 *Nouveau Vendeur inscrit !*\n\n` +
+                    `👤 *Nom :* ${vNom}\n` +
+                    `📱 *Tél :* ${vTel}\n` +
+                    `🎟️ *Code Promo :* ${vPromo}` +
+                    vMomo +
+                    vEmail +
+                    `\n\n🌿 Plateforme Ambassadeurs — Cabane du Fermier`;
+
+                const waNotifUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(notifMsg)}`;
+
+                // Mémoriser pour afficher le bandeau de confirmation sur le Dashboard au cas où le pop-up soit bloqué
+                try {
+                    sessionStorage.setItem('cdf_new_vendeur_notif', JSON.stringify({
+                        waUrl: waNotifUrl,
+                        nom: vNom,
+                        codePromo: vPromo
+                    }));
+                } catch (e) {}
+
+                // Déclenchement automatique de la fenêtre WhatsApp vers l'admin
+                try {
+                    window.open(waNotifUrl, '_blank');
+                } catch (e) {
+                    console.warn('Tentative ouverture WhatsApp admin:', e);
+                }
+            }
 
             showAlert('Email vérifié et compte activé avec succès !', 'success');
             setTimeout(async () => {
@@ -637,7 +675,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Charger les demandes de retrait
         await loadVendeurWithdrawals(profile.id);
 
+        // Vérifier si une notification WhatsApp admin vient d'être préparée
+        checkAndShowNewSellerNotif();
+
         if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Bandeau de confirmation notification WhatsApp nouveau vendeur
+    function checkAndShowNewSellerNotif() {
+        try {
+            const raw = sessionStorage.getItem('cdf_new_vendeur_notif');
+            if (!raw) return;
+            const notif = JSON.parse(raw);
+            sessionStorage.removeItem('cdf_new_vendeur_notif');
+
+            const container = document.getElementById('newSellerNotifBanner');
+            if (container) {
+                container.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%); border: 1.5px solid #10b981; border-radius: 14px; padding: 1.15rem 1.35rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.12);">
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: #25D366; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.35);">
+                                📱
+                            </div>
+                            <div>
+                                <div style="font-weight: 800; color: #065f46; font-size: 1rem; font-family: 'Outfit', sans-serif;">
+                                    🎉 Inscription réussie ! Alerte WhatsApp Admin
+                                </div>
+                                <div style="color: #047857; font-size: 0.85rem; margin-top: 0.2rem;">
+                                    Une notification a été préparée pour l'administration (+229 01 91 66 66 17). Si elle ne s'est pas ouverte automatiquement, cliquez sur le bouton ci-contre.
+                                </div>
+                            </div>
+                        </div>
+                        <a href="${notif.waUrl}" target="_blank" rel="noopener noreferrer" style="background: #25D366; color: #ffffff; font-weight: 700; font-size: 0.88rem; padding: 0.65rem 1.25rem; border-radius: 999px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3); transition: transform 0.2s;">
+                            <span>Envoyer la notification WhatsApp</span> →
+                        </a>
+                    </div>
+                `;
+                container.style.display = 'block';
+            }
+        } catch (e) {
+            console.warn('Erreur affichage bandeau nouveau vendeur:', e);
+        }
     }
 
     // ----- 5. QR CODE & PARTAGE -----
