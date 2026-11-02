@@ -487,11 +487,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ----- Gestionnaire d'application du code promo -----
+    // ----- Client Supabase pour la vérification dynamique des codes promo vendeurs -----
+    const SUPABASE_URL = 'https://tfsbmtsyegbxijyvxpta.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_OAr80mY9z0eXbMh5VxxF-A_ps9xk61R';
+    let supabaseClient = null;
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    // ----- Gestionnaire d'application du code promo -----
     const applyPromoBtn = document.getElementById('apply-promo-btn');
     const promoInput = document.getElementById('promo_code');
     const promoFeedback = document.getElementById('promo-feedback');
 
-    function applyPromoCodeAction() {
+    async function applyPromoCodeAction() {
         if (!promoInput || !promoFeedback) return;
         const code = promoInput.value.trim().toUpperCase();
 
@@ -502,22 +511,46 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // 1. Code direct par défaut (CDF-COUSTEAU)
         if (code === VALID_PROMO_CODE) {
-            appliedPromo = { code: VALID_PROMO_CODE, discountRate: 0.05 };
-            promoFeedback.textContent = '✓ Code CDF-COUSTEAU appliqué : 5% de réduction accordée !';
-            promoFeedback.className = 'promo-feedback success';
-            promoFeedback.style.display = 'block';
-            promoInput.setAttribute('disabled', 'true');
-            if (applyPromoBtn) {
-                applyPromoBtn.setAttribute('disabled', 'true');
-                applyPromoBtn.textContent = 'Appliqué';
-            }
-            updateCartUI();
-        } else {
-            promoFeedback.textContent = 'Code promo invalide.';
-            promoFeedback.className = 'promo-feedback error';
-            promoFeedback.style.display = 'block';
+            appliedPromo = { code: VALID_PROMO_CODE, discountRate: 0.05, vendeurId: null };
+            setPromoSuccess(VALID_PROMO_CODE);
+            return;
         }
+
+        // 2. Vérification dans la base Supabase pour les codes Ambassadeurs / Vendeurs
+        if (supabaseClient) {
+            promoFeedback.textContent = 'Vérification du code...';
+            promoFeedback.className = 'promo-feedback';
+            promoFeedback.style.display = 'block';
+
+            try {
+                const { data, error } = await supabaseClient.rpc('check_code_promo', { code_input: code });
+                if (!error && data && data.valid) {
+                    appliedPromo = { code: data.code, discountRate: 0.05, vendeurId: data.vendeur_id };
+                    setPromoSuccess(data.code);
+                    return;
+                }
+            } catch (err) {
+                console.warn('Vérification Supabase:', err);
+            }
+        }
+
+        promoFeedback.textContent = 'Code promo invalide ou non reconnu.';
+        promoFeedback.className = 'promo-feedback error';
+        promoFeedback.style.display = 'block';
+    }
+
+    function setPromoSuccess(code) {
+        promoFeedback.textContent = `✓ Code ${code} appliqué : 5% de réduction sur les viandes et gombo !`;
+        promoFeedback.className = 'promo-feedback success';
+        promoFeedback.style.display = 'block';
+        promoInput.setAttribute('disabled', 'true');
+        if (applyPromoBtn) {
+            applyPromoBtn.setAttribute('disabled', 'true');
+            applyPromoBtn.textContent = 'Appliqué';
+        }
+        updateCartUI();
     }
 
     if (applyPromoBtn) {
@@ -532,10 +565,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Si un code est présent dans l'URL (?ref=CODE ou ?promo=CODE), on l'applique automatiquement
+    if (refCodeFromUrl && !hasOrdered) {
+        setTimeout(applyPromoCodeAction, 300);
+    }
+
     // ----- 7. WhatsApp Order Form Submit -----
     const orderForm = document.getElementById('orderForm');
     if (orderForm) {
-        orderForm.addEventListener('submit', e => {
+        orderForm.addEventListener('submit', async e => {
             e.preventDefault();
 
             const name             = document.getElementById('name')?.value.trim()        || '';
@@ -579,8 +617,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             let finalPrice = orderTotal;
+            let discount = 0;
             if (appliedPromo && appliedPromo.discountRate > 0) {
-                const discount = Math.round(eligibleTotal * appliedPromo.discountRate);
+                discount = Math.round(eligibleTotal * appliedPromo.discountRate);
                 finalPrice = Math.max(0, orderTotal - discount);
                 msg += `\nSous-total : ${orderTotal} F\n`;
                 if (discount > 0) {
@@ -606,6 +645,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             msg += `\nMerci de traiter ma commande. 🙏`;
+
+            // Enregistrer la commande affiliée dans Supabase si un vendeur est associé
+            if (appliedPromo && appliedPromo.vendeurId && supabaseClient) {
+                try {
+                    await supabaseClient.from('commandes_affiliation').insert([{
+                        vendeur_id: appliedPromo.vendeurId,
+                        client_nom: name,
+                        client_tel: contactInfo,
+                        montant_total: finalPrice,
+                        montant_eligible: eligibleTotal,
+                        taux_commission: 5.00,
+                        montant_commission: Math.round(eligibleTotal * 0.05),
+                        statut: 'en_attente'
+                    }]);
+                } catch (err) {
+                    console.warn('Erreur log commande Supabase:', err);
+                }
+            }
 
             // Enregistrer que le client a déjà commandé (masque définitivement le champ code promo pour les prochaines visites)
             try {

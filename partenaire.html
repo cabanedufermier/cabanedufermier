@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Vendeur & Ambassadeur | Cabane du Fermier</title>
+    <meta name="description" content="Espace Ambassadeur & Vendeur Cabane du Fermier : suivez vos commandes affiliées, votre QR Code et vos gains en direct.">
+    <link rel="canonical" href="https://www.cabanedufermier.com/partenaire.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/Logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@0.460.0" defer></script>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=3">
+
+    <style>
+        :root {
+            --partner-bg: #f5f8f3;
+            --partner-card: #ffffff;
+            --partner-dark: #1b4332;
+            --partner-accent: #e9a319;
+            --partner-border: rgba(45, 106, 79, 0.15);
+        }
+
+        body {
+            background-color: var(--partner-bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .partner-nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--partner-border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .partner-nav .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--partner-dark);
+            font-weight: 800;
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+        }
+
+        .partner-nav .brand img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .partner-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Auth Card */
+        .auth-card {
+            max-width: 440px;
+            margin: 3rem auto;
+            background: #ffffff;
+            padding: 2.25rem;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border: 1px solid var(--partner-border);
+        }
+
+        .auth-card h2 {
+            font-family: var(--font-heading);
+            color: var(--partner-dark);
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .auth-card p.subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.75rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: #f0f4ee;
+            padding: 0.35rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tab-btn.active {
+            background: #ffffff;
+            color: var(--partner-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .form-group-partner {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group-partner label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+            color: var(--text);
+        }
+
+        .form-group-partner input, .form-group-partner select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #d4ded2;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            background: #fbfdfa;
+            transition: border-color 0.2s;
+        }
+
+        .form-group-partner input:focus, .form-group-partner select:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: #ffffff;
+        }
+
+        /* Dashboard Styles */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: #ffffff;
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--partner-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .dash-user-info h1 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--partner-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .dash-user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #eef6f0;
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--partner-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .stat-card.wallet::before {
+            background: var(--partner-accent);
+        }
+
+        .stat-card.clients::before {
+            background: #3b82f6;
+        }
+
+        .stat-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            color: var(--partner-dark);
+        }
+
+        .stat-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.35rem;
+        }
+
+        /* Gamification Bar */
+        .gamification-card {
+            background: #ffffff;
+            padding: 1.75rem 2rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--partner-border);
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .gamification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .gamification-header h3 {
+            font-family: var(--font-heading);
+            color: var(--partner-dark);
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-track {
+            height: 14px;
+            background: #e2ecd9;
+            border-radius: var(--radius-full);
+            position: relative;
+            overflow: hidden;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2d6a4f, #e9a319);
+            border-radius: var(--radius-full);
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tiers-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .tier-badge {
+            background: #f0f4ee;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .tier-badge.active {
+            background: #1b4332;
+            color: #ffffff;
+        }
+
+        /* QR Code & Share Card */
+        .share-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .share-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .share-card {
+            background: #ffffff;
+            padding: 1.75rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--partner-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .share-card h3 {
+            font-family: var(--font-heading);
+            color: var(--partner-dark);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-wrapper {
+            background: #ffffff;
+            padding: 1rem;
+            border: 1.5px solid #d4ded2;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            display: inline-block;
+        }
+
+        .promo-pill-display {
+            background: #eef6f0;
+            border: 1.5px dashed var(--primary);
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            letter-spacing: 1px;
+            margin: 0.5rem 0;
+            user-select: all;
+        }
+
+        /* Tables & History */
+        .table-card {
+            background: #ffffff;
+            padding: 1.75rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--partner-border);
+            margin-bottom: 2rem;
+        }
+
+        .table-card h3 {
+            font-family: var(--font-heading);
+            color: var(--partner-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            background: #f7faf5;
+            color: var(--text-muted);
+            font-weight: 700;
+            border-bottom: 1px solid #e2ecd9;
+        }
+
+        .custom-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid #f0f4ee;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-en_attente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-validee, .status-payee {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-annulee, .status-rejetee {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-retrait {
+            background: var(--partner-accent);
+            color: var(--dark);
+            font-weight: 700;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-retrait:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-retrait:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert-box {
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="partner-nav">
+        <a href="/" class="brand">
+            <picture>
+                <source srcset="images/Logo.webp" type="image/webp">
+                <img src="images/Logo.png" alt="Cabane du Fermier">
+            </picture>
+            <span>Cabane du Fermier <small style="font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase;">• Ambassadeur</small></span>
+        </a>
+
+        <div id="navUserActions" style="display: none;">
+            <button type="button" class="btn btn-outline btn-sm" id="btnSignOut">
+                <i data-lucide="log-out" class="icon-xs"></i> Déconnexion
+            </button>
+        </div>
+    </header>
+
+    <div class="partner-container">
+
+        <!-- 1. VUE AUTHENTIFICATION (Connexion / Inscription) -->
+        <div id="authSection" class="auth-card">
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab-btn active" id="tabLoginBtn">Connexion</button>
+                <button type="button" class="auth-tab-btn" id="tabRegisterBtn">Devenir Ambassadeur</button>
+            </div>
+
+            <div id="authAlert" class="alert-box alert-error" style="display: none;"></div>
+
+            <!-- Formulaire Connexion -->
+            <form id="loginForm">
+                <h2>Espace Vendeur</h2>
+                <p class="subtitle">Connectez-vous pour suivre votre Wallet et vos commissions.</p>
+
+                <div class="form-group-partner">
+                    <label for="loginEmail">Adresse Email</label>
+                    <input type="email" id="loginEmail" placeholder="votre.email@exemple.com" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full shadow-md" id="btnLoginSubmit">
+                    Se Connecter
+                </button>
+            </form>
+
+            <!-- Formulaire Inscription -->
+            <form id="registerForm" style="display: none;">
+                <h2>Rejoindre l'équipe</h2>
+                <p class="subtitle">Gagnez jusqu'à 10% de commission sur chaque client apporté.</p>
+
+                <div class="form-group-partner">
+                    <label for="regNom">Nom & Prénoms</label>
+                    <input type="text" id="regNom" placeholder="Ex: Jean Kouassi" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regEmail">Adresse Email</label>
+                    <input type="email" id="regEmail" placeholder="votre.email@exemple.com" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regTel">Numéro WhatsApp</label>
+                    <input type="tel" id="regTel" placeholder="+229 XX XX XX XX" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regCodePromo">Votre Code Promo Souhaité</label>
+                    <input type="text" id="regCodePromo" placeholder="Ex: CDF-VOTRENOM" style="text-transform: uppercase;" required>
+                    <small style="font-size: 0.75rem; color: var(--text-muted);">Ce code donnera -5% à vos clients sur viandes et gombo.</small>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regMomo">Numéro Mobile Money (pour vos retraits)</label>
+                    <input type="tel" id="regMomo" placeholder="+229 XX XX XX XX" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regMomoReseau">Réseau MoMo</label>
+                    <select id="regMomoReseau">
+                        <option value="MTN">MTN Mobile Money</option>
+                        <option value="MOOV">Moov Money</option>
+                        <option value="CELTIIS">Celtiis Cash</option>
+                    </select>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="regPassword">Mot de passe</label>
+                    <input type="password" id="regPassword" placeholder="8 caractères minimum" minlength="8" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full shadow-md" id="btnRegisterSubmit">
+                    Créer mon compte Ambassadeur
+                </button>
+            </form>
+        </div>
+
+        <!-- 2. VUE DASHBOARD DU VENDEUR -->
+        <div id="dashSection" style="display: none;">
+            
+            <!-- Header Profil -->
+            <div class="dash-header">
+                <div class="dash-user-info">
+                    <h1>Bonjour, <span id="vendeurName">Ambassadeur</span> 👋</h1>
+                    <div class="dash-user-badge">
+                        <i data-lucide="award" class="icon-xs"></i>
+                        <span>Niveau actuel : Commission à <strong id="currentTierRate">5%</strong></span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-retrait shadow-sm" id="btnOpenRetraitModal">
+                    <i data-lucide="wallet" class="icon-xs"></i> Demander un retrait
+                </button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card wallet">
+                    <div class="stat-title">Solde Wallet Disponible</div>
+                    <div class="stat-value" id="walletSolde">0 F</div>
+                    <div class="stat-desc">Payable par MoMo avant le 15 du mois</div>
+                </div>
+
+                <div class="stat-card clients">
+                    <div class="stat-title">Nouveaux Clients Ce Mois</div>
+                    <div class="stat-value" id="monthlyClientsCount">0</div>
+                    <div class="stat-desc">Commandes livrées avec votre code ce mois-ci</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Total Commissions Gagnées</div>
+                    <div class="stat-value" id="totalCommissionsEver">0 F</div>
+                    <div class="stat-desc">Depuis la création de votre compte</div>
+                </div>
+            </div>
+
+            <!-- Gamification Paliers de commission -->
+            <div class="gamification-card">
+                <div class="gamification-header">
+                    <h3><i data-lucide="trending-up" class="icon-sm" style="color: var(--primary);"></i> Objectif Mensuel & Gamification</h3>
+                    <span id="tierNextGoal" style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">Plus que 10 clients pour atteindre 7% !</span>
+                </div>
+                
+                <div class="progress-track">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 10%;"></div>
+                </div>
+
+                <div class="tiers-row">
+                    <span class="tier-badge active" id="tier1">Palier 1 (0 à 10 clients) : <strong>5 %</strong></span>
+                    <span class="tier-badge" id="tier2">Palier 2 (11 à 30 clients) : <strong>7 %</strong></span>
+                    <span class="tier-badge" id="tier3">Palier 3 (+ de 30 clients) : <strong>10 %</strong></span>
+                </div>
+            </div>
+
+            <!-- Partage & QR Code -->
+            <div class="share-grid">
+                <div class="share-card">
+                    <h3>Votre QR Code Ambassadeur</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                        Faites scanner ce QR Code à vos clients : le code promo s'appliquera automatiquement !
+                    </p>
+                    <div class="qr-wrapper" id="qrcodeContainer"></div>
+                    <button type="button" class="btn btn-outline btn-sm" id="btnDownloadQr">
+                        <i data-lucide="download" class="icon-xs"></i> Télécharger le QR Code
+                    </button>
+                </div>
+
+                <div class="share-card">
+                    <h3>Votre Code & Lien Partenaire</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                        Partagez ce code ou votre lien direct WhatsApp avec vos contacts.
+                    </p>
+                    <div class="promo-pill-display" id="myPromoCodeDisplay">CDF-...</div>
+                    
+                    <div style="width: 100%; margin-top: 1rem;">
+                        <button type="button" class="btn btn-primary w-full btn-sm" id="btnShareWhatsapp" style="margin-bottom: 0.5rem; background: #25d366; border: none;">
+                            <i data-lucide="message-circle" class="icon-xs"></i> Partager sur WhatsApp
+                        </button>
+                        <button type="button" class="btn btn-outline w-full btn-sm" id="btnCopyLink">
+                            <i data-lucide="copy" class="icon-xs"></i> Copier mon lien affilié
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historique des commandes reçues avec votre code -->
+            <div class="table-card">
+                <h3>Dernières commandes enregistrées</h3>
+                <div style="overflow-x: auto;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Montant Éligible</th>
+                                <th>Taux</th>
+                                <th>Votre Commission</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                    Aucune commande enregistrée pour l'instant.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Historique des demandes de retrait -->
+            <div class="table-card">
+                <h3>Historique de vos retraits MoMo (Paiement avant le 15)</h3>
+                <div style="overflow-x: auto;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Date Demande</th>
+                                <th>Mois</th>
+                                <th>Montant</th>
+                                <th>Numéro MoMo</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawalsTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                    Aucune demande de retrait effectuée.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modale Demande de Retrait -->
+    <div id="retraitModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div style="background: #ffffff; max-width: 420px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un retrait mensuel</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                Conformément à la politique du DAF, <strong>1 seul retrait par mois</strong> est autorisé, versé directement sur votre compte Mobile Money <strong>avant le 15 du mois suivant</strong>.
+            </p>
+
+            <form id="retraitForm">
+                <div class="form-group-partner">
+                    <label>Montant disponible à retirer</label>
+                    <input type="text" id="retraitAvailable" readonly style="background: #eef6f0; font-weight: 700; color: var(--primary);">
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="retraitMontant">Montant souhaité (FCFA)</label>
+                    <input type="number" id="retraitMontant" min="1000" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="retraitMomoNum">Numéro Mobile Money de réception</label>
+                    <input type="tel" id="retraitMomoNum" required>
+                </div>
+
+                <div class="form-group-partner">
+                    <label for="retraitReseau">Réseau</label>
+                    <select id="retraitReseau">
+                        <option value="MTN">MTN Mobile Money</option>
+                        <option value="MOOV">Moov Money</option>
+                        <option value="CELTIIS">Celtiis Cash</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-outline flex-1" id="btnCloseRetraitModal">Annuler</button>
+                    <button type="submit" class="btn btn-primary flex-1 shadow-md" id="btnSubmitRetrait">Confirmer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Partenaire -->
+    <script src="js/partenaire.js"></script>
+</body>
+</html>
