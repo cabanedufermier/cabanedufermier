@@ -981,6 +981,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mobileMenu) mobileMenu.classList.remove('active');
         openCartDrawer();
     });
+    document.getElementById('footerCartLink')?.addEventListener('click', openCartDrawer);
+    document.querySelectorAll('a[href="#commander"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            openCartDrawer();
+        });
+    });
     floatingCartPill?.addEventListener('click', openCartDrawer);
     btnCloseCartDrawer?.addEventListener('click', closeCartDrawer);
     cartDrawerOverlay?.addEventListener('click', closeCartDrawer);
