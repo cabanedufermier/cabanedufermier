@@ -822,10 +822,16 @@
             <span>Cabane du Fermier <small style="font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase;">• Ambassadeur</small></span>
         </a>
 
-        <div id="navUserActions" style="display: none;">
-            <button type="button" class="btn btn-outline btn-sm" id="btnSignOut">
-                <i data-lucide="log-out" class="icon-xs"></i> Déconnexion
-            </button>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="partenaires.html" style="font-size: 0.88rem; color: var(--partner-dark); font-weight: 600; text-decoration: none;">Partenaires</a>
+            <a href="/" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; color: var(--primary); font-weight: 600; text-decoration: none;">
+                <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i> Boutique
+            </a>
+            <div id="navUserActions" style="display: none;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnSignOut">
+                    <i data-lucide="log-out" class="icon-xs"></i> Déconnexion
+                </button>
+            </div>
         </div>
     </header>
 
@@ -1146,6 +1152,20 @@
                     <span class="tier-badge" id="tier2">Palier 2 (11 à 30 clients) : <strong>7 %</strong></span>
                     <span class="tier-badge" id="tier3">Palier 3 (+ de 30 clients) : <strong>10 %</strong></span>
                 </div>
+            </div>
+
+            <!-- Bannière Canal WhatsApp Ambassadeur -->
+            <div style="background: linear-gradient(135deg, #075e54 0%, #128c7e 100%); border-radius: var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; box-shadow: 0 6px 20px rgba(7,94,84,0.2);">
+                <div style="background: rgba(255,255,255,0.15); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="message-circle" style="width:28px;height:28px;color:#ffffff;"></i>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <div style="color: #ffffff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 0.3rem;">Rejoignez notre canal WhatsApp</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; line-height: 1.4;">Recevez du contenu exclusif à partager (photos, vidéos, promos) pour mieux promouvoir Cabane du Fermier.</div>
+                </div>
+                <a href="https://whatsapp.com/channel/0029VbAV8ZRBqbrCYyKJKF0P" target="_blank" rel="noopener noreferrer" style="background: #ffffff; color: #075e54; font-weight: 800; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; flex-shrink: 0; font-family: var(--font-heading); transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                    <i data-lucide="external-link" style="width:15px;height:15px;"></i> Rejoindre le canal
+                </a>
             </div>
 
             <!-- Partage & QR Code -->

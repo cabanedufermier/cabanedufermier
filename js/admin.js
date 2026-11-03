@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderOrders();
 
         } catch (err) {
-            console.error('Erreur chargement DAF:', err);
+            console.error('Erreur chargement Administration:', err);
             ordersList.innerHTML = `<div style="text-align: center; padding: 2rem; color: #ef4444;">Erreur lors du chargement des commandes : ${err.message}</div>`;
         }
     }

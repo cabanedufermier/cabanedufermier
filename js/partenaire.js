@@ -656,15 +656,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ----- GESTION MOT DE PASSE OUBLIÉ -----
-    const linkForgotPassword = document.getElementById('linkForgotPassword');
-    const linkBackToLogin = document.getElementById('linkBackToLogin');
-    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-    const resetPasswordForm = document.getElementById('resetPasswordForm');
-    const resetEmailTarget = document.getElementById('resetEmailTarget');
-    const resetNewPassword = document.getElementById('resetNewPassword');
-    const resetPwdMeterFill = document.getElementById('resetPwdMeterFill');
-    const resetPwdStrengthLabel = document.getElementById('resetPwdStrengthLabel');
-
     let resetEmail = '';
 
     linkForgotPassword?.addEventListener('click', () => {
