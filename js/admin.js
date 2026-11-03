@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
             }
 
-            const vendeurNom = allVendeurs[vendeurId]?.nom_complet || 'le vendeur';
+            const vendeurNom = allVendeurs[vendeurId]?.nom_complet || "l'Ambassadeur";
             showToast(`✓ Versement validé ! Le Wallet de ${vendeurNom} a été crédité de ${Number(commissionAmount).toLocaleString('fr-FR')} F.`);
 
             // Recharger les données

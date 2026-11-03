@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Vendeur & Ambassadeur | Cabane du Fermier</title>
-    <meta name="description" content="Espace Ambassadeur & Vendeur Cabane du Fermier : suivez vos commandes affiliées, votre QR Code et vos gains en direct.">
+    <title>Espace Ambassadeur | Cabane du Fermier</title>
+    <meta name="description"
+        content="Espace Ambassadeur Cabane du Fermier : suivez vos commandes affiliées, votre QR Code et vos gains en direct.">
     <link rel="canonical" href="https://www.cabanedufermier.com/partenaire.html">
 
     <!-- Favicon & PWA -->
@@ -19,7 +20,9 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@0.460.0" defer></script>
@@ -61,7 +64,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -103,30 +106,37 @@
             position: relative;
             overflow: hidden;
         }
+
         .ambassador-hero::before {
             content: '';
             position: absolute;
-            top: -60px; right: -60px;
-            width: 220px; height: 220px;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
             pointer-events: none;
         }
+
         .ambassador-hero::after {
             content: '';
             position: absolute;
-            bottom: -40px; left: -40px;
-            width: 160px; height: 160px;
+            bottom: -40px;
+            left: -40px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            background: rgba(233,163,25,0.12);
+            background: rgba(233, 163, 25, 0.12);
             pointer-events: none;
         }
+
         .ambassador-hero .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            background: rgba(233,163,25,0.2);
-            border: 1px solid rgba(233,163,25,0.5);
+            background: rgba(233, 163, 25, 0.2);
+            border: 1px solid rgba(233, 163, 25, 0.5);
             color: #f5c842;
             padding: 0.3rem 0.9rem;
             border-radius: var(--radius-full);
@@ -136,6 +146,7 @@
             letter-spacing: 0.6px;
             margin-bottom: 1.1rem;
         }
+
         .ambassador-hero h1 {
             font-family: var(--font-heading);
             font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -144,13 +155,15 @@
             margin-bottom: 0.75rem;
             line-height: 1.2;
         }
+
         .ambassador-hero .hero-sub {
             font-size: 1rem;
-            color: rgba(255,255,255,0.82);
+            color: rgba(255, 255, 255, 0.82);
             max-width: 560px;
             margin: 0 auto 2rem;
             line-height: 1.6;
         }
+
         .hero-cta-group {
             display: flex;
             gap: 1rem;
@@ -159,6 +172,7 @@
             position: relative;
             z-index: 1;
         }
+
         .btn-hero-primary {
             background: #e9a319;
             color: #1b1b1b;
@@ -175,17 +189,19 @@
             gap: 0.5rem;
             font-family: var(--font-heading);
         }
+
         .btn-hero-primary:hover {
             filter: brightness(1.08);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(233,163,25,0.35);
+            box-shadow: 0 8px 20px rgba(233, 163, 25, 0.35);
         }
+
         .btn-hero-outline {
             background: transparent;
             color: #ffffff;
             font-weight: 700;
             font-size: 0.95rem;
-            border: 2px solid rgba(255,255,255,0.5);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             padding: 0.9rem 2rem;
             border-radius: var(--radius-md);
             cursor: pointer;
@@ -196,9 +212,10 @@
             gap: 0.5rem;
             font-family: var(--font-heading);
         }
+
         .btn-hero-outline:hover {
-            border-color: rgba(255,255,255,0.9);
-            background: rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
 
@@ -209,19 +226,22 @@
             gap: 1.25rem;
             margin-bottom: 3rem;
         }
+
         .avantage-card {
             background: #ffffff;
             border: 1px solid var(--partner-border);
             border-radius: var(--radius-lg);
             padding: 1.5rem 1.25rem;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
         .avantage-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
         }
+
         .avantage-icon {
             width: 52px;
             height: 52px;
@@ -233,17 +253,20 @@
             margin: 0 auto 1rem;
             color: var(--primary);
         }
+
         .avantage-card h3 {
             font-family: var(--font-heading);
             font-size: 1rem;
             color: var(--partner-dark);
             margin-bottom: 0.4rem;
         }
+
         .avantage-card p {
             font-size: 0.83rem;
             color: var(--text-muted);
             line-height: 1.5;
         }
+
         .avantage-highlight {
             font-size: 1.3rem;
             font-weight: 800;
@@ -258,16 +281,19 @@
             text-align: center;
             margin-bottom: 1.5rem;
         }
+
         .auth-section-title h2 {
             font-family: var(--font-heading);
             font-size: 1.5rem;
             color: var(--partner-dark);
             margin-bottom: 0.35rem;
         }
+
         .auth-section-title p {
             font-size: 0.88rem;
             color: var(--text-muted);
         }
+
         .auth-section-divider {
             display: flex;
             align-items: center;
@@ -277,7 +303,9 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-        .auth-section-divider::before, .auth-section-divider::after {
+
+        .auth-section-divider::before,
+        .auth-section-divider::after {
             content: '';
             flex: 1;
             height: 1px;
@@ -291,7 +319,7 @@
             background: #ffffff;
             padding: 2.25rem;
             border-radius: var(--radius-lg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
             border: 1px solid var(--partner-border);
         }
 
@@ -335,7 +363,7 @@
         .auth-tab-btn.active {
             background: #ffffff;
             color: var(--partner-dark);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
 
         .form-group-partner {
@@ -350,7 +378,8 @@
             color: var(--text);
         }
 
-        .form-group-partner input, .form-group-partner select {
+        .form-group-partner input,
+        .form-group-partner select {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1.5px solid #d4ded2;
@@ -360,7 +389,8 @@
             transition: border-color 0.2s;
         }
 
-        .form-group-partner input:focus, .form-group-partner select:focus {
+        .form-group-partner input:focus,
+        .form-group-partner select:focus {
             border-color: var(--primary);
             outline: none;
             background: #ffffff;
@@ -378,7 +408,7 @@
             padding: 1.5rem 2rem;
             border-radius: var(--radius-lg);
             border: 1px solid var(--partner-border);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
 
         .dash-user-info h1 {
@@ -413,7 +443,7 @@
             padding: 1.5rem;
             border-radius: var(--radius-lg);
             border: 1px solid var(--partner-border);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
             position: relative;
             overflow: hidden;
         }
@@ -465,7 +495,7 @@
             border-radius: var(--radius-lg);
             border: 1px solid var(--partner-border);
             margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
 
         .gamification-header {
@@ -627,12 +657,14 @@
             color: #92400e;
         }
 
-        .status-validee, .status-payee {
+        .status-validee,
+        .status-payee {
             background: #d1fae5;
             color: #065f46;
         }
 
-        .status-annulee, .status-rejetee {
+        .status-annulee,
+        .status-rejetee {
             background: #fee2e2;
             color: #991b1b;
         }
@@ -685,6 +717,7 @@
         .password-meter-wrap {
             margin-top: 0.4rem;
         }
+
         .password-meter-bar {
             height: 6px;
             background: #e2ecd9;
@@ -692,16 +725,34 @@
             overflow: hidden;
             position: relative;
         }
+
         .password-meter-fill {
             height: 100%;
             width: 0%;
             transition: all 0.3s ease;
             border-radius: var(--radius-full);
         }
-        .password-meter-fill.weak { width: 25%; background: #ef4444; }
-        .password-meter-fill.medium { width: 50%; background: #f59e0b; }
-        .password-meter-fill.good { width: 75%; background: #3b82f6; }
-        .password-meter-fill.strong { width: 100%; background: #10b981; }
+
+        .password-meter-fill.weak {
+            width: 25%;
+            background: #ef4444;
+        }
+
+        .password-meter-fill.medium {
+            width: 50%;
+            background: #f59e0b;
+        }
+
+        .password-meter-fill.good {
+            width: 75%;
+            background: #3b82f6;
+        }
+
+        .password-meter-fill.strong {
+            width: 100%;
+            background: #10b981;
+        }
+
         .password-meter-text {
             display: flex;
             justify-content: space-between;
@@ -732,6 +783,7 @@
             cursor: pointer;
             margin-top: 0.75rem;
         }
+
         .cgu-checkbox-label input {
             width: 17px;
             height: 17px;
@@ -739,6 +791,7 @@
             accent-color: var(--primary);
             cursor: pointer;
         }
+
         .cgu-link {
             color: var(--primary);
             font-weight: 700;
@@ -752,12 +805,15 @@
             display: block;
             color: var(--text-muted);
         }
+
         .phone-validation-hint.valid {
             color: #10b981;
         }
+
         .phone-validation-hint.invalid {
             color: #ef4444;
         }
+
         .otp-input-field {
             font-size: 1.4rem !important;
             letter-spacing: 5px !important;
@@ -767,7 +823,9 @@
         }
 
         /* Fix Boutons Mobiles : Centrage parfait & Empêcher le texte de déborder */
-        .btn, button.btn, a.btn {
+        .btn,
+        button.btn,
+        a.btn {
             white-space: normal !important;
             word-break: break-word;
             text-align: center !important;
@@ -781,20 +839,26 @@
                 padding: 1.5rem 1.15rem;
                 margin: 1.5rem auto;
             }
+
             .auth-tabs {
                 flex-direction: column;
                 gap: 0.35rem;
             }
+
             .auth-tab-btn {
                 padding: 0.75rem 0.5rem;
                 font-size: 0.88rem;
                 text-align: center;
             }
-            .btn, button.btn, a.btn {
+
+            .btn,
+            button.btn,
+            a.btn {
                 font-size: 0.88rem !important;
                 padding: 0.8rem 1rem !important;
                 width: 100%;
             }
+
             .btn-retrait {
                 width: 100%;
                 text-align: center;
@@ -802,6 +866,7 @@
                 display: flex;
                 align-items: center;
             }
+
             .dash-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -819,12 +884,14 @@
                 <source srcset="images/Logo.webp" type="image/webp">
                 <img src="images/Logo.png" alt="Cabane du Fermier">
             </picture>
-            <span>Cabane du Fermier <small style="font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase;">• Ambassadeur</small></span>
+            <span>Cabane du Fermier <small
+                    style="font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase;">•
+                    Ambassadeur</small></span>
         </a>
 
         <div style="display: flex; align-items: center; gap: 1rem;">
-            <a href="partenaires.html" style="font-size: 0.88rem; color: var(--partner-dark); font-weight: 600; text-decoration: none;">Partenaires</a>
-            <a href="/" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; color: var(--primary); font-weight: 600; text-decoration: none;">
+            <a href="/"
+                style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.88rem; color: var(--primary); font-weight: 600; text-decoration: none;">
                 <i data-lucide="arrow-left" style="width: 15px; height: 15px;"></i> Boutique
             </a>
             <div id="navUserActions" style="display: none;">
@@ -848,7 +915,8 @@
                 </div>
                 <h1>Gagnez en recommandant<br>les produits Cabane du Fermier</h1>
                 <p class="hero-sub">
-                    Partagez votre code promo avec vos proches, et touchez jusqu'à <strong>10% de commission</strong> sur chaque commande qu'ils passent — directement sur votre Mobile Money.
+                    Partagez votre code promo avec vos proches, et touchez jusqu'à <strong>10% de commission</strong>
+                    sur chaque commande qu'ils passent — directement sur votre Mobile Money.
                 </p>
                 <div class="hero-cta-group">
                     <button type="button" class="btn-hero-primary" id="btnHeroRegister">
@@ -870,7 +938,8 @@
                     </div>
                     <span class="avantage-highlight">-5%</span>
                     <h3>Code Promo Personnel</h3>
-                    <p>Vos proches et abonnés bénéficient de 5% de remise sur leur 1ère commande grâce à votre code exclusif.</p>
+                    <p>Vos proches et abonnés bénéficient de 5% de remise sur leur 1ère commande grâce à votre code
+                        exclusif.</p>
                 </div>
                 <div class="avantage-card">
                     <div class="avantage-icon" style="background:#fff7e6;color:#e9a319;">
@@ -878,7 +947,8 @@
                     </div>
                     <span class="avantage-highlight" style="color:#e9a319;">5% → 10%</span>
                     <h3>Commissions Progressives</h3>
-                    <p>5% sur la 1ère commande, 7% dès 11 clients, et jusqu'à <strong>10%</strong> au-delà de 30 clients par mois.</p>
+                    <p>5% sur la 1ère commande, 7% dès 11 clients, et jusqu'à <strong>10%</strong> au-delà de 30 clients
+                        par mois.</p>
                 </div>
                 <div class="avantage-card">
                     <div class="avantage-icon" style="background:#eff6ff;color:#3b82f6;">
@@ -894,7 +964,8 @@
                     </div>
                     <span class="avantage-highlight" style="color:#10b981;">QR Code</span>
                     <h3>QR Code & Lien Partageable</h3>
-                    <p>Un QR code et un lien personnalisé pour partager facilement votre code en stories, WhatsApp ou en personne.</p>
+                    <p>Un QR code et un lien personnalisé pour partager facilement votre code en stories, WhatsApp ou en
+                        personne.</p>
                 </div>
             </div>
 
@@ -927,9 +998,12 @@
                 </div>
 
                 <div class="form-group-partner">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
                         <label for="loginPassword" style="margin: 0;">Mot de passe</label>
-                        <a href="javascript:void(0)" id="linkForgotPassword" style="font-size: 0.78rem; color: var(--primary); font-weight: 600;">Mot de passe oublié ?</a>
+                        <a href="javascript:void(0)" id="linkForgotPassword"
+                            style="font-size: 0.78rem; color: var(--primary); font-weight: 600;">Mot de passe oublié
+                            ?</a>
                     </div>
                     <input type="password" id="loginPassword" placeholder="••••••••" required>
                 </div>
@@ -938,7 +1012,9 @@
                     Se Connecter
                 </button>
 
-                <p style="text-align:center;margin-top:1rem;font-size:0.84rem;color:var(--text-muted);">Pas encore ambassadeur ? <a href="javascript:void(0)" id="linkGoRegister" style="color:var(--primary);font-weight:700;">Créer un compte →</a></p>
+                <p style="text-align:center;margin-top:1rem;font-size:0.84rem;color:var(--text-muted);">Pas encore
+                    ambassadeur ? <a href="javascript:void(0)" id="linkGoRegister"
+                        style="color:var(--primary);font-weight:700;">Créer un compte →</a></p>
             </form>
 
             <!-- Formulaire Inscription -->
@@ -959,13 +1035,16 @@
                 <div class="form-group-partner">
                     <label for="regTel">Numéro WhatsApp (Bénin 01 requis)</label>
                     <input type="tel" id="regTel" placeholder="+229 01 XX XX XX XX" required>
-                    <span id="regTelHint" class="phone-validation-hint">Format exigé : +229 01 XX XX XX XX ou 01XXXXXXXX (10 chiffres)</span>
+                    <span id="regTelHint" class="phone-validation-hint">Format exigé : +229 01 XX XX XX XX ou 01XXXXXXXX
+                        (10 chiffres)</span>
                 </div>
 
                 <div class="form-group-partner">
                     <label for="regCodePromo">Votre Code Promo Souhaité</label>
-                    <input type="text" id="regCodePromo" placeholder="Ex: CDF-VOTRENOM" style="text-transform: uppercase;" required>
-                    <small style="font-size: 0.75rem; color: var(--text-muted);">Ce code donnera -5% à vos clients sur les viandes et le gombo.</small>
+                    <input type="text" id="regCodePromo" placeholder="Ex: CDF-VOTRENOM"
+                        style="text-transform: uppercase;" required>
+                    <small style="font-size: 0.75rem; color: var(--text-muted);">Ce code donnera -5% à vos clients sur
+                        les viandes et le gombo.</small>
                 </div>
 
                 <div class="form-group-partner">
@@ -985,8 +1064,9 @@
 
                 <div class="form-group-partner">
                     <label for="regPassword">Mot de passe</label>
-                    <input type="password" id="regPassword" placeholder="Minimum 8 car., majuscule, chiffre..." required autocomplete="new-password">
-                    
+                    <input type="password" id="regPassword" placeholder="Minimum 8 car., majuscule, chiffre..." required
+                        autocomplete="new-password">
+
                     <!-- Jauge de robustesse -->
                     <div class="password-meter-wrap">
                         <div class="password-meter-bar">
@@ -1003,7 +1083,8 @@
                 <div class="form-group-partner">
                     <label class="cgu-checkbox-label" for="regCgu">
                         <input type="checkbox" id="regCgu" required>
-                        <span>J'ai lu et j'accepte les <a href="javascript:void(0)" class="cgu-link" id="btnOpenCgu">Conditions d'Utilisation du Programme Ambassadeur</a>.</span>
+                        <span>J'ai lu et j'accepte les <a href="javascript:void(0)" class="cgu-link"
+                                id="btnOpenCgu">Conditions d'Utilisation du Programme Ambassadeur</a>.</span>
                     </label>
                 </div>
 
@@ -1022,8 +1103,10 @@
 
                 <div class="form-group-partner">
                     <label for="otpCodeInput">Code de validation (reçu par email)</label>
-                    <input type="text" id="otpCodeInput" class="otp-input-field" maxlength="10" placeholder="00000000" autocomplete="one-time-code" required>
-                    <small style="display: block; text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">
+                    <input type="text" id="otpCodeInput" class="otp-input-field" maxlength="10" placeholder="00000000"
+                        autocomplete="one-time-code" required>
+                    <small
+                        style="display: block; text-align: center; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">
                         Vérifiez aussi vos spams / courriers indésirables si besoin.
                     </small>
                 </div>
@@ -1052,7 +1135,8 @@
                 </button>
 
                 <div style="text-align: center; margin-top: 1.25rem;">
-                    <a href="javascript:void(0)" id="linkBackToLogin" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                    <a href="javascript:void(0)" id="linkBackToLogin"
+                        style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
                         ← Retour à la connexion
                     </a>
                 </div>
@@ -1068,13 +1152,15 @@
 
                 <div class="form-group-partner">
                     <label for="resetOtpCode">Code de réinitialisation (reçu par email)</label>
-                    <input type="text" id="resetOtpCode" class="otp-input-field" maxlength="10" placeholder="00000000" autocomplete="one-time-code" required>
+                    <input type="text" id="resetOtpCode" class="otp-input-field" maxlength="10" placeholder="00000000"
+                        autocomplete="one-time-code" required>
                 </div>
 
                 <div class="form-group-partner">
                     <label for="resetNewPassword">Nouveau mot de passe</label>
-                    <input type="password" id="resetNewPassword" placeholder="Minimum 8 car., majuscule, chiffre..." required autocomplete="new-password">
-                    
+                    <input type="password" id="resetNewPassword" placeholder="Minimum 8 car., majuscule, chiffre..."
+                        required autocomplete="new-password">
+
                     <div class="password-meter-wrap">
                         <div class="password-meter-bar">
                             <div class="password-meter-fill" id="resetPwdMeterFill"></div>
@@ -1090,14 +1176,15 @@
                 </button>
 
                 <div style="text-align: center; margin-top: 1.25rem;">
-                    <a href="javascript:void(0)" id="linkBackToLoginFromReset" style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
+                    <a href="javascript:void(0)" id="linkBackToLoginFromReset"
+                        style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">
                         ← Annuler et retourner à la connexion
                     </a>
                 </div>
             </form>
         </div>
 
-        <!-- 2. VUE DASHBOARD DU VENDEUR -->
+        <!-- 2. VUE DASHBOARD DE L'AMBASSADEUR -->
         <div id="dashSection" style="display: none;">
 
             <!-- Header Profil -->
@@ -1139,10 +1226,12 @@
             <!-- Gamification Paliers de commission -->
             <div class="gamification-card">
                 <div class="gamification-header">
-                    <h3><i data-lucide="trending-up" class="icon-sm" style="color: var(--primary);"></i> Objectif Mensuel & Gamification</h3>
-                    <span id="tierNextGoal" style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">Plus que 10 clients pour atteindre 7% !</span>
+                    <h3><i data-lucide="trending-up" class="icon-sm" style="color: var(--primary);"></i> Objectif
+                        Mensuel & Gamification</h3>
+                    <span id="tierNextGoal" style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">Plus
+                        que 10 clients pour atteindre 7% !</span>
                 </div>
-                
+
                 <div class="progress-track">
                     <div class="progress-bar-fill" id="progressBarFill" style="width: 10%;"></div>
                 </div>
@@ -1155,15 +1244,23 @@
             </div>
 
             <!-- Bannière Canal WhatsApp Ambassadeur -->
-            <div style="background: linear-gradient(135deg, #075e54 0%, #128c7e 100%); border-radius: var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; box-shadow: 0 6px 20px rgba(7,94,84,0.2);">
-                <div style="background: rgba(255,255,255,0.15); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <div
+                style="background: linear-gradient(135deg, #075e54 0%, #128c7e 100%); border-radius: var(--radius-lg); padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; box-shadow: 0 6px 20px rgba(7,94,84,0.2);">
+                <div
+                    style="background: rgba(255,255,255,0.15); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     <i data-lucide="message-circle" style="width:28px;height:28px;color:#ffffff;"></i>
                 </div>
                 <div style="flex: 1; min-width: 200px;">
-                    <div style="color: #ffffff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 0.3rem;">Rejoignez notre canal WhatsApp</div>
-                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; line-height: 1.4;">Recevez du contenu exclusif à partager (photos, vidéos, promos) pour mieux promouvoir Cabane du Fermier.</div>
+                    <div
+                        style="color: #ffffff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 0.3rem;">
+                        Rejoignez notre canal WhatsApp</div>
+                    <div style="color: rgba(255,255,255,0.8); font-size: 0.85rem; line-height: 1.4;">Recevez du contenu
+                        exclusif à partager (photos, vidéos, promos) pour mieux promouvoir Cabane du Fermier.</div>
                 </div>
-                <a href="https://whatsapp.com/channel/0029VbAV8ZRBqbrCYyKJKF0P" target="_blank" rel="noopener noreferrer" style="background: #ffffff; color: #075e54; font-weight: 800; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; flex-shrink: 0; font-family: var(--font-heading); transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                <a href="https://whatsapp.com/channel/0029VbAV8ZRBqbrCYyKJKF0P" target="_blank"
+                    rel="noopener noreferrer"
+                    style="background: #ffffff; color: #075e54; font-weight: 800; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: var(--radius-md); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; flex-shrink: 0; font-family: var(--font-heading); transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+                    onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
                     <i data-lucide="external-link" style="width:15px;height:15px;"></i> Rejoindre le canal
                 </a>
             </div>
@@ -1182,14 +1279,15 @@
                 </div>
 
                 <div class="share-card">
-                    <h3>Votre Code & Lien Partenaire</h3>
+                    <h3>Votre Code & Lien Ambassadeur</h3>
                     <p style="font-size: 0.85rem; color: var(--text-muted);">
                         Partagez ce code ou votre lien direct WhatsApp avec vos contacts.
                     </p>
                     <div class="promo-pill-display" id="myPromoCodeDisplay">CDF-...</div>
-                    
+
                     <div style="width: 100%; margin-top: 1rem;">
-                        <button type="button" class="btn btn-primary w-full btn-sm" id="btnShareWhatsapp" style="margin-bottom: 0.5rem; background: #25d366; border: none;">
+                        <button type="button" class="btn btn-primary w-full btn-sm" id="btnShareWhatsapp"
+                            style="margin-bottom: 0.5rem; background: #25d366; border: none;">
                             <i data-lucide="message-circle" class="icon-xs"></i> Partager sur WhatsApp
                         </button>
                         <button type="button" class="btn btn-outline w-full btn-sm" id="btnCopyLink">
@@ -1254,15 +1352,20 @@
             <div class="table-card" style="background: #f9fbf8; border: 1.5px solid rgba(45, 106, 79, 0.18);">
                 <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem;">
                     <i data-lucide="info" class="icon-sm" style="color: var(--primary);"></i>
-                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--partner-dark);">Modalités de Retrait & Calendrier — Administration Cabane du Fermier</h3>
+                    <h3 style="margin: 0; font-size: 1.05rem; color: var(--partner-dark);">Modalités de Retrait &
+                        Calendrier — Administration Cabane du Fermier</h3>
                 </div>
                 <div style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
                     <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
-                        <li><strong>Période de demande :</strong> Soumission ouverte chaque mois <strong>entre le 1er et le 5 du mois</strong> pour les commissions acquises du mois écoulé.</li>
-                        <li><strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, vos commissions sont cumulées et reportées sur les mois suivants, sans aucune perte.</li>
+                        <li><strong>Période de demande :</strong> Soumission ouverte chaque mois <strong>entre le 1er et
+                                le 5 du mois</strong> pour les commissions acquises du mois écoulé.</li>
+                        <li><strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, vos
+                            commissions sont cumulées et reportées sur les mois suivants, sans aucune perte.</li>
                         <li><strong>Fréquence :</strong> 1 seule demande par mois civil.</li>
-                        <li><strong>Versement :</strong> Effectué sur votre compte Mobile Money béninois (MTN, Moov, Celtiis) <strong>au plus tard le 15 du même mois</strong> par l'Administration.</li>
-                        <li><strong>Traçabilité :</strong> Chaque versement fait l'objet d'un récapitulatif détaillé consultable sur ce tableau de bord.</li>
+                        <li><strong>Versement :</strong> Effectué sur votre compte Mobile Money béninois (MTN, Moov,
+                            Celtiis) <strong>au plus tard le 15 du même mois</strong> par l'Administration.</li>
+                        <li><strong>Traçabilité :</strong> Chaque versement fait l'objet d'un récapitulatif détaillé
+                            consultable sur ce tableau de bord.</li>
                     </ul>
                 </div>
             </div>
@@ -1272,9 +1375,12 @@
     </div>
 
     <!-- Modale Demande de Retrait -->
-    <div id="retraitModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
-        <div style="background: #ffffff; max-width: 440px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-            <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un retrait</h3>
+    <div id="retraitModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div
+            style="background: #ffffff; max-width: 440px; width: 100%; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin-bottom: 0.5rem;">Demander un
+                retrait</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.4;">
                 • Période de soumission : <strong>du 1er au 5 du mois</strong>.<br>
                 • Seuil minimum requis : <strong>5 000 FCFA</strong>.<br>
@@ -1284,7 +1390,8 @@
             <form id="retraitForm">
                 <div class="form-group-partner">
                     <label>Montant disponible à retirer</label>
-                    <input type="text" id="retraitAvailable" readonly style="background: #eef6f0; font-weight: 700; color: var(--primary);">
+                    <input type="text" id="retraitAvailable" readonly
+                        style="background: #eef6f0; font-weight: 700; color: var(--primary);">
                 </div>
 
                 <div class="form-group-partner">
@@ -1308,66 +1415,100 @@
 
                 <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
                     <button type="button" class="btn btn-outline flex-1" id="btnCloseRetraitModal">Annuler</button>
-                    <button type="submit" class="btn btn-primary flex-1 shadow-md" id="btnSubmitRetrait">Confirmer</button>
+                    <button type="submit" class="btn btn-primary flex-1 shadow-md"
+                        id="btnSubmitRetrait">Confirmer</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modale CGU Ambassadeur -->
-    <div id="cguModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
-        <div style="background: #ffffff; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+    <div id="cguModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1.25rem;">
+        <div
+            style="background: #ffffff; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin: 0;">Conditions du Programme Ambassadeur</h3>
-                <button type="button" id="btnCloseCguModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+                <h3 style="font-family: var(--font-heading); color: var(--partner-dark); margin: 0;">Conditions du
+                    Programme Ambassadeur</h3>
+                <button type="button" id="btnCloseCguModal"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
             </div>
-            
+
             <div style="font-size: 0.85rem; line-height: 1.6; color: var(--text);">
-                <p style="background: #f0f7ed; border-left: 3px solid var(--primary); padding: 0.6rem 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
-                    <strong>Cadre du Partenariat :</strong> La Cabane du Fermier (entreprise béninoise de transformation agroalimentaire fondée en 2022) et l'Ambassadeur conviennent d'une collaboration durable, équitable et transparente pour faire connaître les produits locaux frais et tracés au Bénin.
+                <p
+                    style="background: #f0f7ed; border-left: 3px solid var(--primary); padding: 0.6rem 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
+                    <strong>Cadre du Programme Ambassadeur :</strong> La Cabane du Fermier (entreprise béninoise de transformation
+                    agroalimentaire fondée en 2022) et l'Ambassadeur conviennent d'une collaboration durable, équitable
+                    et transparente pour faire connaître les produits locaux frais et tracés au Bénin.
                 </p>
 
                 <p><strong>1. Produits Concernés & Éligibilité</strong><br>
-                • <strong>Produits éligibles (Remise client 5% + Commission Partenaire) :</strong> Poulet bicyclette fraîchement abattu, Cailles fraîchement abattues, Lapin, et Gombo prêt à cuisiner.<br>
-                • <strong>Produits exclus (0% remise, 0% commission) :</strong> Escargots et Légumes précuits (tchayo, gboman, amanvivè), pour lesquels la marge ne permet pas l'application de remise et commission.</p>
+                    • <strong>Produits éligibles (Remise client 5% + Commission Ambassadeur) :</strong> Poulet bicyclette
+                    fraîchement abattu, Cailles fraîchement abattues, Lapin, et Gombo prêt à cuisiner.<br>
+                    • <strong>Produits exclus (0% remise, 0% commission) :</strong> Escargots et Légumes précuits
+                    (tchayo, gboman, amanvivè), pour lesquels la marge ne permet pas l'application de remise et
+                    commission.</p>
 
                 <p><strong>2. Rémunération de l'Ambassadeur & Remise Client</strong><br>
-                • <strong>Remise client :</strong> Les clients utilisant votre code promo bénéficient de <strong>5 % de remise</strong> sur le prix affiché des produits éligibles, sur leur <strong>première commande uniquement</strong>.<br>
-                • <strong>Commission Partenaire (calculée sur le prix affiché avant remise, hors livraison) :</strong><br>
-                &nbsp;&nbsp;– <strong>1ère commande (acquisition) :</strong> <strong>5 % à 10 %</strong> selon vos paliers mensuels.<br>
-                &nbsp;&nbsp;– <strong>2ème et 3ème commandes (fidélisation) :</strong> <strong>5 %</strong> de commission pour vous (sans remise pour le client).<br>
-                &nbsp;&nbsp;– <strong>À partir de la 4ème commande :</strong> 0 % (le client est considéré comme acquis à l'enseigne).</p>
+                    • <strong>Remise client :</strong> Les clients utilisant votre code promo bénéficient de <strong>5 %
+                        de remise</strong> sur le prix affiché des produits éligibles, sur leur <strong>première
+                        commande uniquement</strong>.<br>
+                    • <strong>Commission Ambassadeur (calculée sur le prix affiché avant remise, hors livraison)
+                        :</strong><br>
+                    &nbsp;&nbsp;– <strong>1ère commande (acquisition) :</strong> <strong>5 % à 10 %</strong> selon vos
+                    paliers mensuels.<br>
+                    &nbsp;&nbsp;– <strong>2ème et 3ème commandes (fidélisation) :</strong> <strong>5 %</strong> de
+                    commission pour vous (sans remise pour le client).<br>
+                    &nbsp;&nbsp;– <strong>À partir de la 4ème commande :</strong> 0 % (le client est considéré comme
+                    acquis à l'enseigne).</p>
 
                 <p><strong>3. Gamification des Paliers Mensuels (1ère commande)</strong><br>
-                Le taux applicable à la première commande de chaque nouveau client évolue selon le nombre de clients livrés dans le mois civil :<br>
-                • De 0 à 10 nouveaux clients : <strong>5 %</strong><br>
-                • De 11 à 30 nouveaux clients : <strong>7 %</strong><br>
-                • Plus de 30 nouveaux clients : <strong>10 %</strong></p>
+                    Le taux applicable à la première commande de chaque nouveau client évolue selon le nombre de clients
+                    livrés dans le mois civil :<br>
+                    • De 0 à 10 nouveaux clients : <strong>5 %</strong><br>
+                    • De 11 à 30 nouveaux clients : <strong>7 %</strong><br>
+                    • Plus de 30 nouveaux clients : <strong>10 %</strong></p>
 
                 <p><strong>4. Rattachement du Client Apporté (Règle des 60 jours)</strong><br>
-                Est considérée comme apportée toute 1ère commande passée avec votre code promo par un client qui n’a jamais commandé. La Cabane du Fermier rattache automatiquement ce client à votre profil via son numéro WhatsApp pour ses 2e et 3e commandes. Ce commissionnement s’applique sur les 3 premières commandes, ou pendant <strong>60 jours</strong> à compter de la première commande (au premier des deux termes atteint).</p>
+                    Est considérée comme apportée toute 1ère commande passée avec votre code promo par un client qui n’a
+                    jamais commandé. La Cabane du Fermier rattache automatiquement ce client à votre profil via son
+                    numéro WhatsApp pour ses 2e et 3e commandes. Ce commissionnement s’applique sur les 3 premières
+                    commandes, ou pendant <strong>60 jours</strong> à compter de la première commande (au premier des
+                    deux termes atteint).</p>
 
                 <p><strong>5. Modalités de Retrait & Calendrier Financier</strong><br>
-                • <strong>Période de soumission :</strong> La demande de retrait s'effectue obligatoirement <strong>entre le 1er et le 5 du mois</strong> pour les commissions du mois écoulé.<br>
-                • <strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, les commissions sont cumulées et reportées sur les mois suivants, sans aucune perte pour le Partenaire.<br>
-                • <strong>Paiement :</strong> Versé par l'Administration par Mobile Money (MTN, Moov, Celtiis) <strong>au plus tard le 15 du même mois</strong> avec récapitulatif détaillé.</p>
+                    • <strong>Période de soumission :</strong> La demande de retrait s'effectue obligatoirement
+                    <strong>entre le 1er et le 5 du mois</strong> pour les commissions du mois écoulé.<br>
+                    • <strong>Seuil minimum de retrait :</strong> <strong>5 000 FCFA</strong>. En dessous, les
+                    commissions sont cumulées et reportées sur les mois suivants, sans aucune perte pour
+                    l'Ambassadeur.<br>
+                    • <strong>Paiement :</strong> Versé par l'Administration par Mobile Money (MTN, Moov, Celtiis)
+                    <strong>au plus tard le 15 du même mois</strong> avec récapitulatif détaillé.</p>
 
                 <p><strong>6. Éthique, Image & Indépendance</strong><br>
-                Le Partenaire agit de manière indépendante. Il s’engage à présenter les produits fidèlement, à indiquer son code promo et les moyens de commande (WhatsApp, site web), et à respecter l’image de marque de la Cabane du Fermier.</p>
+                    L'Ambassadeur agit de manière indépendante. Il s’engage à présenter les produits fidèlement, à
+                    indiquer son code promo et les moyens de commande (WhatsApp, site web), et à respecter l’image de
+                    marque de la Cabane du Fermier.</p>
 
-                <p style="background: #fef2f2; border-left: 3px solid #dc2626; padding: 0.6rem 0.8rem; border-radius: 4px;">
+                <p
+                    style="background: #fef2f2; border-left: 3px solid #dc2626; padding: 0.6rem 0.8rem; border-radius: 4px;">
                     <strong>7. Interdiction Stricte de l'Auto-Parrainage</strong><br>
-                    Le code promo est destiné exclusivement à votre communauté. Constitue un auto-parrainage toute commande passée par l'Ambassadeur pour lui-même, son foyer, ses propres coordonnées ou moyens de paiement dans le but de cumuler remise et commission. Toute fraude entraîne l'annulation des commissions et la suspension du compte conformément aux règles de l'Administration.
+                    Le code promo est destiné exclusivement à votre communauté. Constitue un auto-parrainage toute
+                    commande passée par l'Ambassadeur pour lui-même, son foyer, ses propres coordonnées ou moyens de
+                    paiement dans le but de cumuler remise et commission. Toute fraude entraîne l'annulation des
+                    commissions et la suspension du compte conformément aux règles de l'Administration.
                 </p>
             </div>
 
-            <button type="button" class="btn btn-primary w-full shadow-md" id="btnAcceptCguModal" style="margin-top: 1.5rem;">
-                J'ai lu et j'accepte les conditions de partenariat
+            <button type="button" class="btn btn-primary w-full shadow-md" id="btnAcceptCguModal"
+                style="margin-top: 1.5rem;">
+                J'ai lu et j'accepte les conditions du programme ambassadeur
             </button>
         </div>
     </div>
 
-    <!-- Script Partenaire -->
+    <!-- Script Ambassadeur -->
     <script src="js/partenaire.js"></script>
 </body>
+
 </html>

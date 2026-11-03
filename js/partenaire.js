@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             .single();
 
         if (error || !profile) {
-            showAlert("Profil vendeur introuvable.");
+            showAlert("Profil ambassadeur introuvable.");
             return;
         }
 
